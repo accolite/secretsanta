@@ -1,0 +1,70 @@
+
+<div class="row">
+
+  <div class="col-md-4">
+    <!--<div class="panel panel-default tasks-container">-->
+      <!--&lt;!&ndash; Default panel contents &ndash;&gt;-->
+      <!--<div class="panel-heading"><h4 class="text-center">Tasks</h4></div>-->
+      <!--&lt;!&ndash; List group &ndash;&gt;-->
+        <!--<li class="list-group-item">-->
+          <!--<div class="row">-->
+            <!--<p class="col">Some Text</p>-->
+
+          <!--</div>-->
+        <!--</li>-->
+      <!--</ul>-->
+    <!--</div>-->
+    <h2 class="text-center">Tasks</h2>
+  <div class="tasks-container">
+      <ul class="list">
+        <li class="list-item">
+          <input type="checkbox" class="hidden-box" id="first" checked/>
+          <label for="first" class="check--label">
+            <span class="check--label-box"></span>
+            <span class="check--label-text">First Checkbox</span>
+          </label>
+        </li>
+        <li class="list-item">
+          <input type="checkbox" class="hidden-box" id="second" />
+          <label for="second" class="check--label">
+            <span class="check--label-box"></span>
+            <span class="check--label-text">Second Checkbox</span>
+          </label>
+        </li>
+        <li class="list-item">
+          <input type="checkbox" class="hidden-box" id="third" />
+          <label for="third" class="check--label">
+            <span class="check--label-box"></span>
+            <span class="check--label-text">Third Checkbox</span>
+          </label>
+        </li>
+      </ul>
+
+      <div class="input-group">
+        <input type="text" class="form-control btn btn-primary" placeholder="Add tasks for your child here..." ng-model="task">
+        <span class="input-group-btn">
+            <button class="example pinterest" type="button" ng-click="addTask(task); task = null">send</button>
+          </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="well chat-container">
+      <div class="chat-list">
+        <div ng-repeat="msg in messages" class="panel" ng-class="getClass(msg)">
+          <div class="panel-body">
+            {{msg.text}}
+          </div>
+        </div>
+      </div>
+      <div class="input-group">
+        <input type="text" class="form-control btn btn-primary" placeholder="Chat here..." ng-model="message">
+        <span class="input-group-btn">
+          <button class="example pinterest" type="button" ng-click="addMessage(message); message = null">send</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
