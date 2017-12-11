@@ -1,3 +1,4 @@
+var _ = require("underscore");
 function storeInFirebase(employees, firebase) {
     const dbRefForEmployees = firebase.database().ref().child('Employees');
     // var employeeEmailIds = employees.map(employee => employee.emailId);
@@ -13,7 +14,29 @@ function storeInFirebase(employees, firebase) {
                             teamName: employees[obj].teamName});
     }
     dbRefForEmployees.set(employeeArray);
-    const dbRefForSantaChildMapping = firebase.database().ref().child('rooms');
-    dbRefForSantaChildMapping.set(employees.map(employee => employee.room));            
+
+    const dbRefForRoomMapping = firebase.database().ref().child('rooms');
+    var rooms = employees.map(employee => employee.room);
+    dbRefForRoomMapping.set(employees.map(employee => employee.room));
+
+    // const dbRefForUsersMapping = firebase.database().ref().child('users');
+    // dbRefForUsersMapping.set(employees.map(employee => employee.emailid));
+    var jsonUsers= [];
+    var dbRefForUsersDetailsMapping = firebase.database().ref().child('users');
+    for(var obj in employees)
+    {        
+        var email = employees[obj].emailId;
+        var trimmedEmail = email.replace(/[^a-zA-Z0-9]/g, "");
+        var roomAsSanta = _.filter(rooms, function(room) {
+            return room.indexOf(email+"_") != -1
+         });
+        var roomAsChild = _.filter(rooms, function(room) {
+            return room.indexOf("_"+email) != -1
+        });
+        var jsonUser = {};
+        jsonUser[trimmedEmail] = {"roomAsSanta": roomAsSanta, 'roomAsChild' : roomAsChild};
+        jsonUsers.push(jsonUser);        
+    }
+    dbRefForUsersDetailsMapping.set(jsonUsers);
 };
 exports.storeInFirebase = storeInFirebase;

@@ -47,7 +47,9 @@ app.post("/", (req, res) => {
                         employeeData.shift = curr[3] ? curr[3] : "";
                         employeeData.company = curr[4] ? curr[4] : "";
                         employeeData.location = curr[5] ? curr[5] : "";
-                        employeeData.teamName = curr[6] ? curr[6] : "";;
+                        employeeData.teamName = curr[6] ? curr[6] : "";
+                        employeeData.roomAsSanta = "";
+                        employeeData.roomAsChild = "";
                         employees.push(employeeData);
                     });
                     // console.log(employees);
