@@ -13,27 +13,11 @@ angular.module('secretSantaApp')
 
       $scope.user = currentAuth;
       var messages;
-      var tasks;
+      var tasksAsSanta;
+      var tasksAsChild;
       $scope.loaded = false;
 
-      // $firebaseObject(rootRef.child('users/' + $scope.user.uid.toString() + '/room')).$loaded().then(function (room) {
-      //   if( room === null || angular.isUndefined(room)) {
-      //     console.log('cannot find room');
-      //     return;
-      //   }
-      //   console.log('user', $scope.user);
-      //   var query = rootRef.child('rooms').child(room.$value).limitToLast(10);
-      //   messages = $firebaseArray(query);
-      //
-      //   messages.$loaded()
-      //     .then(function () {
-      //       $scope.messages = messages;
-      //       $scope.loaded = true;
-      //     })
-      //     .catch(alert);
-      // });
-
-      firebaseUtilityService.getRoomAndLoadMessages('users/' + firebaseUtilityService.getUserName(currentAuth.email) + '/room', function (messages) {
+      firebaseUtilityService.getRoomAndLoadMessages('users/' + firebaseUtilityService.getUserName(currentAuth.email) + '/roomAsSanta', function (messages) {
         messages.$loaded()
           .then(function (data) {
             $scope.messages = data;
@@ -42,10 +26,19 @@ angular.module('secretSantaApp')
           .catch(alert);
       });
 
-      firebaseUtilityService.getRoomAndLoadTasks('users/' + firebaseUtilityService.getUserName(currentAuth.email) + '/room', function (tasks) {
-        tasks.$loaded()
+      firebaseUtilityService.getRoomAndLoadTasks('users/' + firebaseUtilityService.getUserName(currentAuth.email) + '/roomAsSanta', function (tasksAsSanta) {
+        tasksAsSanta.$loaded()
           .then(function (data) {
-            $scope.tasks = data;
+            $scope.tasksAsSanta = data;
+            $scope.tasksLoaded = true;
+          })
+          .catch(alert);
+      });
+
+      firebaseUtilityService.getRoomAndLoadTasks('users/' + firebaseUtilityService.getUserName(currentAuth.email) + '/roomAsChild', function (tasksAsChild) {
+        tasksAsChild.$loaded()
+          .then(function (data) {
+            $scope.tasksAsChild = data;
             $scope.tasksLoaded = true;
           })
           .catch(alert);
@@ -59,17 +52,17 @@ angular.module('secretSantaApp')
             text: newMessage,
             user: currentAuth.email,
             userId: currentAuth.uid
-          })
-            .catch(alert);
+          }).catch(alert);
         }
       };
 
-      $scope.addTask = function (newTask) {
+      $scope.addSantaTask = function (newTask) {
         if(newTask) {
-          $scope.tasks.$add({
+          $scope.tasksAsSanta.$add({
             text: newTask,
             user: currentAuth.email,
-            userId: currentAuth.uid
+            userId: currentAuth.uid,
+            completed: false
           })
             .catch(alert);
         }

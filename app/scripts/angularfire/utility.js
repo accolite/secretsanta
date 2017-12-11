@@ -11,16 +11,16 @@ angular.module('firebase.Auth')
     };
 
     obj.getRoomAndLoadMessages = function (room, cb) {
-        $firebaseObject(rootRef.child(room)).$loaded().then(function (room) {
-          if( room === null || angular.isUndefined(room)) {
-            console.log('cannot find room');
-            return;
-          }
-          var query = rootRef.child('rooms').child(room.$value).limitToLast(10);
-          var messages = $firebaseArray(query);
-          cb(messages);
-        });
-      };
+      $firebaseObject(rootRef.child(room)).$loaded().then(function (room) {
+        if( room === null || angular.isUndefined(room)) {
+          console.log('cannot find room');
+          return;
+        }
+        var query = rootRef.child('rooms').child(room.$value).limitToLast(10);
+        var messages = $firebaseArray(query);
+        cb(messages);
+      });
+    };
 
     obj.getRoomAndLoadTasks = function (room, cb) {
       $firebaseObject(rootRef.child(room)).$loaded().then(function (room) {
@@ -28,7 +28,7 @@ angular.module('firebase.Auth')
           console.log('cannot find room');
           return;
         }
-        var query = rootRef.child('tasks').child(room.$value);
+        var query = rootRef.child('tasks').child(room.$value).child('santa');
         var tasks = $firebaseArray(query);
         cb(tasks);
       });
