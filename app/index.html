@@ -21,6 +21,7 @@
   your browser</a> to improve your experience.</p>
 <![endif]-->
 
+<div id="overlay"><img class="bg" src="https://www.ottenjohnson.com/Templates/media/images/970x547-15fps---Snowfall.gif" height=1080 alt="Be patient..." /></div>
 <!-- Add your site or application content here -->
 <div class="header" ng-controller="MainCtrl" ng-cloak="">
   <div class="navbar navbar-default" role="navigation">
@@ -42,7 +43,9 @@
           <ul class="nav navbar-nav">
             <!-- //angularfire -->
 
-            <li class=""><a href="#!/dashboard" style="color: white">Dashboard</a></li>
+            <li class=""><a style="color: white; background-color: #1b6d85">Me As</a></li>
+            <li class=""><a href="#!/dashboard/santa" style="color: white; background-color: #1b6d85">Santa</a></li>
+            <li class=""><a href="#!/dashboard/child" style="color: white; background-color: #1b6d85">Child</a></li>
             <li class=""><a href="#!/login" ng-hide-auth="" style="color: white">Login</a></li>
             <li class=""><a href="" ng-show-auth="" ng-click="logout()" style="color: white">Logout</a></li>
 
@@ -57,7 +60,6 @@
 
 
   <div ng-view=""></div>
-
 
   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
   <script>
@@ -90,20 +92,20 @@
   <!-- endbuild -->
 
   <script>
-    // var config = {
-    //   apiKey: 'AIzaSyBsAyfyywpfbFyjCLNZP8gMZJU08ytjsWA',
-    //   authDomain: 'secretsanta-19ed6.firebaseapp.com',
-    //   databaseURL: 'https://secretsanta-19ed6.firebaseio.com',
-    //   storageBucket: 'secretsanta-19ed6.appspot.com'
-    // };
-    var config = {
-        apiKey: "AIzaSyBMyZjbWf1J0-A677LvTRXQfb9t7a3y25o",
-        authDomain: "secretsanta-accolite.firebaseapp.com",
-        databaseURL: "https://secretsanta-accolite.firebaseio.com",
-        projectId: "secretsanta-accolite",
-        storageBucket: "",
-        messagingSenderId: "993421622636"
-    };
+     var config = {
+       apiKey: 'AIzaSyBsAyfyywpfbFyjCLNZP8gMZJU08ytjsWA',
+       authDomain: 'secretsanta-19ed6.firebaseapp.com',
+       databaseURL: 'https://secretsanta-19ed6.firebaseio.com',
+       storageBucket: 'secretsanta-19ed6.appspot.com'
+     };
+//    var config = {
+//        apiKey: "AIzaSyBMyZjbWf1J0-A677LvTRXQfb9t7a3y25o",
+//        authDomain: "secretsanta-accolite.firebaseapp.com",
+//        databaseURL: "https://secretsanta-accolite.firebaseio.com",
+//        projectId: "secretsanta-accolite",
+//        storageBucket: "",
+//        messagingSenderId: "993421622636"
+//    };
 
     firebase.initializeApp(config);
     var rootRef = firebase.database().ref();

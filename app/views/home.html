@@ -1,4 +1,5 @@
-<div class="jumbotron">
+<div class="jumbotron" style="">
+  <div class="christmasLights" style="width: 100%"></div>
   <h1 style="color: white">Ho Ho Ho</h1>
   <p class="lead">
     <!--<img src="images/yeoman.png" alt="I'm Yeoman"><br>-->
@@ -16,9 +17,13 @@
   <h3 class="text-center">Activity</h3>
 
   <ul class=" list-group">
-    <li class="activity list-group-item">Cras justo odio</li>
-    <li class="activity list-group-item">Dapibus ac facilisis in</li>
-    <li class="activity list-group-item">Morbi leo risus</li>
+    <li class="activity list-group-item" ng-repeat="act in activites">{{constructMessage(act)}}</li>
+    <!--<li class="activity list-group-item">Dapibus ac facilisis in</li>-->
+    <!--<li class="activity list-group-item">Morbi leo risus</li>-->
   </ul>
 
+</div>
+
+<div>
+  <img src="http://clipart-library.com/images/yckA54Gxi.png" class="tree-bg" style="height: 400px; width: 300px;" alt="">
 </div>

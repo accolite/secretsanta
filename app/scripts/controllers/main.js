@@ -49,4 +49,17 @@ angular.module('secretSantaApp')
         })
     };
 
+    firebaseUtilityService.loadActivities(function (activites) {
+      activites.$loaded().then(function () {
+        $scope.activites = activites;
+      });
+    });
+
+    $scope.constructMessage = function (act) {
+      if(act.event === 'task_added') {
+        return "The amazing santa " + act.src + " challenged his child!";
+      }
+      console.log('construct a intuitive message from act', act);
+    }
+
   }]);

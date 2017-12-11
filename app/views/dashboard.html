@@ -1,74 +1,29 @@
-
+<div class="christmasLights" style="width: 100%"></div>
 <div class="row">
-
+  <button  class="col example pinterest pull-right" style="margin-top: 20px; margin-right: 20px" ng-click="sendAGift()">Send a gift</button>
+</div>
+<div class="row">
   <div class="col-md-4">
-    <!--<div class="panel panel-default tasks-container">-->
-      <!--&lt;!&ndash; Default panel contents &ndash;&gt;-->
-      <!--<div class="panel-heading"><h4 class="text-center">Tasks</h4></div>-->
-      <!--&lt;!&ndash; List group &ndash;&gt;-->
-        <!--<li class="list-group-item">-->
-          <!--<div class="row">-->
-            <!--<p class="col">Some Text</p>-->
-
-          <!--</div>-->
-        <!--</li>-->
-      <!--</ul>-->
-    <!--</div>-->
-    <h2 class="text-center">Tasks</h2>
+  <h2 class="text-center">Tasks</h2>
   <div class="tasks-container">
-      <!-- <ul class="list">
-        <li class="list-item">
-          <input type="checkbox" class="hidden-box" id="first" checked/>
+       <ul class="list">
+        <li class="list-item" ng-repeat="task in tasks">
+          <input  type="checkbox" class="hidden-box" id="first" ng-change="updateTaskStatus(task)" ng-model="task.completed"/>
           <label for="first" class="check--label">
-            <span class="check--label-box"></span>
-            <span class="check--label-text">First Checkbox</span>
+            <span ng-show="isTasksWrite" class="check--label-box"></span>
+            <span class="check--label-text">{{task.text}}</span>
           </label>
+          <p class="text-muted" ng-show="isTasksWrite" ng-click="deleteTask(task)">delete</p>
         </li>
-        <li class="list-item">
-          <input type="checkbox" class="hidden-box" id="second" />
-          <label for="second" class="check--label">
-            <span class="check--label-box"></span>
-            <span class="check--label-text">Second Checkbox</span>
-          </label>
-        </li>
-        <li class="list-item">
-          <input type="checkbox" class="hidden-box" id="third" />
-          <label for="third" class="check--label">
-            <span class="check--label-box"></span>
-            <span class="check--label-text">Third Checkbox</span>
-          </label>
-        </li>
-      </ul> -->
-      <div class="list">
-        <div ng-repeat="task in tasksAsSanta" class="list-item">
-          
-          <label for="third" class="check--label">
-              <input type="checkbox" ng-model="task.completed" />
-              <span class="check--label-box"></span>
-              <span class="check--label-text">{{task.text}}</span>
-          </label>          
-        </div>
-      </div>
-
-      <div class="input-group">
-        <input type="text" class="form-control btn btn-primary" placeholder="Add tasks for your child here..." ng-model="task">
+         <label class="check--label" ng-if="tasks.length === 0">
+           <span class="check--label-text text-muted">{{getEmptyTasksContext()}}</span>
+         </label>
+      </ul>
+      <div class="input-group" ng-show="isTasksWrite">
+        <input type="text" class="form-control" style="border-color: #C51712; border-width: 2px" placeholder="Give your child a task!" ng-model="task">
         <span class="input-group-btn">
-            <button class="example pinterest" type="button" ng-click="addSantaTask(task); task = null">Send</button>
+            <button class="example pinterest" type="button" ng-click="addTask(task); task = null">Challenge</button>
           </span>
-      </div>
-    </div>
-  <!-- </div> -->
-  <div class="col-md-8">   
-    <h2 class="text-center">Tasks</h2>
-    <div class="tasks-container">
-      <div class="list">
-          <div ng-repeat="task in tasksAsChild" class="list-item">
-            <input type="checkbox" class="hidden-box" ng-checked="task.completed == true" ng-disabled="true"/>
-            <label class="check--label">
-                <span class="check--label-box"></span>
-                <span class="check--label-text">{{task.text}}</span>
-            </label>          
-          </div>
       </div>
     </div>
   </div>
@@ -82,12 +37,12 @@
         </div>
       </div>
       <div class="input-group">
-        <input type="text" class="form-control btn btn-primary" placeholder="Chat here..." ng-model="message">
+        <span ng-if="messages.length === 0" class="text-muted text-center" style="margin: 0">Don't be shy, Start a new conversation</span>
+        <input type="text" class="form-control" placeholder="Chat here..." ng-model="message" style="border-color: #C51712; border-width: 2px">
         <span class="input-group-btn">
           <button class="example pinterest" type="button" ng-click="addMessage(message); message = null">send</button>
         </span>
       </div>
     </div>
   </div>
-</div>
 </div>

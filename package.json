@@ -2,7 +2,13 @@
   "name": "secretsanta",
   "version": "0.0.0",
   "dependencies": {
-    "ng-toast": "^2.0.0"
+    "excel": "^0.1.7",
+    "exceljs": "^0.8.0",
+    "express-fileupload": "^0.3.0",
+    "firebase": "^4.8.0",
+    "lodash": "^4.17.4",
+    "ng-toast": "^2.0.0",
+    "underscore": "^1.8.3"
   },
   "repository": {},
   "devDependencies": {

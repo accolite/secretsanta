@@ -1,6 +1,6 @@
 var Excel = require('exceljs');
 var firebase = require('./firebase_config').firebase;
-var _ = require("underscore");
+var _ = require("lodash");
 var parseXlsx = require('excel');
 var express = require("express");
 var sendEmail = require('./send_email').sendEmail;
@@ -72,14 +72,14 @@ app.post("/", (req, res) => {
 
                 remove(employeesCopyForChild, randomChild);
                 remove(employeesCopyForSanta, randomSanta);
-            }                                   
+            }
         };
         function createRooms() {
             _.map(employees, (data) => {
                 data.room = data.santa.emailId+"_"+data.child.emailId;
-            });            
+            });
         };
-        
+
         function getRandomInt(min, max, randomSanta, checkUnique) {
             min = Math.ceil(min);
             max = Math.floor(max);
@@ -87,10 +87,10 @@ app.post("/", (req, res) => {
             // if(min == 0 && max == 1 && randomSanta == 0) return 0;
             if(checkUnique)
                 return (employeesCopyForChild[num] == employeesCopyForSanta[randomSanta]) ? getRandomInt(min, max, randomSanta, true) : num;
-            else 
+            else
                 return num;
-        };        
-        function remove(array, index) {                        
+        };
+        function remove(array, index) {
             if (index !== -1) {
                 array.splice(index, 1);
             }
@@ -107,13 +107,13 @@ app.get("/notify", (req, res) => {
 
     // get appropriate body from hr with placeholders for adding names of santa and child
     var body = "This is a test email body";
-    
+
     var subject = "SecretSanta Application";
     var recepientsArray = employees.map(employee => employee.emailId)
     _.map(employees, (employee) => {
         sendEmail(from, employee.emailId, subject, body);
         // sendEmail(from, , subject, body);
         console.log("Email sent for "+ employee.emailId);
-    });    
+    });
     res.end();
 });

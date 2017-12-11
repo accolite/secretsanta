@@ -7,42 +7,51 @@
  * Handler for santa-child login
  */
 angular.module('secretSantaApp')
-  .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService",
-    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService) {
+  .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "$route",
+    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route) {
 
 
       $scope.user = currentAuth;
-      var messages;
-      var tasksAsSanta;
-      var tasksAsChild;
       $scope.loaded = false;
 
-      firebaseUtilityService.getRoomAndLoadMessages('users/' + firebaseUtilityService.getUserName(currentAuth.email) + '/roomAsSanta', function (messages) {
+      var roomPointerName = '';
+      if($route.current.$$route.originalPath === "/dashboard/santa") {
+        roomPointerName = '/roomAsSanta';
+      } else {
+        roomPointerName = '/roomAsChild';
+      }
+
+      $scope.isTasksWrite = roomPointerName !== '/roomAsChild';
+
+        firebaseUtilityService.getRoomAndLoadMessages('users/' + firebaseUtilityService.getUserName(currentAuth.email) + roomPointerName, function (messages) {
         messages.$loaded()
-          .then(function (data) {
-            $scope.messages = data;
+          .then(function () {
+            $scope.messages = messages;
             $scope.loaded = true;
           })
           .catch(alert);
       });
 
-      firebaseUtilityService.getRoomAndLoadTasks('users/' + firebaseUtilityService.getUserName(currentAuth.email) + '/roomAsSanta', function (tasksAsSanta) {
-        tasksAsSanta.$loaded()
-          .then(function (data) {
-            $scope.tasksAsSanta = data;
+      firebaseUtilityService.getRoomAndLoadTasks('users/' + firebaseUtilityService.getUserName(currentAuth.email) + roomPointerName, function (tasks) {
+        tasks.$loaded()
+          .then(function () {
+            $scope.tasks = tasks;
             $scope.tasksLoaded = true;
+            setFirebaseWatchers();
           })
           .catch(alert);
       });
 
-      firebaseUtilityService.getRoomAndLoadTasks('users/' + firebaseUtilityService.getUserName(currentAuth.email) + '/roomAsChild', function (tasksAsChild) {
-        tasksAsChild.$loaded()
-          .then(function (data) {
-            $scope.tasksAsChild = data;
-            $scope.tasksLoaded = true;
-          })
-          .catch(alert);
-      });
+      // function setFirebaseWatchers() {
+      //   $scope.tasks.$watch(function (eventData) {
+      //     if("child_changed" === eventData.event) {
+      //       console.log('find the event status and if true, emit an event key', eventData.key);
+      //     } else if("child_added" === eventData.event) {
+      //       firebaseUtilityService.getActivity('task_added', {user: $scope.user, taskId: eventData.key});
+      //     }
+      //   });
+      //   $scope.tasks.off();ut
+      // }
 
       // provide a method for adding a message
       $scope.addMessage = function (newMessage) {
@@ -50,21 +59,60 @@ angular.module('secretSantaApp')
           // push messages to the end of the array
           $scope.messages.$add({
             text: newMessage,
-            user: currentAuth.email,
             userId: currentAuth.uid
           }).catch(alert);
         }
       };
 
-      $scope.addSantaTask = function (newTask) {
+      $scope.addTask = function (newTask) {
         if(newTask) {
-          $scope.tasksAsSanta.$add({
+          $scope.tasks.$add({
             text: newTask,
-            user: currentAuth.email,
             userId: currentAuth.uid,
             completed: false
-          })
-            .catch(alert);
+          }).then(
+            firebaseUtilityService.getActivity(function (activities) {
+              activities.$add({
+                event: 'task_added',
+                src: $scope.user.email,
+                uid: $scope.user.uid
+              });
+            })
+          )
+          .catch(alert);
+        }
+      };
+
+      $scope.deleteTask = function (task) {
+        const _response = window.confirm("do you want to perform this ?");
+        if(_response) {
+          if(task) {
+            $scope.tasks.$remove(task)
+              .catch(alert);
+          }
+        }
+      };
+
+      $scope.updateTaskStatus = function (task) {
+        const _response = window.confirm("do you want to perform this ?");
+        if(_response) {
+          $scope.tasks.$save(task);
+        } else {
+          // revert the change
+          task.completed = !task.completed;
+        }
+      };
+
+      $scope.sendAGift = function () {
+        console.log('send a gift button pressed, ')
+      };
+
+      $scope.getEmptyTasksContext = function () {
+        if($scope.isTasksWrite) {
+          //santa
+          return "Give some tasks to your child!";
+        } else {
+          return "Your santa did not give you tasks";
         }
       };
 

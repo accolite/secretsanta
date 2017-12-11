@@ -34,6 +34,21 @@ angular.module('firebase.Auth')
       });
     };
 
+    obj.getActivity = function (cb) {
+      if(event === 'task_added') {
+        var query = rootRef.child('activity');
+        var activities = $firebaseArray(query);
+        console.log("add to activity...");
+        cb(activities);
+      }
+    };
+
+    obj.loadActivities = function (cb) {
+      var query = rootRef.child('activity');
+      var activities = $firebaseArray(query);
+      cb(activities);
+    };
+
     obj.getUserName = function (email) {
       // removes all special characters
       return email.replace(/[^a-zA-Z0-9]/g, "");
