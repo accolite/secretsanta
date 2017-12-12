@@ -1,31 +1,34 @@
 var _ = require("underscore");
-function storeInFirebase(employees, firebase) {
+function storeInFirebase(mappedEmployeesList, firebase) {
     const dbRefForEmployees = firebase.database().ref().child('Employees');
     // var employeeEmailIds = employees.map(employee => employee.emailId);
     var employeeArray = new Array;
-    for(var obj in employees)
+    for(var obj in mappedEmployeesList)
     {
-        employeeArray.push({emailid: employees[obj].emailId, 
-                            name : employees[obj].name,
-                            mobileno: employees[obj].mobileNo,
-                            shift: employees[obj].shift,
-                            company: employees[obj].company,
-                            location: employees[obj].location,
-                            teamName: employees[obj].teamName});
+        employeeArray.push({emailid: mappedEmployeesList[obj].emailId, 
+                            name : mappedEmployeesList[obj].name,
+                            mobileno: mappedEmployeesList[obj].mobileNo,
+                            shift: mappedEmployeesList[obj].shift,
+                            company: mappedEmployeesList[obj].company,
+                            location: mappedEmployeesList[obj].location,
+                            teamName: mappedEmployeesList[obj].teamName,
+                            childEmailId: mappedEmployeesList[obj].child ? mappedEmployeesList[obj].child.emailId:"",
+                            santaEmailId: mappedEmployeesList[obj].santa ? mappedEmployeesList[obj].santa.emailId : "" 
+                        });
     }
     dbRefForEmployees.set(employeeArray);
 
     const dbRefForRoomMapping = firebase.database().ref().child('rooms');
-    var rooms = employees.map(employee => employee.room);
-    dbRefForRoomMapping.set(employees.map(employee => employee.room));
+    var rooms = mappedEmployeesList.map(employee => employee.room);
+    dbRefForRoomMapping.set(mappedEmployeesList.map(employee => employee.room));
 
     // const dbRefForUsersMapping = firebase.database().ref().child('users');
     // dbRefForUsersMapping.set(employees.map(employee => employee.emailid));
     var jsonUsers= [];
     var dbRefForUsersDetailsMapping = firebase.database().ref().child('users');
-    for(var obj in employees)
+    for(var obj in mappedEmployeesList)
     {        
-        var email = employees[obj].emailId;
+        var email = mappedEmployeesList[obj].emailId;
         var trimmedEmail = email.replace(/[^a-zA-Z0-9]/g, "");
         var roomAsSanta = _.filter(rooms, function(room) {
             return room.indexOf(email+"_") != -1
