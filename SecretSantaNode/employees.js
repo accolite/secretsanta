@@ -10,8 +10,10 @@ var upload = require('express-fileupload');
 var storeInFirebase = require('./firebase_storage').storeInFirebase;
 
 var employees = [];
+var employeeGroups = {};
 var employeesCopyForSanta = [];
 var employeesCopyForChild = [];
+var mappedEmployeesList = [];
 console.log("Server Started!");
 app.use(upload());
 
@@ -52,49 +54,81 @@ app.post("/", (req, res) => {
                         employeeData.roomAsChild = "";
                         employees.push(employeeData);
                     });
-                    // console.log(employees);
-                    mapSantaChild();
+                    
+                    groupEmployees();                    
                     createRooms();
-                    storeInFirebase(employees, firebase);
+                    storeInFirebase(mappedEmployeesList, firebase);
                 });
             }
         });
-        function mapSantaChild() {
-            employeesCopyForSanta = employees.slice();
-            employeesCopyForChild = employees.slice();
-            var length = employeesCopyForSanta.length;
-            while(employeesCopyForSanta.length >=1)
-            {
-                var randomSanta = getRandomInt(0, employeesCopyForSanta.length, length+1, false);
-                var randomChild = getRandomInt(0, employeesCopyForSanta.length, randomSanta, true);
-                employees[employees.indexOf(employeesCopyForSanta[randomSanta])].child = employeesCopyForChild[randomChild];
-                employees[employees.indexOf(employeesCopyForChild[randomChild])].santa = employeesCopyForSanta[randomSanta];
 
-                remove(employeesCopyForChild, randomChild);
-                remove(employeesCopyForSanta, randomSanta);
-            }                                   
+        function groupEmployees() {
+            for(var i = 0;i<employees.length; i++) {
+                var employee = employees[i];
+                if(!employeeGroups[employee.teamName+"_"+employee.shift+"_"+employee.location+"_"+employee.company]) {
+                    employeeGroups[employee.teamName+"_"+employee.shift+"_"+employee.location+"_"+employee.company]=[];
+                }
+                employeeGroups[employee.teamName+"_"+employee.shift+"_"+employee.location+"_"+employee.company].push(employee);
+            }
+            for (var array in employeeGroups) {
+                if (employeeGroups.hasOwnProperty(array)) {
+                    mapSantaChild(employeeGroups[array]);
+                }
+            }                        
         };
+
+        function mapSantaChild(group) {
+            var employeesCopyForSanta=[], employeesCopyForChild=[];
+            employeesCopyForSanta = group.slice();
+            employeesCopyForChild = group.slice();
+            var length = employeesCopyForSanta.length;
+            if(length == 1)
+            {
+                console.log(group[0].name+ ' cannot be mapped');
+                group[0].santa="";
+                group[0].child="";
+                mappedEmployeesList.push(group[0]);
+                return;
+            }
+
+            employeesCopyForSanta.sort(function() { return 0.5 - Math.random();}); // shuffle arrays
+            employeesCopyForChild.sort(function() { return 0.5 - Math.random();});
+        
+            while (employeesCopyForSanta.length) {
+                var santa = employeesCopyForSanta.pop(), 
+                    child = employeesCopyForChild[0] == santa ? employeesCopyForChild.pop() : employeesCopyForChild.shift();
+                  
+                group[group.indexOf(santa)].child = child;
+                group[group.indexOf(child)].santa = santa;
+                
+            }
+            for(var obj in group)
+            {
+                mappedEmployeesList.push(group[obj]);
+            }                                 
+        };
+
         function createRooms() {
-            _.map(employees, (data) => {
+            _.map(mappedEmployeesList, (data) => {
                 data.room = data.santa.emailId+"_"+data.child.emailId;
             });            
         };
         
-        function getRandomInt(min, max, randomSanta, checkUnique) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            var num = Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-            // if(min == 0 && max == 1 && randomSanta == 0) return 0;
-            if(checkUnique)
-                return (employeesCopyForChild[num] == employeesCopyForSanta[randomSanta]) ? getRandomInt(min, max, randomSanta, true) : num;
-            else 
-                return num;
-        };        
-        function remove(array, index) {                        
-            if (index !== -1) {
-                array.splice(index, 1);
-            }
-        };
+        // function getRandomInt(min, max, randomSanta, checkUnique, employeesCopyForChild, employeesCopyForSanta) {
+        //     min = Math.ceil(min);
+        //     max = Math.floor(max);
+        //     var num = Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+        //     // if(min == 0 && max == 1 && randomSanta == 0) return 0;
+        //     if(checkUnique)
+        //         return (employeesCopyForChild[num] == employeesCopyForSanta[randomSanta]) ? getRandomInt(min, max, randomSanta, true, employeesCopyForChild, employeesCopyForSanta) : num;
+        //     else 
+        //         return num;
+        // };        
+        // function remove(array, index) {                        
+        //     if (index !== -1) {
+        //         array.splice(index, 1);
+        //     }
+        // };
         res.end();
     }
 });
