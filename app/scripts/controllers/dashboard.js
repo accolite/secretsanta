@@ -21,7 +21,7 @@ angular.module('secretSantaApp')
         roomPointerName = '/roomAsChild';
       }
 
-      $scope.isTasksWrite = roomPointerName !== '/roomAsChild';
+      $scope.isSanta = roomPointerName !== '/roomAsChild';
 
         firebaseUtilityService.getRoomAndLoadMessages('users/' + firebaseUtilityService.getUserName(currentAuth.email) + roomPointerName, function (messages) {
         messages.$loaded()
@@ -72,9 +72,9 @@ angular.module('secretSantaApp')
             completed: false
           }).then(
             firebaseUtilityService.getActivity(function (activities) {
+              console.log('adding activity here');
               activities.$add({
                 event: 'task_added',
-                src: $scope.user.email,
                 uid: $scope.user.uid
               });
             })
@@ -103,12 +103,30 @@ angular.module('secretSantaApp')
         }
       };
 
-      $scope.sendAGift = function () {
-        console.log('send a gift button pressed, ')
+      $scope.sendAGift = function (content) {
+        console.log('send a gift button pressed, ', content);
+        // add to messages as a special message
+        $scope.messages.$add({
+          text: content,
+          userId: currentAuth.uid,
+          type: 'special'
+        }) .then(
+          firebaseUtilityService.getActivity(function (activities) {
+            activities.$add({
+              event: 'gift',
+              uid: $scope.user.uid
+            })
+          })
+        )
+          .catch(alert);
+      };
+
+      $scope.pokeSanta = function () {
+        console.log('send a email to santa');
       };
 
       $scope.getEmptyTasksContext = function () {
-        if($scope.isTasksWrite) {
+        if($scope.isSanta) {
           //santa
           return "Give some tasks to your child!";
         } else {
@@ -117,10 +135,20 @@ angular.module('secretSantaApp')
       };
 
       $scope.getClass = function (msg) {
+        var _o = {};
         if(msg.userId === currentAuth.uid) {
-          return {'panel-me': true, 'activity-me': true};
+          _o = {'panel-me': true, 'activity-me': true};
+          if(msg.type === 'special') {
+            _o['special-msg'] = true;
+          }
         }
-        return {'panel-others': true, 'activity-others': true};
+        else {
+          _o ={'panel-others': true, 'activity-others': true};
+          if(msg.type === 'special') {
+            _o['special-msg-others'] = true;
+          }
+        }
+        return _o;
       };
 
       function alert(msg) {

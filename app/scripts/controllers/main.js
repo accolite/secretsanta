@@ -49,17 +49,19 @@ angular.module('secretSantaApp')
         })
     };
 
-    firebaseUtilityService.loadActivities(function (activites) {
+    firebaseUtilityService.getActivity(function (activites) {
       activites.$loaded().then(function () {
         $scope.activites = activites;
       });
     });
 
     $scope.constructMessage = function (act) {
-      if(act.event === 'task_added') {
-        return "The amazing santa " + act.src + " challenged his child!";
+      switch(act.event) {
+        case 'task_added' :
+          return "A santa just challenged his child!";
+        case 'gift':
+          return "The amazing santa is planning to gift his child!";
       }
-      console.log('construct a intuitive message from act', act);
     }
 
   }]);
