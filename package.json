@@ -2,6 +2,7 @@
   "name": "secretsanta",
   "version": "0.0.0",
   "dependencies": {
+    "angular-chat-emoji-popup": "^1.0.0",
     "excel": "^0.1.7",
     "exceljs": "^0.8.0",
     "express-fileupload": "^0.3.0",

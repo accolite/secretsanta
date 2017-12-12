@@ -6,6 +6,23 @@ angular.module('firebase.Auth')
 
     var obj = {};
 
+    obj.oauthLogin = function (auth, provider) {
+      auth.$signInWithPopup(provider)
+        .then(function (authData) {
+          console.log("logged");
+          if(authData.user.email.endsWith('accoliteindia.com') || authData.user.email.endsWith('accolitelabs.com')) {
+            redirect(authData);
+          } else {
+            window.alert('sorry, you are permitted to play this amazing game!');
+            auth.$signOut();
+          }
+        })
+        .catch(function (error) {
+          console.log("login error");
+          showError(error);
+        })
+    };
+
     obj.showUserName = function (auth, cb) {
       console.log(auth.get);
     };
@@ -34,9 +51,15 @@ angular.module('firebase.Auth')
       });
     };
 
+    obj.getUserInformation = function (email, cb) {
+      var query = rootRef.child('Employees').orderByChild("emailid").equalTo(email);
+      var _o = $firebaseArray(query);
+      cb(_o);
+    };
+
     obj.getActivity = function (cb) {
         var query = rootRef.child('activity');
-        var activities = $firebaseArray(query);
+        var activities = $firebaseObject(query);
         cb(activities);
     };
 

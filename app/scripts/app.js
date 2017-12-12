@@ -17,5 +17,6 @@ angular.module('secretSantaApp', [
     'ngSanitize',
     'ngTouch',
     'firebase',
-    'firebase.Auth'
+    'firebase.Auth',
+    'emojiApp'
   ]);

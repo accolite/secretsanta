@@ -24,15 +24,7 @@ angular.module('secretSantaApp')
 
       // SignIn with a Provider
       $scope.oauthLogin = function (provider) {
-        auth.$signInWithPopup(provider)
-          .then(function (authData) {
-            console.log("logged");
-            redirect(authData);
-          })
-          .catch(function (error) {
-            console.log("login error");
-            showError(error);
-          })
+        firebaseUtilityService.oauthLogin(auth, provider);
       };
 
       // Anonymous login method
