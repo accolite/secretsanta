@@ -523,7 +523,7 @@ i.icon {
   border-radius: 6px;
   /*box-shadow: 10px 10px 0 0 rgba(62, 196, 240, 0.5);*/
   list-style: none;
-  overflow: hidden;
+  overflow: auto;
   -webkit-box-shadow: 0px 5px 0px 0px #2E4476;
 }
 .list .list-item {

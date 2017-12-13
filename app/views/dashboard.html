@@ -67,12 +67,16 @@
   <div class="col-md-12">
     <div class="col-md-4">
     <div class="tasks-container">
-        <div class="input-group" ng-show="isSanta">
+        <div class="input-group" ng-if="isSanta">
           <input type="text" class="form-control" style="border-color: #C51712; border-width: 2px" placeholder="Give your child a task!" ng-model="task">
           <span class="input-group-btn">
               <button class="example pinterest" type="button" ng-click="addTask(task); task = null">Challenge</button>
             </span>
         </div>
+        <div ng-if="!isSanta">
+          <h2 class="text-center white-text">My Tasks</h2>
+        </div>
+
          <ul class="list">
           <li class="list-item" ng-repeat="task in tasks">
             <input  type="checkbox" class="hidden-box" id="first" ng-change="updateTaskStatus(task)" ng-model="task.completed"/>
