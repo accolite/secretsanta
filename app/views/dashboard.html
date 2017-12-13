@@ -1,6 +1,6 @@
 <div class="row col-md-12">
   <div class="col-md-3 chat-header-image">
-    <img src="images/reading-santa.gif" style="height: 150px">
+    <!--<img src="images/reading-santa.gif" style="height: 150px">-->
     <!-- <div class="ribbon">
       <div class="ribbon-stitches-top"></div>
       <strong class="ribbon-content">
@@ -19,20 +19,22 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Poke your Santa</h4>
+          <h4 ng-show="!isSanta" class="modal-title">Poke your Santa</h4>
+          <h4 ng-show="sSanta" class="modal-title">Poke your Child</h4>
         </div>
         <div class="modal-body">
-          <p>Poking you santa will send him a email, <br> if you are lucky your santa may turn up before it's too late</p>
+          <p ng-show="!isSanta">Poking you santa will send him a email, <br> if you are lucky your santa may turn up before it's too late</p>
+          <p ng-show="isSanta">Poking your child will send him a email, <br> if you are lucky your child may turn up before it's too late</p>
         </div>
         <div class="modal-footer">
-          <button class="col example pinterest btn" ng-click="pokeSanta()" data-dismiss="modal">Poke Now!</button>
+          <button class="col example pinterest btn" ng-click="poke()" data-dismiss="modal">Poke Now!</button>
         </div>
       </div>
 
     </div>
   </div>
   <div class = "col-md-12">
-    <img ng-if="isSanta" src="images/poke-child1.gif" height="50px" class="col example pinterest pull-right poke" ng-attr-title="Poke your Child" style="padding-left:10px" data-toggle="modal" data-target="#myModal">
+    <img ng-if="isSanta" src="images/poke-child1.gif" height="50px" class="col example pinterest pull-right poke" ng-attr-title="Poke your Child" style="padding-left:10px" data-toggle="modal" data-target="#myModal2">
     <img ng-if="isSanta" src="images/santa-gift.gif" height="50px" class="col example pinterest pull-right santa-gift" ng-attr-title="Send a Gift to you Child" data-toggle="modal" data-target="#myModal">
     <img ng-if="!isSanta" src="images/poke-santa.gif" height="50px" class="col example pinterest pull-right poke" ng-attr-title="Poke your SANTA" data-toggle="modal" data-target="#myModal2">
 

@@ -8,6 +8,7 @@ var app = express();
 var http = require('http').Server(app).listen(4000);
 var upload = require('express-fileupload');
 var storeInFirebase = require('./firebase_storage').storeInFirebase;
+var bodyParser = require('body-parser');
 
 var employees = [];
 var employeeGroups = {};
@@ -17,6 +18,8 @@ var mappedEmployeesList = [];
 var id = 0;
 console.log("Server Started!");
 app.use(upload());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname+"/index.html");
@@ -27,7 +30,7 @@ app.post("/", (req, res) => {
         // console.log(req.files.filename.data.toString('utf16'));
         var file = req.files.filename;
         var filename = file.name;
-        
+
         employees = [];
         employeeGroups = {};
         employeesCopyForSanta = [];
@@ -58,11 +61,11 @@ app.post("/", (req, res) => {
                         employeeData.location = curr[5] ? curr[5] : "";
                         employeeData.teamName = curr[4] ? curr[4] : "";
                         employeeData.id = 0;
-                        employeeData.room = {"roomAsSanta" : "", 'roomAsChild' : ""};                     
+                        employeeData.room = {"roomAsSanta" : "", 'roomAsChild' : ""};
                         employees.push(employeeData);
                     });
                     id = 0;
-                    groupEmployees();                    
+                    groupEmployees();
                     createRooms();
                     storeInFirebase(mappedEmployeesList, firebase);
                 });
@@ -81,14 +84,14 @@ app.post("/", (req, res) => {
                 if (employeeGroups.hasOwnProperty(array)) {
                     mapSantaChild(employeeGroups[array]);
                 }
-            }                        
+            }
         };
         Object.compare = function (obj1, obj2) {
             //Loop through properties in object 1
             for (var p in obj1) {
                 //Check property exists on both objects
                 if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false;
-         
+
                 switch (typeof (obj1[p])) {
                     //Deep compare objects
                     case 'object':
@@ -103,7 +106,7 @@ app.post("/", (req, res) => {
                         if (obj1[p] != obj2[p]) return false;
                 }
             }
-         
+
             //Check object 2 for any extra properties
             for (var p in obj2) {
                 if (typeof (obj1[p]) == 'undefined') return false;
@@ -126,11 +129,11 @@ app.post("/", (req, res) => {
 
             employeesCopyForSanta.sort(function() { return 0.5 - Math.random();}); // shuffle arrays
             employeesCopyForChild.sort(function() { return 0.5 - Math.random();});
-        
+
             while (employeesCopyForSanta.length>0) {
                 // var s = employeesCopyForSanta.pop();
-                
-                var santa = employeesCopyForSanta.pop(), 
+
+                var santa = employeesCopyForSanta.pop(),
                     child = Object.compare(employeesCopyForChild[0].emailId, santa.emailId) ? employeesCopyForChild[employeesCopyForChild.length-1] : employeesCopyForChild[0];
                 if(santa.santa && (santa.santa.emailId == child.emailId))
                 {
@@ -143,34 +146,34 @@ app.post("/", (req, res) => {
                 else{
                     if(Object.compare(santa, employeesCopyForChild[0]))
                     {
-                        child = employeesCopyForChild.pop();    
+                        child = employeesCopyForChild.pop();
                     }
                     else
                         child = employeesCopyForChild.shift();
                 }
-                
 
-               
+
+
 
 
                 group[group.indexOf(santa)].child = child;
                 group[group.indexOf(child)].santa = santa;
-                
+
             }
             for(var obj in group)
             {
                 group[obj].id = id++;
                 mappedEmployeesList.push(group[obj]);
-            }                                 
+            }
         };
 
         function createRooms() {
             _.map(mappedEmployeesList, (data) => {
                 data.room['roomAsChild'] = data.santa.id+"_"+data.id;
                 data.room['roomAsSanta'] = data.id+"_"+data.child.id;
-            });            
+            });
         };
-        
+
         // function getRandomInt(min, max, randomSanta, checkUnique, employeesCopyForChild, employeesCopyForSanta) {
         //     min = Math.ceil(min);
         //     max = Math.floor(max);
@@ -178,10 +181,10 @@ app.post("/", (req, res) => {
         //     // if(min == 0 && max == 1 && randomSanta == 0) return 0;
         //     if(checkUnique)
         //         return (employeesCopyForChild[num] == employeesCopyForSanta[randomSanta]) ? getRandomInt(min, max, randomSanta, true, employeesCopyForChild, employeesCopyForSanta) : num;
-        //     else 
+        //     else
         //         return num;
-        // };        
-        // function remove(array, index) {                        
+        // };
+        // function remove(array, index) {
         //     if (index !== -1) {
         //         array.splice(index, 1);
         //     }
@@ -198,24 +201,24 @@ app.get("/notify", (req, res) => {
 
     // get appropriate body from hr with placeholders for adding names of santa and child
     var body = "This is a test email body";
-    
+
     var subject = "SecretSanta Application";
     var recepientsArray = employees.map(employee => employee.emailId)
     _.map(employees, (employee) => {
         sendEmail(from, employee.emailId, subject, body);
         // sendEmail(from, , subject, body);
         console.log("Email sent for "+ employee.emailId);
-    });    
+    });
     res.end();
 });
 
 app.get('/email/send', (req, res) => {
-    var eventType = req.query.event;
-    var currUser = req.query.user;
-    switch(eventType)
+  var eventType = req.query.event;
+  var currUser = req.query.user;
+  switch(eventType)
     {
-        case 'addTask' : notifyChildAboutAddedTask(currUser);
-        case 'poke_santa': pokeSanta(currUser);
+        case 'add_task' : notifyChildAboutAddedTask(currUser);
+        case 'poke_santa': poke(currUser);
 
     }
 });
@@ -235,7 +238,7 @@ function notifyChildAboutAddedTask(currUser) {
     var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
     +" to get yourself one more step closer to a surprise gift!!"
     sendEmail(from, childEmailId, subject, body);
-    
+
 };
 
 function pokeSanta(currUser) {
@@ -251,7 +254,7 @@ function pokeSanta(currUser) {
     var from = 'secretsanta.accolite@gmail.com';
     var subject = "POKE!!";
     var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
-    +" to get yourself one more step closer to a surprise gift!!"    
+    +" to get yourself one more step closer to a surprise gift!!"
     sendEmail(from, santaEmailId, subject, body);
 };
 

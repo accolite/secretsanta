@@ -62,8 +62,8 @@ angular.module('firebase.Auth')
     };
 
     obj.getActivity = function (cb) {
-        var query = rootRef.child('activity');
-        var activities = $firebaseObject(query);
+        var query = rootRef.child('activity').limitToLast(30);
+        var activities = $firebaseArray(query);
         cb(activities);
     };
 

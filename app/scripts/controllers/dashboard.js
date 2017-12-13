@@ -76,8 +76,9 @@ angular.module('secretSantaApp')
             firebaseUtilityService.getActivity(function (activities) {
               console.log('adding activity here');
               activities.$add({
-                event: 'task_added',
-                uid: $scope.user.uid
+                event: 'add_task',
+                uid: $scope.user.uid,
+                timestamp: Date.now()
               });
             })
           )
@@ -116,14 +117,15 @@ angular.module('secretSantaApp')
           firebaseUtilityService.getActivity(function (activities) {
             activities.$add({
               event: 'gift',
-              uid: $scope.user.uid
+              uid: $scope.user.uid,
+              timestamp: Date.now()
             })
           })
         )
           .catch(alert);
       };
 
-      $scope.pokeSanta = function () {
+      $scope.poke = function () {
         console.log('send a email to santa', $scope.isSanta);
         if($scope.isSanta) {
           var event = 'poke_child';

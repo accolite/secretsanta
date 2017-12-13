@@ -678,13 +678,15 @@ i.icon {
   float: left;
   margin-right:10%;
   color: #000;
+  height: fit-content;
 }
 .bubble-right {
   color: #fff;
   border: #ff0241 solid 3px;
   background: #ff0241;
   float:right;
-  margin-left:10%
+  margin-left:10%;
+  height: fit-content;
 }
 
 
@@ -893,7 +895,7 @@ i.icon {
   .active > div:first-child + div + div + div { display:block; }
 }
 
-.red {background-color: #FF9800;}
+.red {background-color: #C51712;}
 
 .blue {background-color: #1976D2;}
 
@@ -911,87 +913,17 @@ i.icon {
   font-size: medium;
   opacity:0.5;
 }
-.carousel-col{
+
+.carousel-col {
   max-midth: min-content;
 }
-=======
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #1c333b;
+  color: #1c333b;
+  text-align: center;
+}

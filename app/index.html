@@ -10,12 +10,11 @@
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
   <link rel="stylesheet" href="bower_components/textAngular/dist/textAngular.css" />
-  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css(.tmp) styles/main.css -->
   <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
   <!-- endbuild -->
 </head>
 <body ng-app="secretSantaApp" style="background-color: #1c333b">
@@ -63,9 +62,15 @@
     </div>
   </div>
   <div class="christmasLights"  style="position: fixed;top: 50px; width: 100%"></div>
+
   <div ng-view="" style="padding-top:100px"></div>
 
-  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+
+  <div class="footer">
+    <p style="color: whitesmoke"><span class="glyphicon glyphicon-heart"></span> developed by </p>
+  </div>
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
   <script>
     !function (A, n, g, u, l, a, r) {
       A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
@@ -141,5 +146,24 @@
         <script src="scripts/directives/ngHideAuth.js"></script>
         <script src="scripts\routes.js"></script>
         <!-- endbuild -->
+
+        <!--<script>-->
+          <!--$('.carousel[data-type="multi"] .item').each(function() {-->
+            <!--var next = $(this).next();-->
+            <!--if (!next.length) {-->
+              <!--next = $(this).siblings(':first');-->
+            <!--}-->
+            <!--next.children(':first-child').clone().appendTo($(this));-->
+
+            <!--for (var i = 0; i < 2; i++) {-->
+              <!--next = next.next();-->
+              <!--if (!next.length) {-->
+                <!--next = $(this).siblings(':first');-->
+              <!--}-->
+
+              <!--next.children(':first-child').clone().appendTo($(this));-->
+            <!--}-->
+          <!--});-->
+        <!--</script>-->
 </body>
 </html>
