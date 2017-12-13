@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="styles/main.css">
   <!-- endbuild -->
 </head>
-<body ng-app="secretSantaApp" style="background-color: #282828">
+<body ng-app="secretSantaApp" style="background-color: #1c333b">
 <!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
   your browser</a> to improve your experience.</p>
@@ -34,7 +34,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-
+        <img src="images/oppa-santa-style.gif" class="oppo-santa-style navbar-brand" style="padding: 0 !important">
         <a class="navbar-brand" href="#/" style="color: white">Secret Santa</a>
       </div>
 
@@ -43,9 +43,9 @@
           <ul class="nav navbar-nav">
             <!-- //angularfire -->
 
-            <li class=""><a style="color: white; background-color: #1b6d85">Me As</a></li>
-            <li class=""><a href="#!/dashboard/santa" style="color: white; background-color: #1b6d85">Santa</a></li>
-            <li class=""><a href="#!/dashboard/child" style="color: white; background-color: #1b6d85">Child</a></li>
+            <li class=""><a href="#!/dashboard/santa" style="color: white; background-color: #1b6d85">My Child</a></li>
+            <li class=""><a href="#!/dashboard/child" style="color: white; background-color: #1b6d85">My Santa</a></li>
+            <li class=""><a href="#!/dashboard/guide" style="color: white; background-color: #1b6d85">Guide</a></li>
             <li class=""><a href="#!/profile" style="color: white;">Profile</a></li>
             <li class=""><a href="#!/login" ng-hide-auth="" style="color: white">Login</a></li>
             <li class=""><a href="" ng-show-auth="" ng-click="logout()" style="color: white">Logout</a></li>
@@ -123,6 +123,7 @@
         <script src="scripts\controllers\account.js"></script>
         <script src="scripts\controllers\dashboard.js"></script>
         <script src="scripts/controllers/profile.js"></script>
+        <script src="scripts\controllers\guide.js"></script>
         <script src="scripts/directives/ngShowAuth.js"></script>
         <script src="scripts/directives/ngHideAuth.js"></script>
         <script src="scripts\routes.js"></script>

@@ -134,6 +134,18 @@ angular.module('secretSantaApp')
           }]
         }
       })
+      .when('/dashboard/guide', {
+        templateUrl: 'views/guide.html',
+        controller: 'GuideCtrl',
+        controllerAs: 'guide',
+        resolve: {
+          "currentAuth": ["auth", function (auth) {
+            // returns a promisse so the resolve waits for it to complete
+            return auth.$requireSignIn();
+          }]
+        }
+      })
+
       .otherwise({
         redirectTo: '/'
       });
