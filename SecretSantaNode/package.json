@@ -1,0 +1,34 @@
+{
+  "name": "secretsanta",
+  "version": "0.0.1",
+  "description": "secretsanta",
+  "main": "scheduleReportGeneration.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mahikanth Nag Yalamarthi",
+  "license": "ISC",
+  "dependencies": {
+    "excel": "^0.1.7",
+    "exceljs": "^0.8.0",
+    "express": "^4.16.2",
+    "express-fileupload": "^0.3.0",
+    "firebase": "^4.8.0",
+    "node-cron": "^1.2.1",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/accolite/secretsanta.git"
+  },
+  "keywords": [
+    "secret",
+    "santa",
+    "accolite"
+  ],
+  "bugs": {
+    "url": "https://github.com/accolite/secretsanta/issues"
+  },
+  "homepage": "https://github.com/accolite/secretsanta#readme"
+}
