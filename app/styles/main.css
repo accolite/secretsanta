@@ -46,6 +46,7 @@ min-width: 100%;
 
 body {
   padding: 0;
+  overflow: auto;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -347,20 +348,21 @@ button.yahoo:active:before {
 }
 
 .tasks-container{
-  height: 30em;
+  height: 375px;
   margin-top: 30px;
   margin-left: 30px;
 }
 .chat-container{
-  height: 31em;
+  height: 340px;
   background-color: #3B5999;
-  margin-top: 30px;
+  margin-top: 10px;
   margin-right: 10px;
   border-radius: 6px;
 }
 .chat-list{
   overflow: auto;
-  height: 25em;
+  height: 320px;
+
 }
 
 .panel.panel-others {
@@ -797,4 +799,14 @@ i.icon {
   position: fixed;
   left:30%;
   z-index: 5;
+}
+
+.santa-gift {
+  height: 80px;
+  cursor: pointer;
+}
+
+.poke {
+  height: 80px;
+  cursor: pointer;
 }
