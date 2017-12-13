@@ -9,6 +9,7 @@
   "author": "Mahikanth Nag Yalamarthi",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "excel": "^0.1.7",
     "exceljs": "^0.8.0",
     "express": "^4.16.2",

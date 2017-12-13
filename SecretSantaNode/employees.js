@@ -8,6 +8,9 @@ var app = express();
 var http = require('http').Server(app).listen(4000);
 var upload = require('express-fileupload');
 var storeInFirebase = require('./firebase_storage').storeInFirebase;
+var reportGenerator = require('./scheduleReportGeneration').reportGenerator;
+var cron = require('node-cron');
+var bodyParser = require('body-parser');
 
 var employees = [];
 var employeeGroups = {};
@@ -17,6 +20,9 @@ var mappedEmployeesList = [];
 var id = 0;
 console.log("Server Started!");
 app.use(upload());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname+"/index.html");
@@ -65,6 +71,7 @@ app.post("/", (req, res) => {
                     groupEmployees();                    
                     createRooms();
                     storeInFirebase(mappedEmployeesList, firebase);
+                    
                 });
             }
         });
@@ -256,8 +263,13 @@ function pokeSanta(currUser) {
 };
 
 app.post('/user/update', (req, res) => {
-    var empObj = req.body;
+    // console.log(req.body);
+    var empObj = JSON.parse(Object.keys(req.body)[0]);
     var id = empObj.id;
     mappedEmployeesList[id] = empObj;
     storeInFirebase(mappedEmployeesList, firebase);
+});
+
+cron.schedule('30 16 * * *', function() {
+    reportGenerator();
 });

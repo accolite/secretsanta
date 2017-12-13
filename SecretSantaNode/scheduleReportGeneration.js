@@ -1,18 +1,14 @@
 var firebase = require('./firebase_config').firebase;
 var _ = require("underscore");
 function reportGenerator() {
-    var reports = [];
-
-    var cron = require('node-cron');
+    var reports = [];    
     var maxChatRate = -1; 
     var maxNumberOfTasksBySanta = 0, minNumberOfTasksBySanta = 9007199254740992; 
     var minNumberOfTaskCompletedByChild= 0, maxNumberOfTasksCompletedByChild = 0;
     var roomWithMaxSantaTasks=[], roomWithMaxChildTasksCompleted=[];
     var roomWithMinSantaTasks=[], roomWithMinChildTasksCompleted=[];
     var roomWithMaxChatRate;
-    cron.schedule('30 16 * * *', function() {
-        generateReport();
-    });
+    generateReport();
     function generateReport() {    
         reports = [];            
         var dbRefForTasks = firebase.database().ref('/tasks/').once('value').then(function(snapshot) {
@@ -138,5 +134,4 @@ function reportGenerator() {
 
     };
 }
-// exports.reportGenerator = reportGenerator;
-reportGenerator();
+exports.reportGenerator = reportGenerator;
