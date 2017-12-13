@@ -1,4 +1,4 @@
-(function () {
+(function () {    
     // Initialize Firebase
     var firebase = require("firebase");
     // var config = {
@@ -10,11 +10,11 @@
     //     messagingSenderId: "993421622636"
     // };
     var config = {
-      apiKey: 'AIzaSyBsAyfyywpfbFyjCLNZP8gMZJU08ytjsWA',
-      authDomain: 'secretsanta-19ed6.firebaseapp.com',
-      databaseURL: 'https://secretsanta-19ed6.firebaseio.com',
-      storageBucket: 'secretsanta-19ed6.appspot.com'
-    };
+        apiKey: 'AIzaSyBsAyfyywpfbFyjCLNZP8gMZJU08ytjsWA',
+        authDomain: 'secretsanta-19ed6.firebaseapp.com',
+        databaseURL: 'https://secretsanta-19ed6.firebaseio.com',
+        storageBucket: 'secretsanta-19ed6.appspot.com'
+      };
     firebase.initializeApp(config);
     exports.firebase = firebase;
 })();
