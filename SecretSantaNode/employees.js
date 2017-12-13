@@ -14,18 +14,25 @@ var employeeGroups = {};
 var employeesCopyForSanta = [];
 var employeesCopyForChild = [];
 var mappedEmployeesList = [];
+var id = 0;
 console.log("Server Started!");
 app.use(upload());
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname+"/index.html");
-})
+});
 
 app.post("/", (req, res) => {
     if(req.files){
         // console.log(req.files.filename.data.toString('utf16'));
         var file = req.files.filename;
         var filename = file.name;
+        
+        employees = [];
+        employeeGroups = {};
+        employeesCopyForSanta = [];
+        employeesCopyForChild = [];
+        mappedEmployeesList = [];
         file.mv("./"+filename, (err) => {
             if(err)
             {
@@ -42,19 +49,19 @@ app.post("/", (req, res) => {
                         {
                             return;
                         }
-                        var employeeData = {};
+                        employeeData = {};
                         employeeData.emailId = curr[0]
                         employeeData.name = curr[1];
                         employeeData.mobileNo = curr[2];
                         employeeData.shift = curr[3] ? curr[3] : "";
-                        employeeData.company = curr[4] ? curr[4] : "";
+                        employeeData.company = curr[6] ? curr[6] : "";
                         employeeData.location = curr[5] ? curr[5] : "";
-                        employeeData.teamName = curr[6] ? curr[6] : "";
-                        employeeData.roomAsSanta = "";
-                        employeeData.roomAsChild = "";
+                        employeeData.teamName = curr[4] ? curr[4] : "";
+                        employeeData.id = 0;
+                        employeeData.room = {"roomAsSanta" : "", 'roomAsChild' : ""};                     
                         employees.push(employeeData);
                     });
-                    
+                    id = 0;
                     groupEmployees();                    
                     createRooms();
                     storeInFirebase(mappedEmployeesList, firebase);
@@ -65,10 +72,10 @@ app.post("/", (req, res) => {
         function groupEmployees() {
             for(var i = 0;i<employees.length; i++) {
                 var employee = employees[i];
-                if(!employeeGroups[employee.teamName+"_"+employee.shift+"_"+employee.location+"_"+employee.company]) {
-                    employeeGroups[employee.teamName+"_"+employee.shift+"_"+employee.location+"_"+employee.company]=[];
+                if(!employeeGroups[employee.shift+"_"+employee.location+"_"+employee.company]) {
+                    employeeGroups[employee.shift+"_"+employee.location+"_"+employee.company]=[];
                 }
-                employeeGroups[employee.teamName+"_"+employee.shift+"_"+employee.location+"_"+employee.company].push(employee);
+                employeeGroups[employee.shift+"_"+employee.location+"_"+employee.company].push(employee);
             }
             for (var array in employeeGroups) {
                 if (employeeGroups.hasOwnProperty(array)) {
@@ -76,7 +83,33 @@ app.post("/", (req, res) => {
                 }
             }                        
         };
-
+        Object.compare = function (obj1, obj2) {
+            //Loop through properties in object 1
+            for (var p in obj1) {
+                //Check property exists on both objects
+                if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false;
+         
+                switch (typeof (obj1[p])) {
+                    //Deep compare objects
+                    case 'object':
+                        if (!Object.compare(obj1[p], obj2[p])) return false;
+                        break;
+                    //Compare function code
+                    case 'function':
+                        if (typeof (obj2[p]) == 'undefined' || (p != 'compare' && obj1[p].toString() != obj2[p].toString())) return false;
+                        break;
+                    //Compare values
+                    default:
+                        if (obj1[p] != obj2[p]) return false;
+                }
+            }
+         
+            //Check object 2 for any extra properties
+            for (var p in obj2) {
+                if (typeof (obj1[p]) == 'undefined') return false;
+            }
+            return true;
+        };
         function mapSantaChild(group) {
             var employeesCopyForSanta=[], employeesCopyForChild=[];
             employeesCopyForSanta = group.slice();
@@ -94,23 +127,47 @@ app.post("/", (req, res) => {
             employeesCopyForSanta.sort(function() { return 0.5 - Math.random();}); // shuffle arrays
             employeesCopyForChild.sort(function() { return 0.5 - Math.random();});
         
-            while (employeesCopyForSanta.length) {
+            while (employeesCopyForSanta.length>0) {
+                // var s = employeesCopyForSanta.pop();
+                
                 var santa = employeesCopyForSanta.pop(), 
-                    child = employeesCopyForChild[0] == santa ? employeesCopyForChild.pop() : employeesCopyForChild.shift();
-                  
+                    child = Object.compare(employeesCopyForChild[0].emailId, santa.emailId) ? employeesCopyForChild[employeesCopyForChild.length-1] : employeesCopyForChild[0];
+                if(santa.santa && (santa.santa.emailId == child.emailId))
+                {
+                    if(santa == employeesCopyForChild[employeesCopyForChild.length-1])
+                    {
+                        console.log("error");
+                    }
+                    child = employeesCopyForChild.pop();
+                }
+                else{
+                    if(Object.compare(santa, employeesCopyForChild[0]))
+                    {
+                        child = employeesCopyForChild.pop();    
+                    }
+                    else
+                        child = employeesCopyForChild.shift();
+                }
+                
+
+               
+
+
                 group[group.indexOf(santa)].child = child;
                 group[group.indexOf(child)].santa = santa;
                 
             }
             for(var obj in group)
             {
+                group[obj].id = id++;
                 mappedEmployeesList.push(group[obj]);
             }                                 
         };
 
         function createRooms() {
             _.map(mappedEmployeesList, (data) => {
-                data.room = data.santa.emailId+"_"+data.child.emailId;
+                data.room['roomAsChild'] = data.santa.id+"_"+data.id;
+                data.room['roomAsSanta'] = data.id+"_"+data.child.id;
             });            
         };
         
@@ -150,4 +207,57 @@ app.get("/notify", (req, res) => {
         console.log("Email sent for "+ employee.emailId);
     });    
     res.end();
+});
+
+app.get('/email/send', (req, res) => {
+    var eventType = req.query.event;
+    var currUser = req.query.user;
+    switch(eventType)
+    {
+        case 'addTask' : notifyChildAboutAddedTask(currUser);
+        case 'poke_santa': pokeSanta(currUser);
+
+    }
+});
+
+function notifyChildAboutAddedTask(currUser) {
+    var childEmailId;
+    _.map(mappedEmployeesList, (data) => {
+        if(data.emailId == currUser)
+        {
+            var room = data.room['roomAsSanta'];
+            var childId = room.split('_')[1];
+            childEmailId = mappedEmployeesList[childId].emailId;
+        }
+    });
+    var from = 'secretsanta.accolite@gmail.com';
+    var subject = "New Task Added To Your List!!";
+    var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
+    +" to get yourself one more step closer to a surprise gift!!"
+    sendEmail(from, childEmailId, subject, body);
+    
+};
+
+function pokeSanta(currUser) {
+    var santaEmailId;
+    _.map(mappedEmployeesList, (data) => {
+        if(data.emailId == currUser)
+        {
+            var room = data.room['roomAsChild'];
+            var santaId = room.split('_')[0];
+            santaEmailId = mappedEmployeesList[santaId].emailId;
+        }
+    });
+    var from = 'secretsanta.accolite@gmail.com';
+    var subject = "POKE!!";
+    var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
+    +" to get yourself one more step closer to a surprise gift!!"    
+    sendEmail(from, santaEmailId, subject, body);
+};
+
+app.post('/user/update', (req, res) => {
+    var empObj = req.body;
+    var id = empObj.id;
+    mappedEmployeesList[id] = empObj;
+    storeInFirebase(mappedEmployeesList, firebase);
 });
