@@ -38,7 +38,7 @@ angular.module('secretSantaApp')
           .then(function () {
             $scope.tasks = tasks;
             $scope.tasksLoaded = true;
-            setFirebaseWatchers();
+            // setFirebaseWatchers();
           })
           .catch(alert);
       });
@@ -60,7 +60,8 @@ angular.module('secretSantaApp')
           // push messages to the end of the array
           $scope.messages.$add({
             text: newMessage,
-            userId: currentAuth.uid
+            userId: currentAuth.uid,
+            timestamp: Date.now()
           }).catch(alert);
         }
       };

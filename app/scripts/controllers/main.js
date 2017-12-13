@@ -46,6 +46,15 @@ angular.module('secretSantaApp')
       });
     });
 
+    $scope.getPanelBG = function (act) {
+      var colors = [{'red': true}, {'blue': true}, {'green': true}, {'yellow': true}];
+      // var randomNumber = (Math.floor(Math.random()*6 + 1)) % colors.length;
+      if(act.event === 'task_added') {
+        return colors[1];
+      }
+      return colors[0];
+    };
+
     $scope.constructMessage = function (act) {
       switch(act.event) {
         case 'task_added' :
@@ -53,6 +62,16 @@ angular.module('secretSantaApp')
         case 'gift':
           return "The amazing santa is planning to gift his child!";
       }
+    };
+
+    $scope.constructMessageHeading = function (act) {
+      switch(act.event) {
+        case 'task_added' :
+          return "Santa Challenge";
+        case 'gift':
+          return "Santa is gifting";
+      }
     }
+
 
   }]);
