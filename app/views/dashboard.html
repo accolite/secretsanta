@@ -103,9 +103,10 @@
         </div>
         <div class="row input-group">
           <span ng-if="messages.length === 0" class="text-muted text-center" style="margin: 0">Don't be shy, Start a new conversation</span>
-          <input type="text" class="form-control" placeholder="You can use markup also ! eg, <b>Hello World</b>" ng-model="message" style="border-color: #C51712; border-width: 2px">
-          <span class="input-group-btn">
-            <button class="example pinterest" type="button" ng-click="addMessage(message); message = null">send</button>
+          <text-angular ng-model="message"></text-angular>
+          <!-- <input type="text" class="form-control" placeholder="You can use markup also ! eg, <b>Hello World</b>"  style="border-color: #C51712; border-width: 2px"> -->
+          <span class="input-group-btn" style="padding-top:65px">
+            <button class="example pinterest" type="button" style="height:40px" ng-click="addMessage(message); message = null">send</button>
           </span>
         </div>
       </div>
