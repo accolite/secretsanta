@@ -1,3 +1,11 @@
+.white-text {
+  color: #fff
+}
+
+.profile-form {
+  background-color: #f7f7f7; padding: 10px; border-radius: 3px
+}
+
 .bg {
   position: fixed;
   top: 0;
@@ -50,7 +58,7 @@ body {
 
 .navbar {
   margin-bottom: 0;
-  background-color: #3EC4F0;
+  background-color: #282828;
   border-color: #3EC4F0;
   border: 0;
 }
@@ -80,20 +88,21 @@ body {
 }
 
 body {
-  background-color: #F7F7F7;
+  background-color: #EF5350;
 }
 
 /* Main marketing message and sign up button */
 .jumbotron {
   text-align: center;
   border-bottom: 3px solid #C51712;
-  background-color: #3EC4F0;
+  background-color: #282828;
+  height: 10em;
 }
 
 .jumbotron .btn {
   font-size: 21px;
   padding: 10px 10px;
-  background-color: #F7F7F7;
+  background-color: #EF5350;
   color: #C51712;
   border-top-color: #C51712;
   border-bottom-width: 5px;
@@ -344,7 +353,7 @@ button.yahoo:active:before {
 }
 .chat-container{
   height: 31em;
-  background-color: #3EC4F0;
+  background-color: #3B5999;
   margin-top: 30px;
   margin-right: 10px;
   border-radius: 6px;
@@ -392,11 +401,11 @@ button.yahoo:active:before {
 }
 
 .special-msg {
-  background-color: #b92c28;
+  background-color: #85d142;
 }
 
 .special-msg-others {
-  background-color: #b92c28;
+  background-color: #85d142;
 }
 
 .label__checkbox {
@@ -508,11 +517,12 @@ i.icon {
   padding: 0;
   width: 100%;
   max-width: 500px;
-  background-color: rgba(62, 196, 240, 0.2);
+  background-color: #3B5999;
   border-radius: 6px;
-  box-shadow: 10px 10px 0 0 rgba(62, 196, 240, 0.5);
+  /*box-shadow: 10px 10px 0 0 rgba(62, 196, 240, 0.5);*/
   list-style: none;
   overflow: hidden;
+  -webkit-box-shadow: 0px 5px 0px 0px #2E4476;
 }
 .list .list-item {
   margin: 0;
@@ -561,7 +571,7 @@ i.icon {
   height: 20px;
   width: 20px;
   margin: 0 20px;
-  border: 2px solid #3498db;
+  border: 2px solid crimson;
   border-radius: 2px;
   cursor: pointer;
 }
@@ -574,6 +584,7 @@ i.icon {
   position: relative;
   cursor: pointer;
   padding: 20px;
+  color: whitesmoke;
   border-left: 1px solid #ecf0f1;
 }
 .check--label-text:after {
@@ -591,10 +602,10 @@ i.icon {
   transition: width 100ms ease-in-out;
 }
 .hidden-box:checked + .check--label {
-  background-color: #F9F9F9;
+  background-color: #2E4476;
 }
 .hidden-box:checked + .check--label .check--label-box {
-  background-color: #3498db;
+  background-color: crimson;
 }
 .hidden-box:checked + .check--label .check--label-box:after {
   content: '';
@@ -651,8 +662,6 @@ i.icon {
   display: block;
   position: relative;
   padding: .25em .5em;
-  background: pink;
-  border: red solid 3px;
   -webkit-border-radius: 11px;
   -moz-border-radius: 11px;
   border-radius: 11px;
@@ -662,10 +671,16 @@ i.icon {
 }
 
 .bubble-left {
+  border: #ffd028 solid 3px;
+  background: #ffd028;
   float: left;
   margin-right:10%;
+  color: #000;
 }
 .bubble-right {
+  color: #fff;
+  border: #ff0241 solid 3px;
+  background: #ff0241;
   float:right;
   margin-left:10%
 }

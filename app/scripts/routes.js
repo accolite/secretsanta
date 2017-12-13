@@ -100,10 +100,10 @@ angular.module('secretSantaApp')
           }]
         }
       })
-      .when('/profile/', {
-        templateUrl: 'views/dashboard.html',
-        controller: 'DashboardCtrl',
-        controllerAs: 'dashboard',
+      .when('/profile', {
+        templateUrl: 'views/profile.html',
+        controller: 'ProfileCtrl',
+        controllerAs: 'profile',
         resolve: {
           "currentAuth": ["auth", function (auth) {
             // returns a promisse so the resolve waits for it to complete

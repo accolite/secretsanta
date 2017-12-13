@@ -11,6 +11,7 @@ angular.module('secretSantaApp')
     function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route) {
 
 
+      $scope.emojiMessage={};
       $scope.user = currentAuth;
       $scope.loaded = false;
 
@@ -122,7 +123,7 @@ angular.module('secretSantaApp')
       };
 
       $scope.pokeSanta = function () {
-        console.log('send a email to santa');
+        console.log('send a email to santa', $scope.isSanta);
       };
 
       $scope.getEmptyTasksContext = function () {
@@ -137,13 +138,15 @@ angular.module('secretSantaApp')
       $scope.getClass = function (msg) {
         var _o = {};
         if(msg.userId === currentAuth.uid) {
-          _o = {'panel-me': true, 'activity-me': true};
+          // _o = {'panel-me': true, 'activity-me': true};
+          _o = {'bubble-right': true};
           if(msg.type === 'special') {
             _o['special-msg'] = true;
           }
         }
         else {
-          _o ={'panel-others': true, 'activity-others': true};
+          // _o ={'panel-others': true, 'activity-others': true};
+          _o ={'bubble-left': true};
           if(msg.type === 'special') {
             _o['special-msg-others'] = true;
           }

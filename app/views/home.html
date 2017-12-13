@@ -1,25 +1,17 @@
-<div class="jumbotron" style="">
-  <div class="christmasLights" style="width: 100%"></div>
-  <h1 style="color: white">Ho Ho Ho</h1>
-  <p class="lead">
-    <!--<img src="images/yeoman.png" alt="I'm Yeoman"><br>-->
-  </p>
-  <div class="row" ng-class="{shake: isShake}" ng-hide-auth="">
-    <input type="button" class="col btn btn-primary" value="Enter through official ID">
-    <!--<button class="col example pinterest">Enter!</button>-->
-    <button  class="col example pinterest" ng-click="oauthLogin('google')">Google</button>
-    <!--<a class="col btn btn-lg btn-success" ng-href="#/">Enter!<span class="glyphicon glyphicon-ok"></span></a>-->
-  </div>
+<div class="christmasLights" style="width: 100%"></div>
+<div class="row" ng-class="{shake: isShake}" ng-hide-auth="">
+  <button  class="example facebook">Enter through official ID</button>
+  <!--<button class="col example pinterest">Enter!</button>-->
+  <button  class="example pinterest" ng-click="oauthLogin('google')">Google</button>
+  <!--<a class="col btn btn-lg btn-success" ng-href="#/">Enter!<span class="glyphicon glyphicon-ok"></span></a>-->
 </div>
 
 <div class="container">
 
-  <h3 class="text-center">Activity</h3>
+  <h3 class="text-center" style="color: white">Activity</h3>
 
   <ul class=" list-group">
     <li class="activity list-group-item" ng-repeat="act in activites">{{constructMessage(act)}}</li>
-    <!--<li class="activity list-group-item">Dapibus ac facilisis in</li>-->
-    <!--<li class="activity list-group-item">Morbi leo risus</li>-->
   </ul>
 
 </div>
