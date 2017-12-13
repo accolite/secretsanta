@@ -1,5 +1,4 @@
-<div class="christmasLights" style="width: 100%"></div>
-<div class="row">
+<div class="row col-md-12">
   <div class="col-md-3 chat-header-image">
     <img src="images/reading-santa.gif" style="height: 150px">
     <!-- <div class="ribbon">
@@ -11,7 +10,7 @@
     </div> -->
   </div>
 
-  <button class="col example pinterest pull-right" style="margin-top: 20px; margin-right: 20px" data-toggle="modal" data-target="#myModal2">Poke</button>
+  <!-- <button class="col example pinterest pull-right" style="margin-top: 20px; margin-right: 20px" data-toggle="modal" data-target="#myModal2">Poke</button> -->
   <!-- Modal -->
   <div id="myModal2" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -32,12 +31,18 @@
 
     </div>
   </div>
+  <div class = "col-md-12">
+    <img ng-if="isSanta" src="images/poke-child1.gif" height="50px" class="col example pinterest pull-right poke" ng-attr-title="Poke your Child" style="padding-left:10px" data-toggle="modal" data-target="#myModal">
+    <img ng-if="isSanta" src="images/santa-gift.gif" height="50px" class="col example pinterest pull-right santa-gift" ng-attr-title="Send a Gift to you Child" data-toggle="modal" data-target="#myModal">
+    <img ng-if="!isSanta" src="images/poke-santa.gif" height="50px" class="col example pinterest pull-right poke" ng-attr-title="Poke your SANTA" data-toggle="modal" data-target="#myModal2">
 
-  <button ng-show="isSanta" class="col example pinterest pull-right" style="margin-top: 20px; margin-right: 20px" data-toggle="modal" data-target="#myModal">
+  </div>
+
+<!--   <button ng-show="isSanta" class="col example pinterest pull-right" style="margin-top: 20px; margin-right: 20px" data-toggle="modal" data-target="#myModal">
     Send a
     <img src="http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/gift-icon.png" alt="" width="30px" height="30px">
   </button>
-  <!-- Modal -->
+ -->  <!-- Modal -->
   <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
 
@@ -58,49 +63,53 @@
       </div>
 
     </div>
-</div>
-<div class="row">
-  <div class="col-md-4">
-  <h2 class="text-center white-text">Tasks</h2>
-  <div class="tasks-container">
-       <ul class="list">
-        <li class="list-item" ng-repeat="task in tasks">
-          <input  type="checkbox" class="hidden-box" id="first" ng-change="updateTaskStatus(task)" ng-model="task.completed"/>
-          <label for="first" class="check--label">
-            <span ng-show="isSanta" class="check--label-box"></span>
-            <span class="check--label-text">{{task.text}}</span>
-            <button type="button" class="close" ng-show="isSanta" ng-click="deleteTask(task)">&times;</button>
-          </label>
-        </li>
-         <label class="check--label" ng-if="tasks.length === 0">
-           <span class="check--label-text text-muted">{{getEmptyTasksContext()}}</span>
-         </label>
-      </ul>
-      <div class="input-group" ng-show="isSanta">
-        <input type="text" class="form-control" style="border-color: #C51712; border-width: 2px" placeholder="Give your child a task!" ng-model="task">
-        <span class="input-group-btn">
-            <button class="example pinterest" type="button" ng-click="addTask(task); task = null">Challenge</button>
-          </span>
+  </div>
+  <div class="col-md-12">
+    <div class="col-md-4">
+    <div class="tasks-container">
+        <div class="input-group" ng-if="isSanta">
+          <input type="text" class="form-control" style="border-color: #C51712; border-width: 2px" placeholder="Give your child a task!" ng-model="task">
+          <span class="input-group-btn">
+              <button class="example pinterest" type="button" ng-click="addTask(task); task = null">Challenge</button>
+            </span>
+        </div>
+        <div ng-if="!isSanta">
+          <h2 class="text-center white-text">My Tasks</h2>
+        </div>
+
+         <ul class="list">
+          <li class="list-item" ng-repeat="task in tasks">
+            <input  type="checkbox" class="hidden-box" id="first" ng-change="updateTaskStatus(task)" ng-model="task.completed"/>
+            <label for="first" class="check--label">
+              <span ng-show="isSanta" class="check--label-box"></span>
+              <span class="check--label-text">{{task.text}}</span>
+              <button type="button" class="close" ng-show="isSanta" ng-click="deleteTask(task)">&times;</button>
+            </label>
+          </li>
+           <label class="check--label" ng-if="tasks.length === 0">
+             <span class="check--label-text text-muted">{{getEmptyTasksContext()}}</span>
+           </label>
+        </ul>
       </div>
     </div>
-  </div>
-  <div class="col-md-8">
-    <div class="well chat-container">
-      <div class="chat-list">
-        <div ng-repeat="msg in messages" class="panel" ng-class="getClass(msg)">
-          <div class="panel-body" ng-bind-html="msg.text">
-            <!--{{msg.text}}-->
+    <div class="col-md-8">
+      <div class="well chat-container">
+        <div class="chat-list">
+          <div ng-repeat="msg in messages" class="panel" ng-class="getClass(msg)">
+            <div class="panel-body" ng-bind-html="msg.text">
+              <!--{{msg.text}}-->
+            </div>
           </div>
         </div>
-      </div>
-      <div class="input-group">
-        <span ng-if="messages.length === 0" class="text-muted text-center" style="margin: 0">Don't be shy, Start a new conversation</span>
-        <input type="text" class="form-control" placeholder="You can use markup also ! eg, <b>Hello World</b>" ng-model="message" style="border-color: #C51712; border-width: 2px">
-        <span class="input-group-btn">
-          <button class="example pinterest" type="button" ng-click="addMessage(message); message = null">send</button>
-        </span>
+        <div class="row input-group">
+          <span ng-if="messages.length === 0" class="text-muted text-center" style="margin: 0">Don't be shy, Start a new conversation</span>
+          <text-angular ng-model="message"></text-angular>
+          <!-- <input type="text" class="form-control" placeholder="You can use markup also ! eg, <b>Hello World</b>"  style="border-color: #C51712; border-width: 2px"> -->
+          <span class="input-group-btn" style="padding-top:65px">
+            <button class="example pinterest" type="button" style="height:40px" ng-click="addMessage(message); message = null">send</button>
+          </span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>

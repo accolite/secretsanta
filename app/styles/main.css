@@ -46,6 +46,7 @@ min-width: 100%;
 
 body {
   padding: 0;
+  overflow: auto;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -347,20 +348,21 @@ button.yahoo:active:before {
 }
 
 .tasks-container{
-  height: 30em;
+  height: 375px;
   margin-top: 30px;
   margin-left: 30px;
 }
 .chat-container{
-  height: 31em;
+  height: 320px;
   background-color: #3B5999;
-  margin-top: 30px;
+  margin-top: 10px;
   margin-right: 10px;
   border-radius: 6px;
 }
 .chat-list{
   overflow: auto;
-  height: 25em;
+  height: 300px;
+
 }
 
 .panel.panel-others {
@@ -521,7 +523,7 @@ i.icon {
   border-radius: 6px;
   /*box-shadow: 10px 10px 0 0 rgba(62, 196, 240, 0.5);*/
   list-style: none;
-  overflow: hidden;
+  overflow: auto;
   -webkit-box-shadow: 0px 5px 0px 0px #2E4476;
 }
 .list .list-item {
@@ -799,6 +801,23 @@ i.icon {
   z-index: 5;
 }
 
+.santa-gift {
+  height: 80px;
+  cursor: pointer;
+}
+
+.poke {
+  height: 80px;
+  cursor: pointer;
+}
+
+.ta-editor.ta-html, .ta-scroll-window.form-control {
+  min-height: 30px !important;
+}
+.ta-scroll-window > .ta-bind {
+  min-height: 30px !important;
+}
+
 .col-centered {
   float: none;
   margin: 0 auto;
@@ -815,6 +834,7 @@ i.icon {
   background-image: none;
   opacity: 1;
 }
+<<<<<<< .mine
 .carousel-control > a > span {
   color: white;
   font-size: 29px !important;
@@ -894,3 +914,84 @@ i.icon {
 .carousel-col{
   max-midth: min-content;
 }
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs

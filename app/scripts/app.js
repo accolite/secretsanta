@@ -15,6 +15,7 @@ angular.module('secretSantaApp', [
     'ngResource',
     'ngRoute',
     'ngSanitize',
+    'textAngular',
     'ngTouch',
     'firebase',
     'firebase.Auth'
