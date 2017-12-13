@@ -36,17 +36,23 @@ angular.module('secretSantaApp')
       console.log($scope.isShake);
     });
 
-    // SignIn with a Provider
     $scope.oauthLogin = function (provider) {
-      auth.$signInWithPopup(provider)
-        .then(function (authData) {
-          console.log("logged");
-          redirect(authData);
-        })
-        .catch(function (error) {
-          console.log("login error");
-          showError(error);
-        })
+      firebaseUtilityService.oauthLogin(auth, provider);
     };
+
+    firebaseUtilityService.getActivity(function (activites) {
+      activites.$loaded().then(function () {
+        $scope.activites = activites;
+      });
+    });
+
+    $scope.constructMessage = function (act) {
+      switch(act.event) {
+        case 'task_added' :
+          return "A santa just challenged his child!";
+        case 'gift':
+          return "The amazing santa is planning to gift his child!";
+      }
+    }
 
   }]);

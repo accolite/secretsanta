@@ -75,13 +75,13 @@ module.exports = function (grunt) {
     express: {
       options: {
         script: 'server/app.js',
-          port: 3000
+          port: 9010
       },
       defaults: {}
     },
     open: {
       dev: {
-        path: 'http://localhost:3000/'
+        path: 'http://localhost:9010/'
       }
     },
     
@@ -378,7 +378,7 @@ module.exports = function (grunt) {
       'concurrent:server',
       'autoprefixer:server',
       'express',
-      'open',
+      //'open',
       'watch'
     ]);
   });

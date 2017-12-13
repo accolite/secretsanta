@@ -78,10 +78,32 @@ angular.module('secretSantaApp')
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
-      .when('/dashboard', {
+      .when('/dashboard/santa', {
         templateUrl: 'views/dashboard.html',
         controller: 'DashboardCtrl',
         controllerAs: 'dashboard',
+        resolve: {
+          "currentAuth": ["auth", function (auth) {
+            // returns a promisse so the resolve waits for it to complete
+            return auth.$requireSignIn();
+          }]
+        }
+      })
+      .when('/dashboard/child', {
+        templateUrl: 'views/dashboard.html',
+        controller: 'DashboardCtrl',
+        controllerAs: 'dashboard',
+        resolve: {
+          "currentAuth": ["auth", function (auth) {
+            // returns a promisse so the resolve waits for it to complete
+            return auth.$requireSignIn();
+          }]
+        }
+      })
+      .when('/profile', {
+        templateUrl: 'views/profile.html',
+        controller: 'ProfileCtrl',
+        controllerAs: 'profile',
         resolve: {
           "currentAuth": ["auth", function (auth) {
             // returns a promisse so the resolve waits for it to complete
@@ -112,6 +134,18 @@ angular.module('secretSantaApp')
           }]
         }
       })
+      .when('/dashboard/guide', {
+        templateUrl: 'views/guide.html',
+        controller: 'GuideCtrl',
+        controllerAs: 'guide',
+        resolve: {
+          "currentAuth": ["auth", function (auth) {
+            // returns a promisse so the resolve waits for it to complete
+            return auth.$requireSignIn();
+          }]
+        }
+      })
+
       .otherwise({
         redirectTo: '/'
       });
