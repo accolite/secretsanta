@@ -54,7 +54,11 @@ angular.module('firebase.Auth')
     obj.getUserInformation = function (email, cb) {
       var query = rootRef.child('Employees').orderByChild("emailid").equalTo(email);
       var _o = $firebaseArray(query);
-      cb(_o);
+      _o.$loaded().then(function () {
+        var q = rootRef.child('Employees').child(_o[0].$id);
+        var o = $firebaseObject(q);
+        cb(o);
+      });
     };
 
     obj.getActivity = function (cb) {

@@ -7,8 +7,8 @@
  * Handler for santa-child login
  */
 angular.module('secretSantaApp')
-  .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "$route",
-    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route) {
+  .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "$route", "NetworkService",
+    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route, NetworkService) {
 
 
       $scope.emojiMessage={};
@@ -124,6 +124,12 @@ angular.module('secretSantaApp')
 
       $scope.pokeSanta = function () {
         console.log('send a email to santa', $scope.isSanta);
+        if($scope.isSanta) {
+          var event = 'poke_child';
+        } else {
+          event = 'poke_santa';
+        }
+        NetworkService.triggerEmailer(event, currentAuth);
       };
 
       $scope.getEmptyTasksContext = function () {

@@ -2,15 +2,16 @@
   <form class="profile-form">
     <div class="form-group">
       <label for="exampleFormControlInput1">Name</label>
-      <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name" ng-value="info[0].name">
+      <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name" ng-value="info.name">
     </div>
     <div class="form-group">
       <label for="name">Email address</label>
-      <input type="email" class="form-control" id="name" placeholder="name@example.com" ng-value="info[0].emailid">
+      <input type="email" class="form-control" id="name" placeholder="name@example.com" ng-value="info.emailid">
     </div>
     <div class="form-group">
       <label for="wishlist">What's your wish list ?</label>
-      <input type="text" class="form-control" id="wishlist" placeholder="wish list here..." ng-model="new.Wish">
+      <input type="text" class="form-control" id="wishlist" placeholder="wish list here..." ng-model="new.wish">
+      <button ng-disabled="!loaded" type="submit" class="example yahoo" ng-click="add(new.wish)">Add</button>
       <ul id="">
         <li>list here</li>
       </ul>
@@ -19,30 +20,30 @@
       <label for="gender">Gender</label>
       <div class="form-check" id="gender">
         <label class="form-check-label">
-          <input ng-model="new.gender" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+          <input ng-model="new.gender" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="male">
           male
         </label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-          <input ng-model="new.gender" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+          <input ng-model="new.gender" class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="female">
           female
         </label>
       </div>
       <div class="form-check">
         <label class="form-check-label">
-          <input ng-model="new.gender" class="form-check-input" type="radio" name="exampleRadios" id="" value="option2" checked>
+          <input ng-model="new.gender" class="form-check-input" type="radio" name="exampleRadios" value="none" checked>
           none
         </label>
       </div>
     </div>
     <div class="form-group">
       <label for="likes">What are your likes ?</label>
-      <textarea class="form-control" id="likes" rows="3" ng-value="info[0].likes"></textarea>
+      <textarea class="form-control" id="likes" rows="3" ng-value="info.likes"></textarea>
     </div>
     <div class="form-group">
       <label for="dislikes">What are your dislikes ?</label>
-      <textarea class="form-control" id="dislikes" rows="3" ng-value="info[0].dislikes"></textarea>
+      <textarea class="form-control" id="dislikes" rows="3" ng-value="info.dislikes"></textarea>
     </div>
     <button ng-disabled="!loaded" type="submit" class="example pinterest">submit</button>
   </form>
