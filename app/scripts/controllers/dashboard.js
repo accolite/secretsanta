@@ -7,8 +7,8 @@
  * Handler for santa-child login
  */
 angular.module('secretSantaApp')
-  .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "$route",
-    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route) {
+  .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "$route", "NetworkService", "$location",
+    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route, NetworkService, $location) {
 
 
       $scope.emojiMessage={};
@@ -38,7 +38,7 @@ angular.module('secretSantaApp')
           .then(function () {
             $scope.tasks = tasks;
             $scope.tasksLoaded = true;
-            setFirebaseWatchers();
+            // setFirebaseWatchers();
           })
           .catch(alert);
       });
@@ -60,7 +60,8 @@ angular.module('secretSantaApp')
           // push messages to the end of the array
           $scope.messages.$add({
             text: newMessage,
-            userId: currentAuth.uid
+            userId: currentAuth.uid,
+            timestamp: Date.now()
           }).catch(alert);
         }
       };
@@ -75,8 +76,13 @@ angular.module('secretSantaApp')
             firebaseUtilityService.getActivity(function (activities) {
               console.log('adding activity here');
               activities.$add({
-                event: 'task_added',
-                uid: $scope.user.uid
+                event: 'add_task',
+                uid: $scope.user.uid,
+                timestamp: Date.now()
+              }).then(function () {
+                var utterThis = new SpeechSynthesisUtterance("Santa added a new child!");
+                utterThis.voice = speechSynthesis.getVoices().filter(s => s.name.match("Zira | Female"))[0];
+                window.speechSynthesis.speak(utterThis)
               });
             })
           )
@@ -115,15 +121,22 @@ angular.module('secretSantaApp')
           firebaseUtilityService.getActivity(function (activities) {
             activities.$add({
               event: 'gift',
-              uid: $scope.user.uid
+              uid: $scope.user.uid,
+              timestamp: Date.now()
             })
           })
         )
           .catch(alert);
       };
 
-      $scope.pokeSanta = function () {
+      $scope.poke = function () {
         console.log('send a email to santa', $scope.isSanta);
+        if($scope.isSanta) {
+          var event = 'poke_child';
+        } else {
+          event = 'poke_santa';
+        }
+        NetworkService.triggerEmailer(event, currentAuth);
       };
 
       $scope.getEmptyTasksContext = function () {
@@ -152,6 +165,14 @@ angular.module('secretSantaApp')
           }
         }
         return _o;
+      };
+
+      $scope.goToChildProfile = function () {
+        firebaseUtilityService.getUserInformation(currentAuth.email, function (allData) {
+          allData.$loaded().then(function () {
+            $location.path('/profile/' + allData.childEmailId);
+          });
+        });
       };
 
       function alert(msg) {

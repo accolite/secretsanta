@@ -46,13 +46,32 @@ angular.module('secretSantaApp')
       });
     });
 
+    $scope.getPanelBG = function (act) {
+      var colors = [{'red': true}, {'blue': true}, {'green': true}, {'yellow': true}];
+      // var randomNumber = (Math.floor(Math.random()*6 + 1)) % colors.length;
+      if(act.event === 'add_task') {
+        return colors[1];
+      }
+      return colors[0];
+    };
+
     $scope.constructMessage = function (act) {
       switch(act.event) {
-        case 'task_added' :
-          return "A santa just challenged his child!";
+        case 'add_task' :
+          return "A santa just challenged his child !";
         case 'gift':
-          return "The amazing santa is planning to gift his child!";
+          return "The amazing santa is planning to gift his child !";
+      }
+    };
+
+    $scope.constructMessageHeading = function (act) {
+      switch(act.event) {
+        case 'add_task' :
+          return "Santa Challenge";
+        case 'gift':
+          return "Santa is gifting";
       }
     }
+
 
   }]);

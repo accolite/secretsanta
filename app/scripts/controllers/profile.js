@@ -7,19 +7,37 @@
  *  for profile page
  */
 angular.module('secretSantaApp')
-  .controller('ProfileCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService",
-    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService) {
+  .controller('ProfileCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "NetworkService", "$firebaseUtils", "$routeParams", "$location",
+    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, NetworkService, $firebaseUtils, $routeParams, $location) {
 
       $scope.loaded = false;
-      $scope.newWish = '';
+      $scope.newWishList = [];
 
-      var email = "mahikanthnag.yalamarthi@accoliteindia.com";
+      // // var email = "mahikanthnag.yalamarthi@accoliteindia.com";
+      if($routeParams.email) {
+        var email = $routeParams.email;
+        $scope.editable = false;
+      } else {
+        email = currentAuth.email;
+        $scope.editable = true;
+      }
+
       firebaseUtilityService.getUserInformation(email, function (info) {
         info.$loaded().then(function () {
           $scope.info = info;
           $scope.loaded = true;
+          $scope.user = $firebaseUtils.toJSON($scope.info);
+          $scope.user.wishlist = [];
         });
       });
 
+      $scope.save = function () {
+        $scope.user.id = $scope.info.$id;
+        NetworkService.updateUser($scope.user.emailid, $scope.user);
+      };
+
+      $scope.add = function (wish) {
+        $scope.user.wishlist.push(wish);
+      };
 
     }]);

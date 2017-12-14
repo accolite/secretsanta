@@ -24,7 +24,19 @@ angular.module('secretSantaApp')
 
       // SignIn with a Provider
       $scope.oauthLogin = function (provider) {
-        firebaseUtilityService.oauthLogin(auth, provider);
+        auth.$signInWithPopup(provider)
+          .then(function (authData) {
+            console.log("logged");
+            if(authData.email.endsWith('accoliteindia.com')) {
+              redirect(authData);
+            } else {
+              auth.$signOut();
+            }
+          })
+          .catch(function (error) {
+            console.log("login error");
+            showError(error);
+          })
       };
 
       // Anonymous login method

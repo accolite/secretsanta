@@ -1,21 +1,88 @@
-<div class="christmasLights" style="width: 100%"></div>
 <div class="row" ng-class="{shake: isShake}" ng-hide-auth="">
-  <button  class="example facebook">Enter through official ID</button>
   <!--<button class="col example pinterest">Enter!</button>-->
-  <button  class="example pinterest" ng-click="oauthLogin('google')">Google</button>
+  <button  class="example pinterest" ng-click="oauthLogin('google')">Login with <i class="fa fa-google"></i> </button>
   <!--<a class="col btn btn-lg btn-success" ng-href="#/">Enter!<span class="glyphicon glyphicon-ok"></span></a>-->
 </div>
 
-<div class="container">
+<div class="" ng-show-auth="">
 
-  <h3 class="text-center" style="color: white">Activity</h3>
+  <h3 class="text-center" style="color: white; margin-top: 70px">Activity</h3>
 
-  <ul class=" list-group">
-    <li class="activity list-group-item" ng-repeat="act in activites">{{constructMessage(act)}}</li>
-  </ul>
+  <!--<ul class=" list-group">-->
+    <!--<li class="activity list-group-item" ng-repeat="act in activites">{{constructMessage(act)}}</li>-->
+  <!--</ul>-->
+    <div class="row">
+      <div class="col-xs-11 col-md-10 col-centered">
 
-</div>
+        <div id="carousel" class="carousel slide" data-ride="carousel" data-type="multi" data-interval="2500">
+          <div class="carousel-inner">
+            <div class="item active">
+              <div class="carousel-col ">
+                <div class="panel panel-default red">
+                  <div class="panel-heading">Activity</div>
+                  <div class="panel-body panel-body-activity">
+                    <h1 class="display-1" style="color: whitesmoke; padding: 10px;">
+                      Check out all the activities happening in Secret Santa universe!
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item" style="height: 300px" ng-repeat="act in activites">
+              <div class="carousel-col">
+                <div class="panel panel-default" ng-class="getPanelBG(act)">
+                  <div class="panel-heading">
+                    {{constructMessageHeading(act)}}
+                    <b class="pull-right">{{act.timestamp | date:"MM/dd/yyyy 'at' h:mma"}}</b>
+                  </div>
+                  <div class="panel-body" style="text-align:center;vertical-align: middle">
+                    <h1 class="display-1" style="color: whitesmoke; padding: 10px;">{{constructMessage(act)}}</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--<div class="item">-->
+              <!--<div class="carousel-col">-->
+                <!--<div class="panel panel-default yellow">-->
+                  <!--<div class="panel-heading">Panel heading without title</div>-->
+                  <!--<div class="panel-body">-->
+                    <!--Panel content-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="item">-->
+              <!--<div class="carousel-col">-->
+                <!--<div class="panel panel-default green">-->
+                  <!--<div class="panel-heading">Panel heading without title</div>-->
+                  <!--<div class="panel-body">-->
+                    <!--Panel content-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
 
-<div>
-  <img src="http://clipart-library.com/images/yckA54Gxi.png" class="tree-bg" style="height: 400px; width: 300px;" alt="">
+          <!-- Controls -->
+          <div class="left carousel-control">
+            <a href="#carousel" role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </div>
+          <div class="right carousel-control">
+            <a href="#carousel" role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <!--<img src="http://clipart-library.com/images/yckA54Gxi.png" class="" style="height: 400px; width: 300px;" alt="">-->
+  </div>
 </div>

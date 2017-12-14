@@ -15,7 +15,7 @@
 /*/ Preserve aspet ratio /*/
 min-width: 100%;
   min-height: 100%;
-  z-index: 10;
+  z-index: 4;
   opacity:0.45;
   -moz-opacity:0.45;
   filter:alpha(opacity=45);
@@ -46,6 +46,7 @@ min-width: 100%;
 
 body {
   padding: 0;
+  overflow: auto;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -80,7 +81,8 @@ body {
 .footer {
   padding-top: 19px;
   color: #777;
-  border-top: 1px solid #e5e5e5;
+  z-index: -1;
+  /*border-top: 1px solid #e5e5e5;*/
 }
 
 .container-narrow > hr {
@@ -347,20 +349,21 @@ button.yahoo:active:before {
 }
 
 .tasks-container{
-  height: 30em;
+  height: 375px;
   margin-top: 30px;
   margin-left: 30px;
 }
 .chat-container{
-  height: 31em;
+  height: 320px;
   background-color: #3B5999;
-  margin-top: 30px;
+  margin-top: 10px;
   margin-right: 10px;
   border-radius: 6px;
 }
 .chat-list{
   overflow: auto;
-  height: 25em;
+  height: 300px;
+
 }
 
 .panel.panel-others {
@@ -521,7 +524,7 @@ i.icon {
   border-radius: 6px;
   /*box-shadow: 10px 10px 0 0 rgba(62, 196, 240, 0.5);*/
   list-style: none;
-  overflow: hidden;
+  overflow: auto;
   -webkit-box-shadow: 0px 5px 0px 0px #2E4476;
 }
 .list .list-item {
@@ -676,13 +679,15 @@ i.icon {
   float: left;
   margin-right:10%;
   color: #000;
+  height: fit-content;
 }
 .bubble-right {
   color: #fff;
   border: #ff0241 solid 3px;
   background: #ff0241;
   float:right;
-  margin-left:10%
+  margin-left:10%;
+  height: fit-content;
 }
 
 
@@ -769,7 +774,7 @@ i.icon {
   -webkit-transform: rotate(-20deg);
 }
 .ribbon-dashboard {
-  -webkit-transform: rotate(-5deg); 
+  -webkit-transform: rotate(-5deg);
   position: fixed;
   left:30%;
 }
@@ -797,4 +802,129 @@ i.icon {
   position: fixed;
   left:30%;
   z-index: 5;
+}
+
+.santa-gift {
+  height: 80px;
+  cursor: pointer;
+}
+
+.poke {
+  height: 80px;
+  cursor: pointer;
+}
+
+.ta-editor.ta-html, .ta-scroll-window.form-control {
+  min-height: 30px !important;
+}
+.ta-scroll-window > .ta-bind {
+  min-height: 30px !important;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}
+
+.carousel-control {
+  width: 8%;
+  width: 0px;
+}
+.carousel-control.left,
+.carousel-control.right {
+  margin-right: 40px;
+  margin-left: 32px;
+  background-image: none;
+  opacity: 1;
+}
+<<<<<<< .mine
+.carousel-control > a > span {
+  color: white;
+  font-size: 29px !important;
+}
+
+.carousel-col {
+  position: relative;
+  min-height: 1px;
+  padding: 5px;
+  float: left;
+}
+
+.active > div { display:none; }
+.active > div:first-child { display:block; }
+
+/*xs*/
+@media (max-width: 767px) {
+  .carousel-inner .active.left { left: -50%; }
+  .carousel-inner .active.right { left: 50%; }
+  .carousel-inner .next        { left:  50%; }
+  .carousel-inner .prev		     { left: -50%; }
+  .carousel-col                { width: 100%; }
+  .active > div:first-child + div { display:block; }
+}
+
+/*sm*/
+@media (min-width: 768px) and (max-width: 991px) {
+  .carousel-inner .active.left { left: -50%; }
+  .carousel-inner .active.right { left: 50%; }
+  .carousel-inner .next        { left:  50%; }
+  .carousel-inner .prev		     { left: -50%; }
+  .carousel-col                { width: 50%; }
+  .active > div:first-child + div { display:block; }
+}
+
+/*md*/
+@media (min-width: 992px) and (max-width: 1199px) {
+  .carousel-inner .active.left { left: -33%; }
+  .carousel-inner .active.right { left: 33%; }
+  .carousel-inner .next        { left:  33%; }
+  .carousel-inner .prev		     { left: -33%; }
+  .carousel-col                { width: 33%; }
+  .active > div:first-child + div { display:block; }
+  .active > div:first-child + div + div { display:block; }
+}
+
+/*lg*/
+@media (min-width: 1200px) {
+  .carousel-inner .active.left { left: -25%; }
+  .carousel-inner .active.right{ left:  25%; }
+  .carousel-inner .next        { left:  25%; }
+  .carousel-inner .prev		     { left: -25%; }
+  .carousel-col                { width: 100%; }
+  .active > div:first-child + div { display:block; }
+  .active > div:first-child + div + div { display:block; }
+  .active > div:first-child + div + div + div { display:block; }
+}
+
+.red {background-color: #C51712;}
+
+.blue {background-color: #1976D2;}
+
+.green {background-color: green;}
+
+.yellow {background-color: yellow;}
+
+.panel-body-activity {
+  min-height: 10em;
+  min-width: 10em;
+  font-size: large;
+}
+
+.panel-header-activity {
+  font-size: medium;
+  opacity:0.5;
+}
+
+.carousel-col {
+  max-midth: min-content;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #1c333b;
+  color: #1c333b;
+  text-align: center;
 }
