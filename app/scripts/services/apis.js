@@ -4,14 +4,15 @@ angular.module('secretSantaApp')
   .factory('NetworkService', ['$http', function ($http) {
 
       var obj = {};
-      var bsse = 'http://localhost:4000';
+      // var bsse = 'http://localhost:4000';
+      var bsse = 'http://192.168.43.47:4000';
 
       obj.getUser = function (email) {
         console.log('get user object');
       };
 
       obj.updateUser = function (email, data) {
-        $http.post(bsse + '/update/user/?email=' + email, data);
+        $http.post(bsse + '/user/update/?email=' + email, JSON.stringify(data));
       };
 
       obj.triggerEmailer = function (event, authData) {

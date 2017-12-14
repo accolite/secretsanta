@@ -7,8 +7,8 @@
  * Handler for santa-child login
  */
 angular.module('secretSantaApp')
-  .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "$route", "NetworkService",
-    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route, NetworkService) {
+  .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "$route", "NetworkService", "$location",
+    function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route, NetworkService, $location) {
 
 
       $scope.emojiMessage={};
@@ -79,6 +79,10 @@ angular.module('secretSantaApp')
                 event: 'add_task',
                 uid: $scope.user.uid,
                 timestamp: Date.now()
+              }).then(function () {
+                var utterThis = new SpeechSynthesisUtterance("Santa added a new child!");
+                utterThis.voice = speechSynthesis.getVoices().filter(s => s.name.match("Zira | Female"))[0];
+                window.speechSynthesis.speak(utterThis)
               });
             })
           )
@@ -161,6 +165,14 @@ angular.module('secretSantaApp')
           }
         }
         return _o;
+      };
+
+      $scope.goToChildProfile = function () {
+        firebaseUtilityService.getUserInformation(currentAuth.email, function (allData) {
+          allData.$loaded().then(function () {
+            $location.path('/profile/' + allData.childEmailId);
+          });
+        });
       };
 
       function alert(msg) {

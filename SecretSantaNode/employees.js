@@ -17,6 +17,13 @@ var employeesCopyForChild = [];
 var mappedEmployeesList = [];
 var id = 0;
 console.log("Server Started!");
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  // res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
 app.use(upload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

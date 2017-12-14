@@ -100,7 +100,7 @@ angular.module('secretSantaApp')
           }]
         }
       })
-      .when('/profile', {
+      .when('/profile/:email?', {
         templateUrl: 'views/profile.html',
         controller: 'ProfileCtrl',
         controllerAs: 'profile',

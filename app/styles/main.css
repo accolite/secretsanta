@@ -15,7 +15,7 @@
 /*/ Preserve aspet ratio /*/
 min-width: 100%;
   min-height: 100%;
-  z-index: 10;
+  z-index: 4;
   opacity:0.45;
   -moz-opacity:0.45;
   filter:alpha(opacity=45);
@@ -81,7 +81,8 @@ body {
 .footer {
   padding-top: 19px;
   color: #777;
-  border-top: 1px solid #e5e5e5;
+  z-index: -1;
+  /*border-top: 1px solid #e5e5e5;*/
 }
 
 .container-narrow > hr {
@@ -858,7 +859,7 @@ i.icon {
   .carousel-inner .active.right { left: 50%; }
   .carousel-inner .next        { left:  50%; }
   .carousel-inner .prev		     { left: -50%; }
-  .carousel-col                { width: 50%; }
+  .carousel-col                { width: 100%; }
   .active > div:first-child + div { display:block; }
 }
 
