@@ -14,7 +14,7 @@
       <input type="text" class="form-control" id="wishlist" placeholder="wish list here..." ng-model="new.wish" ng-disabled="!editable">
       <button ng-disabled="!loaded" type="submit" class="example yahoo" ng-click="add(new.wish)">Add</button>
       <ul id="">
-        <li ng-repeat="item in user.wishlist">{{item}}</li>
+        <li ng-repeat="item in user.wishlist track by $index">{{item}}</li>
       </ul>
     </div>
     <div class="form-group">
@@ -40,11 +40,11 @@
     </div>
     <div class="form-group">
       <label for="likes">What are your likes ?</label>
-      <textarea class="form-control" id="likes" rows="3" ng-value="user.likes" ng-disabled="!editable"></textarea>
+      <textarea class="form-control" id="likes" rows="3" ng-model="user.likes" ng-value="user.likes" ng-disabled="!editable"></textarea>
     </div>
     <div class="form-group">
       <label for="dislikes">What are your dislikes ?</label>
-      <textarea class="form-control" id="dislikes" rows="3" ng-value="user.dislikes" ng-disabled="!editable"></textarea>
+      <textarea class="form-control" id="dislikes" rows="3" ng-model="user.dislikes" ng-value="user.dislikes" ng-disabled="!editable"></textarea>
     </div>
   </form>
 </div>

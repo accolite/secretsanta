@@ -1,6 +1,6 @@
-(function () {    
+(function () {
     // Initialize Firebase
-    // var firebase = require("firebase");
+    var firebase = require("firebase");
     // var config = {
     //     apiKey: "AIzaSyBMyZjbWf1J0-A677LvTRXQfb9t7a3y25o",
     //     authDomain: "secretsanta-accolite.firebaseapp.com",
