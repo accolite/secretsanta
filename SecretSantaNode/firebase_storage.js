@@ -15,7 +15,11 @@ function storeInFirebase(mappedEmployeesList, firebase) {
                             location: mappedEmployeesList[obj].location,
                             teamName: mappedEmployeesList[obj].teamName,                            
                             childEmailId: mappedEmployeesList[obj].child ? mappedEmployeesList[obj].child.emailId:"",
-                            santaEmailId: mappedEmployeesList[obj].santa ? mappedEmployeesList[obj].santa.emailId : "" 
+                            santaEmailId: mappedEmployeesList[obj].santa ? mappedEmployeesList[obj].santa.emailId : "",
+                            gender: mappedEmployeesList[obj].gender,
+                            wishlist: mappedEmployeesList[obj].wishlist,
+                            likes: mappedEmployeesList[obj].likes,
+                            dislikes: mappedEmployeesList[obj].dislikes  
                         });
     }
     dbRefForEmployees.set(employeeArray);
@@ -26,7 +30,7 @@ function storeInFirebase(mappedEmployeesList, firebase) {
 
     // const dbRefForUsersMapping = firebase.database().ref().child('users');
     // dbRefForUsersMapping.set(employees.map(employee => employee.emailid));
-    var jsonUsers= [];
+    var jsonUsers= {};
     var dbRefForUsersDetailsMapping = firebase.database().ref().child('users');
     for(var obj in mappedEmployeesList)
     {        
@@ -41,8 +45,8 @@ function storeInFirebase(mappedEmployeesList, firebase) {
         var roomAsSanta = mappedEmployeesList[obj].room['roomAsSanta'];
         var roomAsChild = mappedEmployeesList[obj].room['roomAsChild'];
         var jsonUser = {};
-        jsonUser[trimmedEmail] = {"roomAsSanta": roomAsSanta, 'roomAsChild' : roomAsChild};
-        jsonUsers.push(jsonUser);        
+        // jsonUser[trimmedEmail] = 
+        jsonUsers[trimmedEmail] = {"roomAsSanta": roomAsSanta, 'roomAsChild' : roomAsChild};        
     }
     dbRefForUsersDetailsMapping.set(jsonUsers);
 };

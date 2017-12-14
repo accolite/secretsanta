@@ -20,10 +20,18 @@ var mappedEmployeesList = [];
 var id = 0;
 console.log("Server Started!");
 app.use(upload());
+
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+});
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
+app.use(bodyParser.json());
 app.get("/", (req, res) => {
     res.sendFile(__dirname+"/index.html");
 });
@@ -167,6 +175,10 @@ app.post("/", (req, res) => {
             for(var obj in group)
             {
                 group[obj].id = id++;
+                group[obj].gender = "";
+                group[obj].likes = "";
+                group[obj].dislikes = "";
+                group[obj].wishlist = [];
                 mappedEmployeesList.push(group[obj]);
             }                                 
         };
@@ -263,10 +275,13 @@ function pokeSanta(currUser) {
 };
 
 app.post('/user/update', (req, res) => {
-    // console.log(req.body);
-    var empObj = JSON.parse(Object.keys(req.body)[0]);
+    console.log(req.body);
+    var empObj = req.body;
     var id = empObj.id;
-    mappedEmployeesList[id] = empObj;
+    mappedEmployeesList[id].wishlist = empObj.wishlist;
+    mappedEmployeesList[id].gender = empObj.gender ? empObj.gender : "";
+    mappedEmployeesList[id].likes = empObj.likes ? empObj.likes : "";
+    mappedEmployeesList[id].dislikes = empObj.dislikes ? empObj.dislikes : "";
     storeInFirebase(mappedEmployeesList, firebase);
 });
 
