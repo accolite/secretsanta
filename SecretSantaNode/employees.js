@@ -32,11 +32,11 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.sendFile(__dirname+"/index.html");
 });
 
-app.post("/", (req, res) => {
+app.post("/api", (req, res) => {
     if(req.files){
         // console.log(req.files.filename.data.toString('utf16'));
         var file = req.files.filename;
