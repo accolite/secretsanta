@@ -199,7 +199,7 @@ app.post("/api", (req, res) => {
     }
 });
 
-app.get("/notify", (req, res) => {
+app.get("/api/notify", (req, res) => {
     var from = 'secretsanta.accolite@gmail.com';
     // var to = req.body.to;
     // var body = req.body.body;
@@ -218,7 +218,7 @@ app.get("/notify", (req, res) => {
     res.end();
 });
 
-app.get('/email/send', (req, res) => {
+app.get('/api/email/send', (req, res) => {
     var eventType = req.query.event;
     var currUser = req.query.user;
     switch(eventType)
@@ -319,7 +319,7 @@ function notifyGift(currUser) {
     var body = "Your santa wants to send you a present!!"    
     sendEmail(from, childEmailId, subject, body);
 }
-app.post('/user/update', (req, res) => {
+app.post('/api/user/update', (req, res) => {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
         fbListOfEmployees = snapshot.val();                      
