@@ -72,6 +72,7 @@ app.post("/", (req, res) => {
                         employeeData.location = curr[5] ? curr[5] : "";
                         employeeData.teamName = curr[4] ? curr[4] : "";
                         employeeData.id = 0;
+                        employeeData.active ="";
                         employeeData.room = {"roomAsSanta" : "", 'roomAsChild' : ""};                     
                         employees.push(employeeData);
                     });
@@ -87,10 +88,10 @@ app.post("/", (req, res) => {
         function groupEmployees() {
             for(var i = 0;i<employees.length; i++) {
                 var employee = employees[i];
-                if(!employeeGroups[employee.shift+"_"+employee.location+"_"+employee.company]) {
-                    employeeGroups[employee.shift+"_"+employee.location+"_"+employee.company]=[];
+                if(!employeeGroups[employee.shift+"_"+employee.active+"_"+employee.location+"_"+employee.company]) {
+                    employeeGroups[employee.shift+"_"+employee.active+"_"+employee.location+"_"+employee.company]=[];
                 }
-                employeeGroups[employee.shift+"_"+employee.location+"_"+employee.company].push(employee);
+                employeeGroups[employee.shift+"_"+employee.active+"_"+employee.location+"_"+employee.company].push(employee);
             }
             for (var array in employeeGroups) {
                 if (employeeGroups.hasOwnProperty(array)) {
@@ -135,6 +136,11 @@ app.post("/", (req, res) => {
                 console.log(group[0].name+ ' cannot be mapped');
                 group[0].santa="";
                 group[0].child="";
+                group[0].id = id++;
+                group[0].gender = "";
+                group[0].likes = "";
+                group[0].dislikes = "";
+                group[0].wishlist = [];
                 mappedEmployeesList.push(group[0]);
                 return;
             }
@@ -188,23 +194,7 @@ app.post("/", (req, res) => {
                 data.room['roomAsChild'] = data.santa.id+"_"+data.id;
                 data.room['roomAsSanta'] = data.id+"_"+data.child.id;
             });            
-        };
-        
-        // function getRandomInt(min, max, randomSanta, checkUnique, employeesCopyForChild, employeesCopyForSanta) {
-        //     min = Math.ceil(min);
-        //     max = Math.floor(max);
-        //     var num = Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
-        //     // if(min == 0 && max == 1 && randomSanta == 0) return 0;
-        //     if(checkUnique)
-        //         return (employeesCopyForChild[num] == employeesCopyForSanta[randomSanta]) ? getRandomInt(min, max, randomSanta, true, employeesCopyForChild, employeesCopyForSanta) : num;
-        //     else 
-        //         return num;
-        // };        
-        // function remove(array, index) {                        
-        //     if (index !== -1) {
-        //         array.splice(index, 1);
-        //     }
-        // };
+        };                
         res.end();
     }
 });
@@ -234,7 +224,11 @@ app.get('/email/send', (req, res) => {
     switch(eventType)
     {
         case 'addTask' : notifyChildAboutAddedTask(currUser);
+        break;
         case 'poke_santa': pokeSanta(currUser);
+        break;
+        case 'poke_child': pokeChild(currUser);
+        break;
 
     }
 });
@@ -273,7 +267,22 @@ function pokeSanta(currUser) {
     +" to get yourself one more step closer to a surprise gift!!"    
     sendEmail(from, santaEmailId, subject, body);
 };
-
+function pokeChild(currUser) {
+    var childEmailId;
+    _.map(mappedEmployeesList, (data) => {
+        if(data.emailId == currUser)
+        {
+            var room = data.room['roomAsSanta'];
+            var childId = room.split('_')[1];
+            childEmailId = mappedEmployeesList[childId].emailId;
+        }
+    });
+    var from = 'secretsanta.accolite@gmail.com';
+    var subject = "POKE!!";
+    var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
+    +" to get yourself one more step closer to a surprise gift!!"    
+    sendEmail(from, childEmailId, subject, body);
+};
 app.post('/user/update', (req, res) => {
     console.log(req.body);
     var empObj = req.body;
@@ -285,6 +294,6 @@ app.post('/user/update', (req, res) => {
     storeInFirebase(mappedEmployeesList, firebase);
 });
 
-cron.schedule('30 16 * * *', function() {
-    reportGenerator();
-});
+// cron.schedule('30 16 * * *', function() {
+    // reportGenerator();
+// });
