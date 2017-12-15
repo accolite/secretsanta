@@ -224,11 +224,31 @@ app.get('/api/email/send', (req, res) => {
   switch(eventType)
   {
     case 'addTask' : notifyChildAboutAddedTask(currUser);
+      break;
     case 'poke_santa': pokeSanta(currUser);
+      break;
+    case 'poke_child': pokeChild(currUser);
+      break;
+    case 'gift' : notifyGift(currUser);
+      break;
 
   }
 });
-
+function notifyGift(currUser) {
+  var childEmailId;
+  _.map(mappedEmployeesList, (data) => {
+    if(data.emailId == currUser)
+    {
+      var room = data.room['roomAsSanta'];
+      var childId = room.split('_')[1];
+      childEmailId = mappedEmployeesList[childId].emailId;
+    }
+  });
+  var from = 'secretsanta.accolite@gmail.com';
+  var subject = "Gift!!";
+  var body = "Your santa Sent you a Present!!";
+  sendEmail(from, childEmailId, subject, body);
+}
 function notifyChildAboutAddedTask(currUser) {
   var childEmailId;
   _.map(mappedEmployeesList, (data) => {
@@ -262,6 +282,23 @@ function pokeSanta(currUser) {
   var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
     +" to get yourself one more step closer to a surprise gift!!"
   sendEmail(from, santaEmailId, subject, body);
+};
+
+function pokeChild(currUser) {
+  var childEmailId;
+  _.map(mappedEmployeesList, (data) => {
+    if(data.emailId == currUser)
+    {
+      var room = data.room['roomAsSanta'];
+      var childId = room.split('_')[1];
+      childEmailId = mappedEmployeesList[childId].emailId;
+    }
+  });
+  var from = 'secretsanta.accolite@gmail.com';
+  var subject = "POKE!!";
+  var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
+    +" to get yourself one more step closer to a surprise gift!!"
+  sendEmail(from, childEmailId, subject, body);
 };
 
 app.post('/api/user/update', (req, res) => {

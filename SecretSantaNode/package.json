@@ -15,6 +15,7 @@
     "express": "^4.16.2",
     "express-fileupload": "^0.3.0",
     "firebase": "^4.8.0",
+    "gmail-send": "^1.2.11",
     "node-cron": "^1.2.1",
     "underscore": "^1.8.3"
   },
