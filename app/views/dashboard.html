@@ -37,7 +37,7 @@
     <img ng-if="isSanta" src="images/poke-child1.gif" height="50px" class="col example pinterest pull-right poke" ng-attr-title="Poke your Child" style="padding-left:10px" data-toggle="modal" data-target="#myModal2">
     <img ng-if="isSanta" src="images/profile_child.gif" height="50px" class="col example pinterest pull-right poke" ng-attr-title="Check out Child Profile" style="padding-left:10px" ng-click="goToChildProfile()">
     <img ng-if="isSanta" src="images/santa-gift.gif" height="50px" class="col example pinterest pull-right santa-gift" ng-attr-title="Send a Gift to you Child" data-toggle="modal" data-target="#myModal">
-    <img ng-if="!isSanta" src="images/poke-santa.gif" height="50px" class="col example pinterest pull-right poke" ng-attr-title="Poke your SANTA" data-toggle="modal" data-target="#myModal2">
+    <img ng-if="!isSanta" src="images/poke-santa.gif" height= "50px" class="col example pinterest pull-right poke" ng-attr-title="Poke your SANTA" data-toggle="modal" data-target="#myModal2">
   </div>
 
 <!--   <button ng-show="isSanta" class="col example pinterest pull-right" style="margin-top: 20px; margin-right: 20px" data-toggle="modal" data-target="#myModal">
@@ -85,7 +85,7 @@
             <label for="first" class="check--label">
               <span ng-show="isSanta" class="check--label-box"></span>
               <span class="check--label-text">{{task.text}}</span>
-              <button type="button" class="close" ng-show="isSanta" ng-click="deleteTask(task)">&times;</button>
+              <button type="button" class="close" ng-show="isSanta" ng-click="deleteTask(task)" style="color: white;">&times;</button>
             </label>
           </li>
            <label class="check--label" ng-if="tasks.length === 0">

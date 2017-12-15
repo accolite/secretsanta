@@ -119,7 +119,7 @@ angular.module('secretSantaApp')
         // add to messages as a special message
         var image = 'santa-gift';
         $scope.messages.$add({
-          text: "<img src=\"images/ "+ image + ".gif\" height=\"30px\"> <br> content",
+          text: "<img src=\"images/"+ image + ".gif\" height=\"30px\"> <br>" + content,
           userId: currentAuth.uid,
           type: 'special_gift'
         }) .then(
@@ -139,13 +139,13 @@ angular.module('secretSantaApp')
         console.log('send a email to santa', $scope.isSanta);
         if($scope.isSanta) {
           var event = 'poke_child';
-          var image = 'poke-santa';
+          var image = 'poke-child2';
         } else {
           event = 'poke_santa';
-          image = 'poke-child1';
+          image = 'poke-santa';
         }
         $scope.messages.$add({
-          text: "<img src=\"images/ "+ image + ".gif\" height=\"30px\">",
+          text: "<img src=\"images/"+ image + ".gif\" height=\"30px\">",
           userId: currentAuth.uid,
           type: 'special_' + event
         }) .then(function () {
