@@ -27,13 +27,17 @@ angular.module('secretSantaApp')
           $scope.info = info;
           $scope.loaded = true;
           $scope.user = $firebaseUtils.toJSON($scope.info);
-          $scope.user.wishlist = [];
+          if(angular.isUndefined($scope.user.wishlist)){
+            $scope.user.wishlist = [];
+          }
         });
       });
 
       $scope.save = function () {
         $scope.user.id = $scope.info.$id;
-        NetworkService.updateUser($scope.user.emailid, $scope.user);
+        NetworkService.updateUser($scope.user.emailid, $scope.user).then(function () {
+          window.alert('updated!');
+        });
       };
 
       $scope.add = function (wish) {

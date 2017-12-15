@@ -6,13 +6,9 @@
         <h1>
             Upload a file!
         </h1>
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" action="/api">
             <input type="file" name = 'filename'>
             <input type="submit" value="upload">
-            
-        </form>
-        <form  action="/notify">
-            <input type="submit" value="notify">
         </form>
     </body>
 </html>

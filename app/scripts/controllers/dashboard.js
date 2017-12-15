@@ -103,7 +103,11 @@ angular.module('secretSantaApp')
       $scope.updateTaskStatus = function (task) {
         const _response = window.confirm("do you want to perform this ?");
         if(_response) {
-          $scope.tasks.$save(task);
+          $scope.tasks.$save(task).then(function () {
+            if(task.completed) {
+              NetworkService.triggerEmailer('addTask', currentAuth);
+            }
+          });
         } else {
           // revert the change
           task.completed = !task.completed;
@@ -113,17 +117,19 @@ angular.module('secretSantaApp')
       $scope.sendAGift = function (content) {
         console.log('send a gift button pressed, ', content);
         // add to messages as a special message
+        var image = 'santa-gift';
         $scope.messages.$add({
-          text: content,
+          text: "<img src=\"images/ "+ image + ".gif\" height=\"30px\"> <br> content",
           userId: currentAuth.uid,
-          type: 'special'
+          type: 'special_gift'
         }) .then(
           firebaseUtilityService.getActivity(function (activities) {
             activities.$add({
               event: 'gift',
               uid: $scope.user.uid,
               timestamp: Date.now()
-            })
+            });
+            NetworkService.triggerEmailer('gift', currentAuth);
           })
         )
           .catch(alert);
@@ -133,10 +139,18 @@ angular.module('secretSantaApp')
         console.log('send a email to santa', $scope.isSanta);
         if($scope.isSanta) {
           var event = 'poke_child';
+          var image = 'poke-santa';
         } else {
           event = 'poke_santa';
+          image = 'poke-child1';
         }
-        NetworkService.triggerEmailer(event, currentAuth);
+        $scope.messages.$add({
+          text: "<img src=\"images/ "+ image + ".gif\" height=\"30px\">",
+          userId: currentAuth.uid,
+          type: 'special_' + event
+        }) .then(function () {
+          NetworkService.triggerEmailer(event, currentAuth);
+        });
       };
 
       $scope.getEmptyTasksContext = function () {
@@ -160,7 +174,7 @@ angular.module('secretSantaApp')
         else {
           // _o ={'panel-others': true, 'activity-others': true};
           _o ={'bubble-left': true};
-          if(msg.type === 'special') {
+          if(msg.startsWith === 'special') {
             _o['special-msg-others'] = true;
           }
         }

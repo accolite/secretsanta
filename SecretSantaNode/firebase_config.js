@@ -1,4 +1,4 @@
-(function () {    
+(function () {
     // Initialize Firebase
     var firebase = require("firebase");
     var config = {
