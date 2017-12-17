@@ -19,7 +19,9 @@ function storeInFirebase(mappedEmployeesList, firebase) {
                             gender: mappedEmployeesList[obj].gender,
                             wishlist: mappedEmployeesList[obj].wishlist,
                             likes: mappedEmployeesList[obj].likes,
-                            dislikes: mappedEmployeesList[obj].dislikes  
+                            dislikes: mappedEmployeesList[obj].dislikes,
+                            roomAsChild: mappedEmployeesList[obj].room['roomAsChild'],
+                            roomAsSanta: mappedEmployeesList[obj].room['roomAsSanta']
                         });
     }
     dbRefForEmployees.set(employeeArray);

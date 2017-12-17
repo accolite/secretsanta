@@ -14,13 +14,15 @@ function reportGenerator() {
         var dbRefForTasks = firebase.database().ref('/tasks/').once('value').then(function(snapshot) {
             getReportForTasks(snapshot);            
             console.log(maxNumberOfTasksBySanta +"in room "+roomWithMaxSantaTasks+  ""+ maxNumberOfTasksCompletedByChild+"in room "+roomWithMaxChildTasksCompleted);
+            var dbRefForChats = firebase.database().ref('/rooms/').once('value').then(function(snapshot) {
+                getReportForChats(snapshot);
+                console.log(reports);
+            });
         });        
-        var dbRefForChats = firebase.database().ref('/rooms/').once('value').then(function(snapshot) {
-            getReportForChats(snapshot);
-        });
+        
     }
     function getReportForTasks(snapshot) {
-        reports['tasks']={};
+        reports['tasks']={};        
         for(var obj in snapshot.val())
         {
             if(obj != 'room')
@@ -28,11 +30,10 @@ function reportGenerator() {
                 // console.log(count(snapshot.val()[obj]));
                 var santaTaskCount = countSantaTasks(snapshot.val()[obj].santa);
                 var childTaskCompletedCount = countChildCompletedTasks(snapshot.val()[obj].santa);
-                reports['tasks'].push({
-                            "santaTaskCount": santaTaskCount,
-                            'childTaskCompletedCount':childTaskCompletedCount,
-                            'room': obj
-                        });
+                reports['tasks']['santaTaskCount'] = santaTaskCount;
+                reports['tasks']['childTaskCompletedCount'] = childTaskCompletedCount;
+                reports['tasks']['room'] = obj;
+                
                 if(santaTaskCount > maxNumberOfTasksBySanta)
                 {
                     maxNumberOfTasksBySanta = santaTaskCount;
@@ -73,7 +74,8 @@ function reportGenerator() {
             }
             else {
                 roomWithMinSantaTasks.push(snapshot.val()[obj]);
-                minNumberOfTasksBySanta = 0;                    
+                minNumberOfTasksBySanta = 0;   
+                reports['tasks']['room'] = obj;                 
             }    
         }
     };
@@ -105,10 +107,8 @@ function reportGenerator() {
         {
             // console.log(snapshot.val()[room]);
             chatRate = calculateChatRateForRoom(snapshot.val()[room]);
-            reports['chat'].push({
-                'chatRate': chatRate,
-                'room': room
-            });
+            reports['chat']['chatRate'] = chatRate;
+            reports['chat']['room'] = room;
             maxChatRate = chatRate>maxChatRate?chatRate:maxChatRate
             if(chatRate>maxChatRate)
             {
@@ -134,4 +134,5 @@ function reportGenerator() {
 
     };
 }
+reportGenerator();
 exports.reportGenerator = reportGenerator;
