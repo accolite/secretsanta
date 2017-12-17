@@ -256,7 +256,7 @@ function notifyChildAboutAddedTask(currUser) {
         var subject = "New Task Added To Your List!!";
         var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
         +" to get yourself one more step closer to a surprise gift!!"
-        sendEmail(from, childEmailId, subject, body);    
+        sendEmail(from, childEmailId, subject, body, 'task_added');    
     });          
 };
 
@@ -271,14 +271,15 @@ function pokeSanta(currUser) {
             {
                 var room = data.roomAsChild;
                 var santaId = room.split('_')[0];
-                santaEmailId = fbListOfEmployees[santaId].emailId;
+                santaEmailId = fbListOfEmployees[santaId].emailid;
+                console.log("h");
             }
         });
         var from = 'secretsanta.accolite@gmail.com';
         var subject = "POKE!!";
         var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
         +" to get yourself one more step closer to a surprise gift!!"    
-        sendEmail(from, santaEmailId, subject, body);        
+        sendEmail(from, santaEmailId, subject, body, 'poke_santa');        
     });        
     
 };
@@ -300,24 +301,30 @@ function pokeChild(currUser) {
         var subject = "POKE!!";
         var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
         +" to get yourself one more step closer to a surprise gift!!"    
-        sendEmail(from, childEmailId, subject, body);    
+        sendEmail(from, childEmailId, subject, body, "poke_child");    
     });    
    
 };
 function notifyGift(currUser) {
-    var childEmailId;
-    _.map(mappedEmployeesList, (data) => {
-        if(data.emailId == currUser)
-        {
-            var room = data.room['roomAsSanta'];
-            var childId = room.split('_')[1];
-            childEmailId = mappedEmployeesList[childId].emailId;
-        }
+    var fbListOfEmployees ;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+        fbListOfEmployees = snapshot.val();      
+        
+        var childEmailId;
+        _.map(fbListOfEmployees, (data) => {
+            if(data.emailId == currUser)
+            {
+                var room = data.room['roomAsSanta'];
+                var childId = room.split('_')[1];
+                childEmailId = fbListOfEmployees[childId].emailId;
+            }
+        });
+        var from = 'secretsanta.accolite@gmail.com';
+        var subject = "Gift!!";
+        var body = "Your santa wants to send you a present!!"    
+        sendEmail(from, childEmailId, subject, body, 'gift');
     });
-    var from = 'secretsanta.accolite@gmail.com';
-    var subject = "Gift!!";
-    var body = "Your santa wants to send you a present!!"    
-    sendEmail(from, childEmailId, subject, body);
+    
 }
 app.post('/api/user/update', (req, res) => {
     var fbListOfEmployees ;
