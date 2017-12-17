@@ -1,25 +1,49 @@
 'use strict';
 
 angular.module('firebase.Auth')
-  .factory('firebaseUtilityService', ["$firebaseArray", "$firebaseObject",
-    function ($firebaseArray, $firebaseObject) {
+  .factory('firebaseUtilityService', ["$firebaseArray", "$firebaseObject", "$rootScope",
+    function ($firebaseArray, $firebaseObject, $rootScope) {
 
     var obj = {};
+    var _auth;
 
-    obj.oauthLogin = function (auth, provider) {
+      function validateLogin(authData, logoutCB, next) {
+        var isAccoliteEmployee = authData.user.email.endsWith('accoliteindia.com') || authData.user.email.endsWith('accolitelabs.com');
+        if(isAccoliteEmployee) {
+          obj.getUserInformation(authData.user.email, function (data) {
+            if(angular.isUndefined(data) || data === null) {
+              logoutCB();
+            } else {
+              next(authData);
+            }
+          })
+        } else {
+          logoutCB();
+        }
+      }
+
+      function logout(auth) {
+        window.alert('sorry, you are permitted to play this amazing game!');
+        auth.$signOut();
+      }
+
+      function redirect(authData) {
+        $rootScope.$emit('authData', authData);
+        $location.path('/dashboard');
+      }
+
+      obj.oauthLogin = function (auth, provider) {
+        _auth = auth;
       auth.$signInWithPopup(provider)
         .then(function (authData) {
           console.log("logged");
-          if(authData.user.email.endsWith('accoliteindia.com') || authData.user.email.endsWith('accolitelabs.com')) {
-            redirect(authData);
-          } else {
-            window.alert('sorry, you are permitted to play this amazing game!');
-            auth.$signOut();
-          }
+          validateLogin(authData, () => {
+            logout(auth);
+          }, redirect);
         })
         .catch(function (error) {
           console.log("login error");
-          showError(error);
+          // showError(error);
         })
     };
 
@@ -54,6 +78,9 @@ angular.module('firebase.Auth')
     obj.getUserInformation = function (email, cb) {
       var query = rootRef.child('Employees').orderByChild("emailid").equalTo(email);
       var _o = $firebaseArray(query);
+      if(angular.isUndefined(_o[0])) {
+        logout(_auth);
+      }
       _o.$loaded().then(function () {
         var q = rootRef.child('Employees').child(_o[0].$id);
         var o = $firebaseObject(q);
