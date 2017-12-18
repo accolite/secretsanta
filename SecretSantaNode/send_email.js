@@ -1,4 +1,5 @@
 var fs = require('fs');
+var _ = require('underscore');
 var firebase = require('./firebase_config').firebase;
 var gmail_send = require('gmail-send');
 function sendEmail(from, to, subject, body, mailType, reports) {
@@ -24,16 +25,29 @@ function sendEmail(from, to, subject, body, mailType, reports) {
     }    
 };
 function informSantasAndChildren(from, to, subject, body, mailType, reports) {
-    fs.readFile("./templates/santa-invite.html", function(err, data) {
-        htmlData = data;
-        htmlData = htmlData.replace("{$Emp_Name$}", name);
-        gmail_send({
-            user: 'secretsanta.accolite@gmail.com',
-            pass: 'accolitehyderabadsecretsanta',
-            to: to,
-            subject: subject,
-            html: htmlData
-        });
+    var fbListOfEmployees ; var name = "";var htmlData;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+        fbListOfEmployees = snapshot.val();                      
+        fs.readFile("./templates/santa-invite.html", function(err, data) {
+            htmlData = data.toString('utf8');
+            _.map(fbListOfEmployees, (employee) => {
+                if(employee.emailid == to )
+                {
+                    name = fbListOfEmployees[employee.roomAsSanta.split("_")[1]].name
+                }
+                
+            });    
+            // htmlData = data;
+            htmlData = htmlData.replace("{$Emp_Name$}", name);
+            gmail_send({
+                user: 'secretsanta.accolite@gmail.com',
+                pass: 'accolitehyderabadsecretsanta',
+                to: to,
+                subject: subject,
+                html: htmlData
+            });
+    });          
+    
    });
    fs.readFile("./templates/client-invite.html", function(err, data) {
         htmlData = data;        

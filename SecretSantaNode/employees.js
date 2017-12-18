@@ -217,7 +217,7 @@ app.get("/api/notify", (req, res) => {
         fbListOfEmployees = snapshot.val();      
         
         _.map(fbListOfEmployees, (employee) => {
-            sendEmail(from, employee.emailId, subject, body, 'inform_pairs');
+            sendEmail(from, employee.emailid, subject, body, 'inform_pairs');
             // sendEmail(from, , subject, body);
             console.log("Email sent for "+ employee.emailId);
         });    
