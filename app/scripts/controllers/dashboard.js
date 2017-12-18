@@ -101,16 +101,18 @@ angular.module('secretSantaApp')
       };
 
       $scope.updateTaskStatus = function (task) {
-        const _response = window.confirm("do you want to perform this ?");
-        if(_response) {
-          $scope.tasks.$save(task).then(function () {
-            if(task.completed) {
-              NetworkService.triggerEmailer('addTask', currentAuth);
-            }
-          });
-        } else {
-          // revert the change
-          task.completed = !task.completed;
+        if($scope.isSanta) {
+          const _response = window.confirm("do you want to perform this ?");
+          if(_response) {
+            $scope.tasks.$save(task).then(function () {
+              if(task.completed) {
+                NetworkService.triggerEmailer('addTask', currentAuth);
+              }
+            });
+          } else {
+            // revert the change
+            task.completed = !task.completed;
+          }
         }
       };
 
