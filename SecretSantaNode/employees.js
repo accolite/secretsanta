@@ -353,7 +353,15 @@ app.post('/api/user/update', (req, res) => {
         fbListOfEmployees[id].likes = empObj.likes ? empObj.likes : "";
         fbListOfEmployees[id].dislikes = empObj.dislikes ? empObj.dislikes : "";
         const dbRefForEmployees = firebase.database().ref().child('Employees');
-        dbRefForEmployees.set(fbListOfEmployees);
+        dbRefForEmployees.set(fbListOfEmployees,(err) => {
+            console.log(err);
+            if(!err) {
+                res.end("Successfully updated!");
+            }
+            else {
+                res.end("Error when updating details!");
+            }
+        });
         console.log("udated employee data");
         res.end();
     });
