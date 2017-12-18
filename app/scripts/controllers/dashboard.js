@@ -50,6 +50,8 @@ angular.module('secretSantaApp')
             text: newMessage,
             userId: currentAuth.uid,
             timestamp: Date.now()
+          }).then(function () {
+            $scope.message = '';
           }).catch(alert);
           var objDiv = document.getElementById("chat");
           objDiv.scrollTop = objDiv.scrollHeight;
