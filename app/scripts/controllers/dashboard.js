@@ -38,21 +38,9 @@ angular.module('secretSantaApp')
           .then(function () {
             $scope.tasks = tasks;
             $scope.tasksLoaded = true;
-            // setFirebaseWatchers();
           })
           .catch(alert);
       });
-
-      // function setFirebaseWatchers() {
-      //   $scope.tasks.$watch(function (eventData) {
-      //     if("child_changed" === eventData.event) {
-      //       console.log('find the event status and if true, emit an event key', eventData.key);
-      //     } else if("child_added" === eventData.event) {
-      //       firebaseUtilityService.getActivity('task_added', {user: $scope.user, taskId: eventData.key});
-      //     }
-      //   });
-      //   $scope.tasks.off();ut
-      // }
 
       // provide a method for adding a message
       $scope.addMessage = function (newMessage) {
@@ -63,6 +51,8 @@ angular.module('secretSantaApp')
             userId: currentAuth.uid,
             timestamp: Date.now()
           }).catch(alert);
+          var objDiv = document.getElementById("chat");
+          objDiv.scrollTop = objDiv.scrollHeight;
         }
       };
 

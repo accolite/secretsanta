@@ -43,8 +43,18 @@ angular.module('secretSantaApp')
     firebaseUtilityService.getActivity(function (activites) {
       activites.$loaded().then(function () {
         $scope.activites = activites;
+        setFirebaseWatchers();
       });
     });
+
+    function setFirebaseWatchers() {
+      $scope.activites.$watch(function (eventData) {
+        if("child_added" === eventData.event) {
+          var audio = new Audio('http://secret-santa.accolitelabs.com/sounds/notification.mp3');
+          audio.play();
+        }
+      });
+    }
 
     $scope.getPanelBG = function (act) {
       var colors = [{'red': true}, {'blue': true}, {'green': true}, {'yellow': true}];
