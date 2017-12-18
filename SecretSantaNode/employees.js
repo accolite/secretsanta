@@ -214,12 +214,16 @@ app.get("/api/notify", (req, res) => {
     var recepientsArray = employees.map(employee => employee.emailId);
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
-        fbListOfEmployees = snapshot.val();      
+        fbListOfEmployees = snapshot.val();    
+        var i =0;  
         
         _.map(fbListOfEmployees, (employee) => {
+            if(i==0) {
             sendEmail(from, employee.emailid, subject, body, 'inform_pairs');
             // sendEmail(from, , subject, body);
             console.log("Email sent for "+ employee.emailid);
+            i++;
+            }
         });    
     });          
    

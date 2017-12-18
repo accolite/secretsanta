@@ -40,8 +40,8 @@ function informSantasAndChildren(from, to, subject, body, mailType, reports) {
             // htmlData = data;
             htmlData = htmlData.replace("{$Emp_Name$}", name);
             gmail_send({
-                user: 'mahikanthnag.yalamarthi@accoliteindia.com',
-                pass: 'mahikanthnag@3.14',
+                user: 'secretsanta.accolite@gmail.com',
+                pass: 'accolitehyderabadsecretsanta',
                 to: to,
                 subject: subject,
                 html: htmlData
@@ -52,8 +52,8 @@ function informSantasAndChildren(from, to, subject, body, mailType, reports) {
    fs.readFile("./templates/client-invite.html", function(err, data) {
         htmlData = data.toString('utf8');        
         gmail_send({
-            user: 'mahikanthnag.yalamarthi@accoliteindia.com',
-            pass: 'mahikanthnag@3.14',
+            user: 'secretsanta.accolite@gmail.com',
+            pass: 'accolitehyderabadsecretsanta',
             to: to,
             subject: subject,
             html: htmlData
@@ -64,21 +64,22 @@ function taskAdded(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/new_task.html", function(err, data) {
        var  htmlData = data.toString('utf8');
         gmail_send({    
-            user: 'mahikanthnag.yalamarthi@accoliteindia.com',
-            pass: 'mahikanthnag@3.14',
+            user: 'secretsanta.accolite@gmail.com',
+            pass: 'accolitehyderabadsecretsanta',
             to: to,
             subject: subject,
             text:    body,                       
             html: htmlData
             })({});
+            console.log("email sent for task addition");
     });
 };
 function gift(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/gift_child.html", function(err, data) {
         htmlData = data;
         gmail_send({    
-            user: 'mahikanthnag.yalamarthi@accoliteindia.com',
-            pass: 'mahikanthnag@3.14',
+            user: 'secretsanta.accolite@gmail.com',
+            pass: 'accolitehyderabadsecretsanta',
             to: to,
             subject: subject,
             text:    body,                       
@@ -91,8 +92,8 @@ function pokeSanta(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/poke_santa.html", function(err, data) {
         htmlData = data;
         gmail_send({    
-            user: 'mahikanthnag.yalamarthi@accoliteindia.com',
-            pass: 'mahikanthnag@3.14',
+            user: 'secretsanta.accolite@gmail.com',
+            pass: 'accolitehyderabadsecretsanta',
             to: to,
             subject: subject,
             text:    body,                       
@@ -104,8 +105,8 @@ function pokeChild(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/poke_child.html", function(err, data) {
         htmlData = data;
         gmail_send({    
-            user: 'mahikanthnag.yalamarthi@accoliteindia.com',
-            pass: 'mahikanthnag@3.14',
+            user: 'secretsanta.accolite@gmail.com',
+            pass: 'accolitehyderabadsecretsanta',
             to: to,
             subject: subject,
             text:    body,                       
@@ -172,8 +173,8 @@ function sendReports(reports) {
                 htmlData = htmlData.replace("QPR", "");
             }
             gmail_send({    
-                user: 'mahikanthnag.yalamarthi@accoliteindia.com',
-                pass: 'mahikanthnag@3.14',
+                user: 'secretsanta.accolite@gmail.com',
+                pass: 'accolitehyderabadsecretsanta',
                 to: 'pavani.kolukuluru@accoliteindia.com',
                 // to : ['mahikanthnag.yalamarthi@accoliteindia.com', 'babanag95@gmaail.com'],
                 subject: "",            
@@ -221,9 +222,9 @@ function sendReports(reports) {
                 htmlData = htmlData.replace("QPR", "");
             }
             gmail_send({    
-                user: 'mahikanthnag.yalamarthi@accoliteindia.com',
-                pass: 'mahikanthnag@3.14',
-                to: ['hyderabad@accoliteindia.com', 'hyderabad@accolitelabs.com'],
+                user: 'secretsanta.accolite@gmail.com',
+                pass: 'accolitehyderabadsecretsanta',
+                to: 'pavani.kolukuluru@accoliteindia.com',
                 // to : ['mahikanthnag.yalamarthi@accoliteindia.com', 'babanag95@gmaail.com'],
                 subject: "",            
                 html: htmlData
