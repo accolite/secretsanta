@@ -17,12 +17,14 @@ function reportGenerator() {
             var dbRefForChats = firebase.database().ref('/rooms/').once('value').then(function(snapshot) {
                 getReportForChats(snapshot);
                 console.log(reports);
+                var sendEmail = require("./send_email").sendEmail;
+                sendEmail(null, null, null, null, 'reports', reports);
             });
         });        
         
     }
     function getReportForTasks(snapshot) {
-        reports['tasks']={};        
+        reports['tasks']=[];        
         for(var obj in snapshot.val())
         {
             if(obj != 'room')
@@ -30,9 +32,10 @@ function reportGenerator() {
                 // console.log(count(snapshot.val()[obj]));
                 var santaTaskCount = countSantaTasks(snapshot.val()[obj].santa);
                 var childTaskCompletedCount = countChildCompletedTasks(snapshot.val()[obj].santa);
-                reports['tasks']['santaTaskCount'] = santaTaskCount;
-                reports['tasks']['childTaskCompletedCount'] = childTaskCompletedCount;
-                reports['tasks']['room'] = obj;
+                reports['tasks'].push({'santaTaskCount' : santaTaskCount,
+                                        'childTaskCompletedCount' : childTaskCompletedCount,
+                                        'room' : obj
+                                        });                
                 
                 if(santaTaskCount > maxNumberOfTasksBySanta)
                 {
@@ -75,7 +78,7 @@ function reportGenerator() {
             else {
                 roomWithMinSantaTasks.push(snapshot.val()[obj]);
                 minNumberOfTasksBySanta = 0;   
-                reports['tasks']['room'] = obj;                 
+                reports['tasks'].push({'room' : obj});
             }    
         }
     };
@@ -93,7 +96,7 @@ function reportGenerator() {
         var count = 0;
         for(var k in foo)
         {
-            if(foo.hasOwnProperty(k) && k.complated == 'true')
+            if(foo.hasOwnProperty(k) && k.completed == 'true')
             {
                 ++count;
             }
@@ -102,12 +105,12 @@ function reportGenerator() {
     };
     function getReportForChats(snapshot) {
         var chatRate;
-        reports['chat']={};
+        reports['chat']=[];
         for(var room in snapshot.val())
         {
             // console.log(snapshot.val()[room]);
             chatRate = calculateChatRateForRoom(snapshot.val()[room]);
-            reports['chat']['chatRate'] = chatRate;
+            reports['chat'].push({'chatRate' : chatRate});
             reports['chat']['room'] = room;
             maxChatRate = chatRate>maxChatRate?chatRate:maxChatRate
             if(chatRate>maxChatRate)
