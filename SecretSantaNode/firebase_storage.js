@@ -7,13 +7,13 @@ function storeInFirebase(mappedEmployeesList, firebase) {
     {
         employeeArray.push({
                             id: mappedEmployeesList[obj].id,
-                            emailid: mappedEmployeesList[obj].emailId, 
+                            emailid: mappedEmployeesList[obj].emailId,
                             name : mappedEmployeesList[obj].name,
                             mobileno: mappedEmployeesList[obj].mobileNo,
                             shift: mappedEmployeesList[obj].shift,
                             company: mappedEmployeesList[obj].company,
                             location: mappedEmployeesList[obj].location,
-                            teamName: mappedEmployeesList[obj].teamName,                            
+                            teamName: mappedEmployeesList[obj].teamName,
                             childEmailId: mappedEmployeesList[obj].child ? mappedEmployeesList[obj].child.emailId:"",
                             santaEmailId: mappedEmployeesList[obj].santa ? mappedEmployeesList[obj].santa.emailId : "",
                             gender: mappedEmployeesList[obj].gender,
@@ -38,7 +38,7 @@ function storeInFirebase(mappedEmployeesList, firebase) {
     var jsonUsers= {};
     var dbRefForUsersDetailsMapping = firebase.database().ref().child('users');
     for(var obj in mappedEmployeesList)
-    {        
+    {
         var email = mappedEmployeesList[obj].emailId;
         var trimmedEmail = email.replace(/[^a-zA-Z0-9]/g, "");
         // var roomAsSanta = _.filter(rooms, function(room) {
@@ -50,13 +50,15 @@ function storeInFirebase(mappedEmployeesList, firebase) {
         var roomAsSanta = mappedEmployeesList[obj].room['roomAsSanta'];
         var roomAsChild = mappedEmployeesList[obj].room['roomAsChild'];
         var jsonUser = {};
-        // jsonUser[trimmedEmail] = 
-        jsonUsers[trimmedEmail] = {"roomAsSanta": roomAsSanta, 'roomAsChild' : roomAsChild};        
+        // jsonUser[trimmedEmail] =
+        jsonUsers[trimmedEmail] = {"roomAsSanta": roomAsSanta, 'roomAsChild' : roomAsChild};
     }
     dbRefForUsersDetailsMapping.set(jsonUsers);
 
     var dbRefForTasksMapping = firebase.database().ref().child('tasks');
     dbRefForTasksMapping.set(mappedEmployeesList.map(employee => employee.room));
     console.log("users object added to firebase");
+    var dbRefForTasksMapping = firebase.database().ref().child('tasks');
+    dbRefForTasksMapping.set(mappedEmployeesList.map(employee => employee.room));
 };
 exports.storeInFirebase = storeInFirebase;

@@ -51,6 +51,8 @@ angular.module('secretSantaApp')
       // var randomNumber = (Math.floor(Math.random()*6 + 1)) % colors.length;
       if(act.event === 'add_task') {
         return colors[1];
+      } else if(act.event === 'gift') {
+        return colors[2];
       }
       return colors[0];
     };

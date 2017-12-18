@@ -80,7 +80,7 @@ angular.module('secretSantaApp')
                 uid: $scope.user.uid,
                 timestamp: Date.now()
               }).then(function () {
-                var utterThis = new SpeechSynthesisUtterance("Santa added a new child!");
+                var utterThis = new SpeechSynthesisUtterance("Santa added a new task!");
                 utterThis.voice = speechSynthesis.getVoices().filter(s => s.name.match("Zira | Female"))[0];
                 window.speechSynthesis.speak(utterThis)
               });
@@ -101,16 +101,18 @@ angular.module('secretSantaApp')
       };
 
       $scope.updateTaskStatus = function (task) {
-        const _response = window.confirm("do you want to perform this ?");
-        if(_response) {
-          $scope.tasks.$save(task).then(function () {
-            if(task.completed) {
-              NetworkService.triggerEmailer('addTask', currentAuth);
-            }
-          });
-        } else {
-          // revert the change
-          task.completed = !task.completed;
+        if($scope.isSanta) {
+          const _response = window.confirm("do you want to perform this ?");
+          if(_response) {
+            $scope.tasks.$save(task).then(function () {
+              if(task.completed) {
+                NetworkService.triggerEmailer('addTask', currentAuth);
+              }
+            });
+          } else {
+            // revert the change
+            task.completed = !task.completed;
+          }
         }
       };
 

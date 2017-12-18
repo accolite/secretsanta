@@ -41,7 +41,11 @@ angular.module('secretSantaApp')
       };
 
       $scope.add = function (wish) {
-        $scope.user.wishlist.push(wish);
+        if(angular.isUndefined(wish) || wish==='' || wish===' ')  {
+          console.log('invalid wish');
+        } else {
+          $scope.user.wishlist.push(wish);
+        }
       };
 
     }]);
