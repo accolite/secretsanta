@@ -339,15 +339,14 @@ function notifyGift(currUser) {
         var body = "Your santa wants to send you a present!!"    
         sendEmail(from, childEmailId, subject, body, 'gift');
         console.log("email for gift sent");
-    });
-    
+    });    
 }
 app.post('/api/user/update', (req, res) => {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
-        fbListOfEmployees = snapshot.val();                      
-
+        fbListOfEmployees = snapshot.val();
         var empObj = req.body;
+        console.log(empObj);
         var id = empObj.id;
         fbListOfEmployees[id].wishlist = empObj.wishlist;
         fbListOfEmployees[id].gender = empObj.gender ? empObj.gender : "";
@@ -356,6 +355,7 @@ app.post('/api/user/update', (req, res) => {
         const dbRefForEmployees = firebase.database().ref().child('Employees');
         dbRefForEmployees.set(fbListOfEmployees);
         console.log("udated employee data");
+        res.end();
     });
     
 });
