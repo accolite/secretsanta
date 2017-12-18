@@ -219,7 +219,7 @@ app.get("/api/notify", (req, res) => {
         _.map(fbListOfEmployees, (employee) => {
             sendEmail(from, employee.emailid, subject, body, 'inform_pairs');
             // sendEmail(from, , subject, body);
-            console.log("Email sent for "+ employee.emailId);
+            console.log("Email sent for "+ employee.emailid);
         });    
     });          
    
