@@ -4,7 +4,7 @@ angular.module('secretSantaApp')
   .factory('NetworkService', ['$http', function ($http) {
 
       var obj = {};
-      var bsse = 'http://innovations.accolite.com';
+      var bsse = 'http://secret-santa.accolitelabs.com';
       // var bsse = 'http://localhost:4000';
       // var bsse = 'http://192.168.43.47:4000';
 
