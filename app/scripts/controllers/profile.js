@@ -12,6 +12,7 @@ angular.module('secretSantaApp')
 
       $scope.loaded = false;
       $scope.newWishList = [];
+      $scope.userData = {};
 
       // // var email = "mahikanthnag.yalamarthi@accoliteindia.com";
       if($routeParams.email) {
@@ -27,6 +28,9 @@ angular.module('secretSantaApp')
           $scope.info = info;
           $scope.loaded = true;
           $scope.user = $firebaseUtils.toJSON($scope.info);
+          delete $scope.user.santaEmailId;
+          delete $scope.user.roomAsSanta;
+          delete $scope.user.roomAsChild;
           if(angular.isUndefined($scope.user.wishlist)){
             $scope.user.wishlist = [];
           }
