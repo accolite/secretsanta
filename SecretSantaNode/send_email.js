@@ -50,7 +50,7 @@ function informSantasAndChildren(from, to, subject, body, mailType, reports) {
     
    });
    fs.readFile("./templates/client-invite.html", function(err, data) {
-        htmlData = data;        
+        htmlData = data.toString('utf8');        
         gmail_send({
             user: 'mahikanthnag.yalamarthi@accoliteindia.com',
             pass: 'mahikanthnag@3.14',
@@ -62,7 +62,7 @@ function informSantasAndChildren(from, to, subject, body, mailType, reports) {
 };
 function taskAdded(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/new_task.html", function(err, data) {
-        htmlData = data.toString('utf8');
+       var  htmlData = data.toString('utf8');
         gmail_send({    
             user: 'mahikanthnag.yalamarthi@accoliteindia.com',
             pass: 'mahikanthnag@3.14',
