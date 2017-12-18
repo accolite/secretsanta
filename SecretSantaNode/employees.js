@@ -41,7 +41,7 @@ app.post("/api", (req, res) => {
         // console.log(req.files.filename.data.toString('utf16'));
         var file = req.files.filename;
         var filename = file.name;
-
+        
         employees = [];
         employeeGroups = {};
         employeesCopyForSanta = [];
@@ -72,15 +72,15 @@ app.post("/api", (req, res) => {
                         employeeData.location = curr[5] ? curr[5] : "";
                         employeeData.teamName = curr[4] ? curr[4] : "";
                         employeeData.id = 0;
-                        employeeData.active ="";
-                        employeeData.room = {"roomAsSanta" : "", 'roomAsChild' : ""};
+                        employeeData.active = curr[7] ? curr[7] : "";
+                        employeeData.room = {"roomAsSanta" : "", 'roomAsChild' : ""};                     
                         employees.push(employeeData);
                     });
                     id = 0;
-                    groupEmployees();
+                    groupEmployees();                    
                     createRooms();
                     storeInFirebase(mappedEmployeesList, firebase);
-
+                    
                 });
             }
         });
@@ -88,24 +88,24 @@ app.post("/api", (req, res) => {
         function groupEmployees() {
             for(var i = 0;i<employees.length; i++) {
                 var employee = employees[i];
-                if(!employeeGroups[employee.shift+"_"+employee.active+"_"+employee.location+"_"+employee.company]) {
-                    employeeGroups[employee.shift+"_"+employee.active+"_"+employee.location+"_"+employee.company]=[];
+                if(!employeeGroups[employee.active+"_"+employee.location+"_"+employee.company]) {
+                    employeeGroups[employee.active+"_"+employee.location+"_"+employee.company]=[];
                 }
-                employeeGroups[employee.shift+"_"+employee.active+"_"+employee.location+"_"+employee.company].push(employee);
+                employeeGroups[employee.active+"_"+employee.location+"_"+employee.company].push(employee);
             }
             for (var array in employeeGroups) {
                 if (employeeGroups.hasOwnProperty(array)) {
                     mapSantaChild(employeeGroups[array]);
                 }
-            }
-            console.log("employees mapped with santas and children");
+            }      
+            console.log("employees mapped with santas and children");                  
         };
         Object.compare = function (obj1, obj2) {
             //Loop through properties in object 1
             for (var p in obj1) {
                 //Check property exists on both objects
                 if (obj1.hasOwnProperty(p) !== obj2.hasOwnProperty(p)) return false;
-
+         
                 switch (typeof (obj1[p])) {
                     //Deep compare objects
                     case 'object':
@@ -120,7 +120,7 @@ app.post("/api", (req, res) => {
                         if (obj1[p] != obj2[p]) return false;
                 }
             }
-
+         
             //Check object 2 for any extra properties
             for (var p in obj2) {
                 if (typeof (obj1[p]) == 'undefined') return false;
@@ -148,11 +148,11 @@ app.post("/api", (req, res) => {
 
             employeesCopyForSanta.sort(function() { return 0.5 - Math.random();}); // shuffle arrays
             employeesCopyForChild.sort(function() { return 0.5 - Math.random();});
-
+        
             while (employeesCopyForSanta.length>0) {
                 // var s = employeesCopyForSanta.pop();
-
-                var santa = employeesCopyForSanta.pop(),
+                
+                var santa = employeesCopyForSanta.pop(), 
                     child = Object.compare(employeesCopyForChild[0].emailId, santa.emailId) ? employeesCopyForChild[employeesCopyForChild.length-1] : employeesCopyForChild[0];
                 if(santa.santa && (santa.santa.emailId == child.emailId))
                 {
@@ -165,19 +165,19 @@ app.post("/api", (req, res) => {
                 else{
                     if(Object.compare(santa, employeesCopyForChild[0]))
                     {
-                        child = employeesCopyForChild.pop();
+                        child = employeesCopyForChild.pop();    
                     }
                     else
                         child = employeesCopyForChild.shift();
                 }
+                
 
-
-
+               
 
 
                 group[group.indexOf(santa)].child = child;
                 group[group.indexOf(child)].santa = santa;
-
+                
             }
             for(var obj in group)
             {
@@ -187,16 +187,16 @@ app.post("/api", (req, res) => {
                 group[obj].dislikes = "";
                 group[obj].wishlist = [];
                 mappedEmployeesList.push(group[obj]);
-            }
+            }                                 
         };
 
         function createRooms() {
             _.map(mappedEmployeesList, (data) => {
                 data.room['roomAsChild'] = data.santa.id+"_"+data.id;
                 data.room['roomAsSanta'] = data.id+"_"+data.child.id;
-            });
-            console.log("created rooms");
-        };
+            });  
+            console.log("created rooms");          
+        };                
         res.end();
     }
 });
@@ -209,20 +209,20 @@ app.get("/api/notify", (req, res) => {
 
     // get appropriate body from hr with placeholders for adding names of santa and child
     var body = "This is a test email body";
-
+    
     var subject = "SecretSanta Application";
     var recepientsArray = employees.map(employee => employee.emailId);
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
-        fbListOfEmployees = snapshot.val();
-
+        fbListOfEmployees = snapshot.val();      
+        
         _.map(fbListOfEmployees, (employee) => {
             sendEmail(from, employee.emailid, subject, body, 'inform_pairs');
             // sendEmail(from, , subject, body);
             console.log("Email sent for "+ employee.emailid);
-        });
-    });
-
+        });    
+    });          
+   
     res.end();
 });
 
@@ -249,8 +249,8 @@ app.get('/api/email/send', (req, res) => {
 function notifyChildAboutAddedTask(currUser) {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
-        fbListOfEmployees = snapshot.val();
-
+        fbListOfEmployees = snapshot.val();      
+        
         var childEmailId;
         _.map(fbListOfEmployees, (data) => {
             if(data.emailid == currUser)
@@ -266,14 +266,14 @@ function notifyChildAboutAddedTask(currUser) {
         +" to get yourself one more step closer to a surprise gift!!"
         sendEmail(from, childEmailId, subject, body, 'task_added');
         console.log("informed child about task");
-    });
+    });          
 };
 
 function pokeSanta(currUser) {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
-        fbListOfEmployees = snapshot.val();
-
+        fbListOfEmployees = snapshot.val();      
+        
         var santaEmailId;
         _.map(fbListOfEmployees, (data) => {
             if(data.emailid == currUser)
@@ -287,17 +287,17 @@ function pokeSanta(currUser) {
         var from = 'secretsanta.accolite@gmail.com';
         var subject = "POKE!!";
         var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
-        +" to get yourself one more step closer to a surprise gift!!"
-        sendEmail(from, santaEmailId, subject, body, 'poke_santa');
-        console.log("email for poke santa send");
-    });
-
+        +" to get yourself one more step closer to a surprise gift!!"    
+        sendEmail(from, santaEmailId, subject, body, 'poke_santa');  
+        console.log("email for poke santa send");      
+    });        
+    
 };
 function pokeChild(currUser) {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
-        fbListOfEmployees = snapshot.val();
-
+        fbListOfEmployees = snapshot.val();      
+        
         var childEmailId;
         _.map(fbListOfEmployees, (data) => {
             if(data.emailid == currUser)
@@ -310,17 +310,17 @@ function pokeChild(currUser) {
         var from = 'secretsanta.accolite@gmail.com';
         var subject = "POKE!!";
         var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
-        +" to get yourself one more step closer to a surprise gift!!"
-        sendEmail(from, childEmailId, subject, body, "poke_child");
+        +" to get yourself one more step closer to a surprise gift!!"    
+        sendEmail(from, childEmailId, subject, body, "poke_child");    
         console.log("mail for poke child sent");
-    });
-
+    });    
+   
 };
 function notifyGift(currUser) {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
-        fbListOfEmployees = snapshot.val();
-
+        fbListOfEmployees = snapshot.val();      
+        
         var childEmailId;
         _.map(fbListOfEmployees, (data) => {
             if(data.emailid == currUser)
@@ -332,16 +332,16 @@ function notifyGift(currUser) {
         });
         var from = 'secretsanta.accolite@gmail.com';
         var subject = "Gift!!";
-        var body = "Your santa wants to send you a present!!"
+        var body = "Your santa wants to send you a present!!"    
         sendEmail(from, childEmailId, subject, body, 'gift');
         console.log("email for gift sent");
     });
-
+    
 }
 app.post('/api/user/update', (req, res) => {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
-        fbListOfEmployees = snapshot.val();
+        fbListOfEmployees = snapshot.val();                      
 
         var empObj = req.body;
         var id = empObj.id;
@@ -353,7 +353,7 @@ app.post('/api/user/update', (req, res) => {
         dbRefForEmployees.set(fbListOfEmployees);
         console.log("udated employee data");
     });
-
+    
 });
 
 cron.schedule('30 16 * * *', function() {
