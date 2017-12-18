@@ -12,7 +12,7 @@ function sendEmail(from, to, subject, body, mailType, reports) {
         case 'gift' :
             gift(from, to, subject, body, mailType, reports);
             break;
-        case 'new_task' :
+        case 'task_added' :
             taskAdded(from, to, subject, body, mailType, reports);
             break;
         case 'inform_pairs' :

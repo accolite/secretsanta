@@ -244,12 +244,12 @@ function notifyChildAboutAddedTask(currUser) {
         fbListOfEmployees = snapshot.val();      
         
         var childEmailId;
-        _.map(mappedEmployeesList, (data) => {
-            if(data.emailId == currUser)
+        _.map(fbListOfEmployees, (data) => {
+            if(data.emailid == currUser)
             {
-                var room = data.room['roomAsSanta'];
+                var room = data.roomAsSanta;
                 var childId = room.split('_')[1];
-                childEmailId = mappedEmployeesList[childId].emailId;
+                childEmailId = fbListOfEmployees[childId].emailid;
             }
         });
         var from = 'secretsanta.accolite@gmail.com';
@@ -289,12 +289,12 @@ function pokeChild(currUser) {
         fbListOfEmployees = snapshot.val();      
         
         var childEmailId;
-        _.map(mappedEmployeesList, (data) => {
-            if(data.emailId == currUser)
+        _.map(fbListOfEmployees, (data) => {
+            if(data.emailid == currUser)
             {
-                var room = data.room['roomAsSanta'];
+                var room = data.roomAsSanta;
                 var childId = room.split('_')[1];
-                childEmailId = mappedEmployeesList[childId].emailId;
+                childEmailId = fbListOfEmployees[childId].emailid;
             }
         });
         var from = 'secretsanta.accolite@gmail.com';
@@ -312,11 +312,11 @@ function notifyGift(currUser) {
         
         var childEmailId;
         _.map(fbListOfEmployees, (data) => {
-            if(data.emailId == currUser)
+            if(data.emailid == currUser)
             {
-                var room = data.room['roomAsSanta'];
+                var room = data.roomAsSanta;
                 var childId = room.split('_')[1];
-                childEmailId = fbListOfEmployees[childId].emailId;
+                childEmailId = fbListOfEmployees[childId].emailid;
             }
         });
         var from = 'secretsanta.accolite@gmail.com';
