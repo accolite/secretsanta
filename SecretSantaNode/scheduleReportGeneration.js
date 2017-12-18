@@ -78,7 +78,9 @@ function reportGenerator() {
             else {
                 roomWithMinSantaTasks.push(snapshot.val()[obj]);
                 minNumberOfTasksBySanta = 0;   
-                reports['tasks'].push({'room' : obj});
+                reports['tasks'].push({'santaTaskCount' : 0,
+                                        'childTaskCompletedCount' : 0,
+                                        'room' : obj});
             }    
         }
     };

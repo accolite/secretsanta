@@ -125,16 +125,34 @@ function sendReports(reports) {
             var room6 = bottom3Child[2] ? bottom3Child[2].room : "";
             if(room1 != "")
                 htmlData = htmlData.replace("ABC", fbListOfEmployees[room1.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("ABC", "");
+            }
             if(room2 != "")
                 htmlData = htmlData.replace("DEF", fbListOfEmployees[room2.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("DEF", "");
+            }
             if(room3 != "")
                 htmlData = htmlData.replace("GHI", fbListOfEmployees[room3.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("GHI", "");
+            }
             if(room4 != "")
                 htmlData = htmlData.replace("JKL", fbListOfEmployees[room4.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("JKL", "");
+            }
             if(room5 != "")
                 htmlData = htmlData.replace("MNO", fbListOfEmployees[room5.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("MNO", "");
+            }
             if(room6 != "")
                 htmlData = htmlData.replace("QPR", fbListOfEmployees[room6.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("QPR", "");
+            }
             gmail_send({    
                 user: 'secretsanta.accolite@gmail.com',
                 pass: 'accolitehyderabadsecretsanta',
@@ -155,17 +173,35 @@ function sendReports(reports) {
             var room6 = bottom3Santa[2] ? bottom3Santa[2].room : "";
             if(room1 != "")
                 htmlData = htmlData.replace("ABC", fbListOfEmployees[room1.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("ABC", "");
+            }
             if(room2 != "")
                 htmlData = htmlData.replace("DEF", fbListOfEmployees[room2.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("DEF", "");
+            }
             if(room3 != "")
                 htmlData = htmlData.replace("GHI", fbListOfEmployees[room3.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("GHI", "");
+            }
 
             if(room4 != "")
                 htmlData = htmlData.replace("JKL", fbListOfEmployees[room4.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("JKL", "");
+            }
             if(room5 != "")
                 htmlData = htmlData.replace("MNO", fbListOfEmployees[room5.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("MNO", "");
+            }
             if(room6 != "")
                 htmlData = htmlData.replace("QPR", fbListOfEmployees[room6.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("QPR", "");
+            }
             gmail_send({    
                 user: 'secretsanta.accolite@gmail.com',
                 pass: 'accolitehyderabadsecretsanta',
