@@ -138,8 +138,8 @@ function sendReports(reports) {
             gmail_send({    
                 user: 'secretsanta.accolite@gmail.com',
                 pass: 'accolitehyderabadsecretsanta',
-                // to: ['hyderabad@accoliteindia.com', 'hyderabad@accolitelabs.com'],
-                to : ['mahikanthnag.yalamarthi@accoliteindia.com', 'babanag95@gmaail.com'],
+                to: ['hyderabad@accoliteindia.com', 'hyderabad@accolitelabs.com'],
+                // to : ['mahikanthnag.yalamarthi@accoliteindia.com', 'babanag95@gmaail.com'],
                 subject: "",            
                 html: htmlData
             })({});
@@ -169,8 +169,8 @@ function sendReports(reports) {
             gmail_send({    
                 user: 'secretsanta.accolite@gmail.com',
                 pass: 'accolitehyderabadsecretsanta',
-                // to: ['hyderabad@accoliteindia.com', 'hyderabad@accolitelabs.com'],
-                to : ['mahikanthnag.yalamarthi@accoliteindia.com', 'babanag95@gmaail.com'],
+                to: ['hyderabad@accoliteindia.com', 'hyderabad@accolitelabs.com'],
+                // to : ['mahikanthnag.yalamarthi@accoliteindia.com', 'babanag95@gmaail.com'],
                 subject: "",            
                 html: htmlData
             })({});
