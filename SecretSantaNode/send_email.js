@@ -1,28 +1,29 @@
 var fs = require('fs');
+var firebase = require('./firebase_config').firebase;
 var gmail_send = require('gmail-send');
 function sendEmail(from, to, subject, body, mailType, reports) {
     switch(mailType) {
         case 'poke_santa' :
-            pokeSanta();
+            pokeSanta(from, to, subject, body, mailType, reports);
             break;
         case 'poke_child' :
-            pokeChild();
+            pokeChild(from, to, subject, body, mailType, reports);
             break;
         case 'gift' :
-            gift();
+            gift(from, to, subject, body, mailType, reports);
             break;
-        case 'new_task' :
-            taskAdded();
+        case 'task_added' :
+            taskAdded(from, to, subject, body, mailType, reports);
             break;
         case 'inform_pairs' :
-            informSantasAndChildren();
+            informSantasAndChildren(from, to, subject, body, mailType, reports);
             break;
         case 'reports' :
-            reports(reports);
+            sendReports(reports);
             break;
     }    
 };
-function informSantasAndChildren() {
+function informSantasAndChildren(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/santa-invite.html", function(err, data) {
         htmlData = data;
         htmlData = htmlData.replace("{$Emp_Name$}", name);
@@ -45,11 +46,11 @@ function informSantasAndChildren() {
         });
     });
 };
-function taskAdded() {
+function taskAdded(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/taskAdded.html", function(err, data) {
         htmlData = data;
         gmail_send({    
-            user: from,
+            user: 'secretsanta.accolite@gmail.com',
             pass: 'accolitehyderabadsecretsanta',
             to: to,
             subject: subject,
@@ -58,9 +59,9 @@ function taskAdded() {
             })({});
     });
 };
-function gift() {
+function gift(from, to, subject, body, mailType, reports) {
     gmail_send({    
-        user: from,
+        user: 'secretsanta.accolite@gmail.com',
         pass: 'accolitehyderabadsecretsanta',
         to: to,
         subject: subject,
@@ -68,11 +69,11 @@ function gift() {
         html: htmlData
         })({});
 };
-function pokeSanta() {
+function pokeSanta(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/poke_santa.html", function(err, data) {
         htmlData = data;
         gmail_send({    
-            user: from,
+            user: 'secretsanta.accolite@gmail.com',
             pass: 'accolitehyderabadsecretsanta',
             to: to,
             subject: subject,
@@ -81,11 +82,11 @@ function pokeSanta() {
         })({});
     });
 };
-function pokeChild() {
+function pokeChild(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/poke_child.html", function(err, data) {
         htmlData = data;
         gmail_send({    
-            user: from,
+            user: 'secretsanta.accolite@gmail.com',
             pass: 'accolitehyderabadsecretsanta',
             to: to,
             subject: subject,
@@ -94,7 +95,7 @@ function pokeChild() {
         })({});
     });
 };
-function reports(reports) {
+function sendReports(reports) {
     var top3Santa=[], top3Child=[], bottom3Santa=[], bottom3Child=[];
     var tasks = reports['tasks'];
     tasks.sort(function(a, b){
@@ -111,54 +112,102 @@ function reports(reports) {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
         fbListOfEmployees = snapshot.val();      
-                        
+
         fs.readFile("./templates/simple_reports_child.html", function(err, data) {
-            htmlData = data;
-            var room1 = top3Child[0].room;
-            var room2 = top3Child[1].room;
-            var room3 = top3Child[2].room;
+            var htmlData = data.toString('utf8');
+            console.log(htmlData);
+            var room1 = top3Child[0] ? top3Child[0].room : "";
+            var room2 = top3Child[1] ? top3Child[1].room : "" ;
+            var room3 = top3Child[2] ?  top3Child[2].room : "";
 
-            var room4 = bottom3Child[0].room;
-            var room5 = bottom3Child[1].room;
-            var room6 = bottom3Child[2].room;
-
-            htmlData.replace("ABC", fbListOfEmployees[room1.split('_')[1]].name);
-            htmlData.replace("DEF", fbListOfEmployees[room2.split('_')[1]].name);
-            htmlData.replace("GHI", fbListOfEmployees[room3.split('_')[1]].name);
-
-            htmlData.replace("JKL", fbListOfEmployees[room4.split('_')[1]].name);
-            htmlData.replace("MNO", fbListOfEmployees[room5.split('_')[1]].name);
-            htmlData.replace("QPR", fbListOfEmployees[room6.split('_')[1]].name);
+            var room4 = bottom3Child[0] ? bottom3Child[0].room: "";
+            var room5 = bottom3Child[1] ? bottom3Child[1].room : "";
+            var room6 = bottom3Child[2] ? bottom3Child[2].room : "";
+            if(room1 != "")
+                htmlData = htmlData.replace("ABC", fbListOfEmployees[room1.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("ABC", "");
+            }
+            if(room2 != "")
+                htmlData = htmlData.replace("DEF", fbListOfEmployees[room2.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("DEF", "");
+            }
+            if(room3 != "")
+                htmlData = htmlData.replace("GHI", fbListOfEmployees[room3.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("GHI", "");
+            }
+            if(room4 != "")
+                htmlData = htmlData.replace("JKL", fbListOfEmployees[room4.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("JKL", "");
+            }
+            if(room5 != "")
+                htmlData = htmlData.replace("MNO", fbListOfEmployees[room5.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("MNO", "");
+            }
+            if(room6 != "")
+                htmlData = htmlData.replace("QPR", fbListOfEmployees[room6.split('_')[1]].name);
+            else {
+                htmlData = htmlData.replace("QPR", "");
+            }
             gmail_send({    
                 user: 'secretsanta.accolite@gmail.com',
                 pass: 'accolitehyderabadsecretsanta',
                 to: ['hyderabad@accoliteindia.com', 'hyderabad@accolitelabs.com'],
-                subject: subject,            
+                // to : ['mahikanthnag.yalamarthi@accoliteindia.com', 'babanag95@gmaail.com'],
+                subject: "",            
                 html: htmlData
             })({});
         });                
         fs.readFile("./templates/simple_reports_santa.html", function(err, data) {
-            htmlData = data;
-            var room1 = top3Santa[0].room;
-            var room2 = top3Santa[1].room;
-            var room3 = top3Santa[2].room;
+            var htmlData = data.toString('utf8');
+            var room1 = top3Santa[0] ? top3Santa[0].room : "";
+            var room2 = top3Santa[1] ? top3Santa[1].room : "";
+            var room3 = top3Santa[2]  ? top3Santa[2].room : "";
 
-            var room4 = bottom3Santa[0].room;
-            var room5 = bottom3Santa[1].room;
-            var room6 = bottom3Santa[2].room;
+            var room4 = bottom3Santa[0] ? bottom3Santa[0].room : "";
+            var room5 = bottom3Santa[1]  ? bottom3Santa[1].room : "";
+            var room6 = bottom3Santa[2] ? bottom3Santa[2].room : "";
+            if(room1 != "")
+                htmlData = htmlData.replace("ABC", fbListOfEmployees[room1.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("ABC", "");
+            }
+            if(room2 != "")
+                htmlData = htmlData.replace("DEF", fbListOfEmployees[room2.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("DEF", "");
+            }
+            if(room3 != "")
+                htmlData = htmlData.replace("GHI", fbListOfEmployees[room3.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("GHI", "");
+            }
 
-            htmlData.replace("ABC", fbListOfEmployees[room1.split('_')[0]].name);
-            htmlData.replace("DEF", fbListOfEmployees[room2.split('_')[0]].name);
-            htmlData.replace("GHI", fbListOfEmployees[room3.split('_')[0]].name);
-
-            htmlData.replace("JKL", fbListOfEmployees[room4.split('_')[0]].name);
-            htmlData.replace("MNO", fbListOfEmployees[room5.split('_')[0]].name);
-            htmlData.replace("QPR", fbListOfEmployees[room6.split('_')[0]].name);
+            if(room4 != "")
+                htmlData = htmlData.replace("JKL", fbListOfEmployees[room4.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("JKL", "");
+            }
+            if(room5 != "")
+                htmlData = htmlData.replace("MNO", fbListOfEmployees[room5.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("MNO", "");
+            }
+            if(room6 != "")
+                htmlData = htmlData.replace("QPR", fbListOfEmployees[room6.split('_')[0]].name);
+            else {
+                htmlData = htmlData.replace("QPR", "");
+            }
             gmail_send({    
                 user: 'secretsanta.accolite@gmail.com',
                 pass: 'accolitehyderabadsecretsanta',
                 to: ['hyderabad@accoliteindia.com', 'hyderabad@accolitelabs.com'],
-                subject: subject,            
+                // to : ['mahikanthnag.yalamarthi@accoliteindia.com', 'babanag95@gmaail.com'],
+                subject: "",            
                 html: htmlData
             })({});
         });        
