@@ -54,6 +54,9 @@ function storeInFirebase(mappedEmployeesList, firebase) {
         jsonUsers[trimmedEmail] = {"roomAsSanta": roomAsSanta, 'roomAsChild' : roomAsChild};        
     }
     dbRefForUsersDetailsMapping.set(jsonUsers);
+
+    var dbRefForTasksMapping = firebase.database().ref().child('tasks');
+    dbRefForTasksMapping.set(mappedEmployeesList.map(employee => employee.room));
     console.log("users object added to firebase");
 };
 exports.storeInFirebase = storeInFirebase;
