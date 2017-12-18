@@ -25,10 +25,13 @@ function storeInFirebase(mappedEmployeesList, firebase) {
                         });
     }
     dbRefForEmployees.set(employeeArray);
+    console.log("pushed employee details to firebase");
 
     const dbRefForRoomMapping = firebase.database().ref().child('rooms');
+    console.log("rooms object added to firebase");
     var rooms = mappedEmployeesList.map(employee => employee.room);
     dbRefForRoomMapping.set(mappedEmployeesList.map(employee => employee.room));
+    console.log("rooms object added to firebase");
 
     // const dbRefForUsersMapping = firebase.database().ref().child('users');
     // dbRefForUsersMapping.set(employees.map(employee => employee.emailid));
@@ -51,5 +54,6 @@ function storeInFirebase(mappedEmployeesList, firebase) {
         jsonUsers[trimmedEmail] = {"roomAsSanta": roomAsSanta, 'roomAsChild' : roomAsChild};        
     }
     dbRefForUsersDetailsMapping.set(jsonUsers);
+    console.log("users object added to firebase");
 };
 exports.storeInFirebase = storeInFirebase;
