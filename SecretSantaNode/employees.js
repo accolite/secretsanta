@@ -72,7 +72,7 @@ app.post("/api", (req, res) => {
                         employeeData.location = curr[5] ? curr[5] : "";
                         employeeData.teamName = curr[4] ? curr[4] : "";
                         employeeData.id = 0;
-                        employeeData.active ="";
+                        employeeData.active = curr[7] ? curr[7] : "";
                         employeeData.room = {"roomAsSanta" : "", 'roomAsChild' : ""};                     
                         employees.push(employeeData);
                     });
@@ -88,10 +88,10 @@ app.post("/api", (req, res) => {
         function groupEmployees() {
             for(var i = 0;i<employees.length; i++) {
                 var employee = employees[i];
-                if(!employeeGroups[employee.shift+"_"+employee.active+"_"+employee.location+"_"+employee.company]) {
-                    employeeGroups[employee.shift+"_"+employee.active+"_"+employee.location+"_"+employee.company]=[];
+                if(!employeeGroups[employee.active+"_"+employee.location+"_"+employee.company]) {
+                    employeeGroups[employee.active+"_"+employee.location+"_"+employee.company]=[];
                 }
-                employeeGroups[employee.shift+"_"+employee.active+"_"+employee.location+"_"+employee.company].push(employee);
+                employeeGroups[employee.active+"_"+employee.location+"_"+employee.company].push(employee);
             }
             for (var array in employeeGroups) {
                 if (employeeGroups.hasOwnProperty(array)) {
