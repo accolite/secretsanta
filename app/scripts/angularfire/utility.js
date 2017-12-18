@@ -23,7 +23,7 @@ angular.module('firebase.Auth')
       }
 
       function logout(auth) {
-        window.alert('sorry, you are permitted to play this amazing game!');
+        window.alert('sorry, you are not allowed to play this amazing game');
         auth.$signOut();
       }
 
@@ -78,10 +78,10 @@ angular.module('firebase.Auth')
     obj.getUserInformation = function (email, cb) {
       var query = rootRef.child('Employees').orderByChild("emailid").equalTo(email);
       var _o = $firebaseArray(query);
-      if(angular.isUndefined(_o[0])) {
-        logout(_auth);
-      }
       _o.$loaded().then(function () {
+        if(angular.isUndefined(_o[0])) {
+          logout(_auth);
+        }
         var q = rootRef.child('Employees').child(_o[0].$id);
         var o = $firebaseObject(q);
         cb(o);
