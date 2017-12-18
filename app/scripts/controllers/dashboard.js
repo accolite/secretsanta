@@ -80,7 +80,7 @@ angular.module('secretSantaApp')
                 uid: $scope.user.uid,
                 timestamp: Date.now()
               }).then(function () {
-                var utterThis = new SpeechSynthesisUtterance("Santa added a new child!");
+                var utterThis = new SpeechSynthesisUtterance("Santa added a new task!");
                 utterThis.voice = speechSynthesis.getVoices().filter(s => s.name.match("Zira | Female"))[0];
                 window.speechSynthesis.speak(utterThis)
               });
