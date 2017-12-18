@@ -12,7 +12,7 @@
     <div class="form-group">
       <label for="wishlist">What's your wish list ?</label>
       <input type="text" class="form-control" id="wishlist" placeholder="wish list here..." ng-model="new.wish" ng-disabled="!editable">
-      <button ng-disabled="!loaded" type="submit" class="example yahoo" ng-click="add(new.wish)">Add</button>
+      <button ng-disabled="!loaded" ng-show="editable" type="submit" class="example yahoo" ng-click="add(new.wish)">Add</button>
       <ul id="">
         <li ng-repeat="item in user.wishlist track by $index">{{item}}</li>
       </ul>
