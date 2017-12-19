@@ -353,7 +353,9 @@ app.get('/api/user/', (req, res) => {
             {
                 var empObj = clone(employee);
                 delete empObj.santaEmailId;
-                delete empObj.roomAsSanta;        
+                delete empObj.roomAsSanta;   
+                delete empObj.roomAsChild;
+                delete empObj.childEmailId;     
                 console.log(empObj);                        
                 var str = JSON.stringify(empObj);
                 res.end(str);
