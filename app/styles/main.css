@@ -10,6 +10,7 @@
   word-wrap: break-word;
   /*margin: auto;*/
   text-align: center;
+  color: black;
 }
 
 .card-1 {
@@ -392,9 +393,13 @@ button.yahoo:active:before {
   padding-right: 0px;
 }
 .chat-list{
-  overflow: auto;
+  overflow: scroll;
   height: 300px;
 
+}
+
+.chat-list .panel-body {
+  padding: 0px !important
 }
 
 .panel.panel-others {
@@ -932,9 +937,9 @@ i.icon {
 
 .blue {background-color: #1976D2;}
 
-.green {background-color: green;}
+.green {background-color: rgba(104, 159, 56,1);}
 
-.yellow {background-color: yellow;}
+.yellow {background-color: rgba(255, 193, 7,1);}
 
 .panel-body-activity {
   min-height: 10em;

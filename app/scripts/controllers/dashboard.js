@@ -10,10 +10,10 @@ angular.module('secretSantaApp')
   .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "$route", "NetworkService", "$location",
     function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route, NetworkService, $location) {
 
-
       $scope.emojiMessage={};
       $scope.user = currentAuth;
       $scope.loaded = false;
+      var objDiv;
 
       var roomPointerName = '';
       if($route.current.$$route.originalPath === "/dashboard/santa") {
@@ -29,6 +29,10 @@ angular.module('secretSantaApp')
           .then(function () {
             $scope.messages = messages;
             $scope.loaded = true;
+            setTimeout(function () {
+              objDiv = document.getElementById("chat");
+              objDiv.scrollTop = objDiv.scrollHeight;
+            }, 100);
           })
           .catch(alert);
       });
@@ -53,8 +57,6 @@ angular.module('secretSantaApp')
           }).then(function () {
             $scope.message = '';
           }).catch(alert);
-          var objDiv = document.getElementById("chat");
-          objDiv.scrollTop = objDiv.scrollHeight;
         }
       };
 

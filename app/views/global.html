@@ -1,0 +1,105 @@
+<div class="" ng-show-auth="">
+
+  <h3 class="text-center" style="color: white; margin-top: 70px">Activity</h3>
+
+  <!--<ul class=" list-group">-->
+  <!--<li class="activity list-group-item" ng-repeat="act in activites">{{constructMessage(act)}}</li>-->
+  <!--</ul>-->
+  <div class="row">
+    <div class="col-xs-11 col-md-10 col-centered">
+
+      <div id="carousel" class="carousel slide" data-ride="carousel" data-type="multi" data-interval="2500">
+        <div class="carousel-inner">
+          <div class="item active">
+            <div class="carousel-col ">
+              <div class="panel panel-default red">
+                <div class="panel-heading">Activity</div>
+                <div class="panel-body panel-body-activity">
+                  <h1 class="display-1" style="color: whitesmoke; padding: 10px;">
+                    Check out all the activities happening in Secret Santa universe!
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item" style="height: 300px" ng-repeat="act in activites">
+            <div class="carousel-col">
+              <div class="panel panel-default" ng-class="getPanelBG(act)">
+                <div class="panel-heading">
+                  {{constructMessageHeading(act)}}
+                  <b class="pull-right">{{act.timestamp | date:"MM/dd/yyyy 'at' h:mma"}}</b>
+                </div>
+                <div class="panel-body" style="text-align:center;vertical-align: middle">
+                  <h1 class="display-1" style="color: whitesmoke; padding: 10px;">{{constructMessage(act)}}</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--<div class="item">-->
+          <!--<div class="carousel-col">-->
+          <!--<div class="panel panel-default yellow">-->
+          <!--<div class="panel-heading">Panel heading without title</div>-->
+          <!--<div class="panel-body">-->
+          <!--Panel content-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--<div class="item">-->
+          <!--<div class="carousel-col">-->
+          <!--<div class="panel panel-default green">-->
+          <!--<div class="panel-heading">Panel heading without title</div>-->
+          <!--<div class="panel-body">-->
+          <!--Panel content-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--</div>-->
+
+          <!-- Controls -->
+          <div class="left carousel-control">
+            <a role="button" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </div>
+          <div class="right carousel-control">
+            <a role="button" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+<!--<div style="display: inline-flex">-->
+<!--<div style="height: 200px; width: 200px; background-color: #0f0f0f; word-wrap: normal">-->
+<!--<h1 style="font-size: 7em;margin-left: auto">8</h1>-->
+<!--<br>-->
+<!--<h4 style="font-size: 3em">This is Text</h4>-->
+<!--</div>-->
+<div style="width: 100%;text-align: center;">
+  <div style="display: inline-block;margin-left: 3rem; margin-right: 3rem">
+    <div class="card card-1 red">
+      <h1 style="font-size: 7em;margin-left: auto">108</h1>
+      <h4 style="font-size: 3em">Messages</h4>
+    </div>
+    <div class="card card-1 blue">
+      <h1 style="font-size: 7em;margin-left: auto">32</h1>
+      <h4 style="font-size: 3em">Pokes</h4>
+    </div>
+    <div class="card card-1 green">
+      <h1 style="font-size: 7em;margin-left: auto">26</h1>
+      <h4 style="font-size: 3em">Challenges</h4>
+    </div>
+    <div class="card card-1 yellow">
+      <h1 style="font-size: 7em;margin-left: auto">4</h1>
+      <h4 style="font-size: 3em">Gifts Promised</h4>
+    </div>
+  </div>
+</div>
