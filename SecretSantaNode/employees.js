@@ -340,7 +340,21 @@ function notifyGift(currUser) {
         sendEmail(from, childEmailId, subject, body, 'gift');
         console.log("email for gift sent");
     });    
-}
+};
+
+app.get('/api/user/:userId', (req, res) => {
+    var fbListOfEmployees ;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+        fbListOfEmployees = snapshot.val();
+        var empObj = fbListOfEmployees[req.params.userId];
+        delete empObj.santaEmailId;
+        delete empObj.roomAsSanta;        
+        console.log(empObj);                        
+        var str = JSON.stringify(empObj);
+        res.end(str);
+    });
+});
+
 app.post('/api/user/update', (req, res) => {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
