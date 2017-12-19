@@ -23,19 +23,17 @@ angular.module('secretSantaApp')
         $scope.editable = true;
       }
 
-      firebaseUtilityService.getUserInformation(email, function (info) {
-        info.$loaded().then(function () {
-          $scope.info = info;
+      getUserInformation();
+
+      function getUserInformation() {
+        NetworkService.getUser(email).then(function(data) {
+          $scope.user = data.data;
           $scope.loaded = true;
-          $scope.user = $firebaseUtils.toJSON($scope.info);
-          delete $scope.user.santaEmailId;
-          delete $scope.user.roomAsSanta;
-          delete $scope.user.roomAsChild;
           if(angular.isUndefined($scope.user.wishlist)){
             $scope.user.wishlist = [];
           }
         });
-      });
+      }
 
       $scope.save = function () {
         $scope.user.id = $scope.info.$id;
