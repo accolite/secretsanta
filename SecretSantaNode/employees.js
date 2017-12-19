@@ -127,6 +127,7 @@ app.post("/api", (req, res) => {
             }
             return true;
         };
+        
         function mapSantaChild(group) {
             var employeesCopyForSanta=[], employeesCopyForChild=[];
             employeesCopyForSanta = group.slice();
@@ -342,16 +343,22 @@ function notifyGift(currUser) {
     });    
 };
 
-app.get('/api/user/:userId', (req, res) => {
+app.get('/api/user/:emailId', (req, res) => {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
         fbListOfEmployees = snapshot.val();
-        var empObj = fbListOfEmployees[req.params.userId];
-        delete empObj.santaEmailId;
-        delete empObj.roomAsSanta;        
-        console.log(empObj);                        
-        var str = JSON.stringify(empObj);
-        res.end(str);
+        var emailId = req.params.emailId;
+        _.map(fbListOfEmployees,(employee) => {
+            if(employee.emailid == emailId)
+            {
+                var empObj = clone(employee);
+                delete empObj.santaEmailId;
+                delete empObj.roomAsSanta;        
+                console.log(empObj);                        
+                var str = JSON.stringify(empObj);
+                res.end(str);
+            }
+        });                        
     });
 });
 
@@ -381,7 +388,14 @@ app.post('/api/user/update', (req, res) => {
     });
     
 });
-
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    return copy;
+};
 cron.schedule('30 16 * * *', function() {
     reportGenerator();
 });
