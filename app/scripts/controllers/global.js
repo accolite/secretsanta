@@ -7,8 +7,8 @@
  * Handler for santa-child login
  */
 angular.module('secretSantaApp')
-  .controller('GlobalCtrl', ["$scope", "currentAuth",
-    function ($scope, currentAuth) {
+  .controller('GlobalCtrl', ["$scope", "currentAuth", "$rootScope", 
+    function ($scope, currentAuth, $rootScope) {
 
       $rootScope.$on('authData', function (event, data) {
         $scope.username = data.displayName || data.email;
