@@ -16,6 +16,10 @@ angular.module('secretSantaApp')
         return $http.post(bsse + '/api/user/update/?email=' + email, JSON.stringify(data));
       };
 
+      obj.getUser = function (email) {
+        return $http.get(bsse + '/api/user/?email=' + email);
+      };
+
       obj.triggerEmailer = function (event, authData) {
         return $http.get(bsse + '/api/email/send/?event=' + event + '&user=' + authData.email);
       };
