@@ -10,10 +10,10 @@ angular.module('secretSantaApp')
   .controller('DashboardCtrl', ["$scope", "currentAuth", "$firebaseArray", "$timeout", "$firebaseObject", "firebaseUtilityService", "$route", "NetworkService", "$location",
     function ($scope, currentAuth, $firebaseArray, $timeout, $firebaseObject, firebaseUtilityService, $route, NetworkService, $location) {
 
-
       $scope.emojiMessage={};
       $scope.user = currentAuth;
       $scope.loaded = false;
+      var objDiv;
 
       var roomPointerName = '';
       if($route.current.$$route.originalPath === "/dashboard/santa") {
@@ -29,6 +29,10 @@ angular.module('secretSantaApp')
           .then(function () {
             $scope.messages = messages;
             $scope.loaded = true;
+            setTimeout(function () {
+              objDiv = document.getElementById("chat");
+              objDiv.scrollTop = objDiv.scrollHeight;
+            }, 100);
           })
           .catch(alert);
       });
@@ -38,21 +42,9 @@ angular.module('secretSantaApp')
           .then(function () {
             $scope.tasks = tasks;
             $scope.tasksLoaded = true;
-            // setFirebaseWatchers();
           })
           .catch(alert);
       });
-
-      // function setFirebaseWatchers() {
-      //   $scope.tasks.$watch(function (eventData) {
-      //     if("child_changed" === eventData.event) {
-      //       console.log('find the event status and if true, emit an event key', eventData.key);
-      //     } else if("child_added" === eventData.event) {
-      //       firebaseUtilityService.getActivity('task_added', {user: $scope.user, taskId: eventData.key});
-      //     }
-      //   });
-      //   $scope.tasks.off();ut
-      // }
 
       // provide a method for adding a message
       $scope.addMessage = function (newMessage) {
@@ -62,6 +54,8 @@ angular.module('secretSantaApp')
             text: newMessage,
             userId: currentAuth.uid,
             timestamp: Date.now()
+          }).then(function () {
+            $scope.message = '';
           }).catch(alert);
         }
       };

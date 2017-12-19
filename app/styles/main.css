@@ -1,5 +1,36 @@
+
+.card {
+  background: #fff;
+  border-radius: 2px;
+  display: inline-block;
+  height: 200px;
+  margin: 1rem;
+  position: relative;
+  width: 300px;
+  word-wrap: break-word;
+  /*margin: auto;*/
+  text-align: center;
+  color: black;
+}
+
+.card-1 {
+  /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
+  /*box-shadow: 0 14px 28px rgba(0,0,0,1), 0 10px 10px rgba(0,0,0,1);*/
+  box-shadow: 5px 5px 8px rgba(255,255,255,1)
+  /*transition: all 0.3s cubic-bezier(.25,.8,.25,1);*/
+}
+
+.card-1:hover {
+  box-shadow: 5px 5px 8px rgba(0, 153, 255,1)
+}
+
 .white-text {
   color: #fff
+}
+
+.white-text-mix {
+  color: rgba(255,255,255,0.5);
+
 }
 
 .profile-form {
@@ -362,9 +393,13 @@ button.yahoo:active:before {
   padding-right: 0px;
 }
 .chat-list{
-  overflow: auto;
+  overflow: scroll;
   height: 300px;
 
+}
+
+.chat-list .panel-body {
+  padding: 0px !important
 }
 
 .panel.panel-others {
@@ -902,9 +937,9 @@ i.icon {
 
 .blue {background-color: #1976D2;}
 
-.green {background-color: green;}
+.green {background-color: rgba(104, 159, 56,1);}
 
-.yellow {background-color: yellow;}
+.yellow {background-color: rgba(255, 193, 7,1);}
 
 .panel-body-activity {
   min-height: 10em;

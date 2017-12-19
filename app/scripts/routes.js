@@ -145,6 +145,17 @@ angular.module('secretSantaApp')
           }]
         }
       })
+      .when('/global', {
+        templateUrl: 'views/global.html',
+        controller: 'GlobalCtrl',
+        controllerAs: 'global',
+        resolve: {
+          "currentAuth": ["auth", function (auth) {
+            // returns a promisse so the resolve waits for it to complete
+            return auth.$requireSignIn();
+          }]
+        }
+      })
 
       .otherwise({
         redirectTo: '/'
