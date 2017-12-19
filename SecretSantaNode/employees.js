@@ -343,11 +343,11 @@ function notifyGift(currUser) {
     });    
 };
 
-app.get('/api/user/:emailId', (req, res) => {
+app.get('/api/user/', (req, res) => {
     var fbListOfEmployees ;
     var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
         fbListOfEmployees = snapshot.val();
-        var emailId = req.params.emailId;
+        var emailId = req.query.email;
         _.map(fbListOfEmployees,(employee) => {
             if(employee.emailid == emailId)
             {
