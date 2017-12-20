@@ -57,7 +57,7 @@ angular.module('firebase.Auth')
           console.log('cannot find room');
           return;
         }
-        var query = rootRef.child('rooms').child(room.$value).limitToLast(10);
+        var query = rootRef.child('rooms').child(room.$value);
         var messages = $firebaseArray(query);
         cb(messages);
       });
