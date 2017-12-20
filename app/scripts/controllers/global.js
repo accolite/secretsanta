@@ -7,8 +7,8 @@
  * Handler for santa-child login
  */
 angular.module('secretSantaApp')
-  .controller('GlobalCtrl', ["$scope", "currentAuth",
-    function ($scope, currentAuth) {
+  .controller('GlobalCtrl', ["auth", "$scope", "$location", "firebaseUtilityService", "$rootScope",
+    function (auth, $scope, $location, firebaseUtilityService, $rootScope) {
 
       $rootScope.$on('authData', function (event, data) {
         $scope.username = data.displayName || data.email;
