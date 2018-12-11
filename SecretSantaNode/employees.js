@@ -24,7 +24,7 @@ app.use(upload());
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 });
@@ -53,8 +53,8 @@ app.post("/api", (req, res) => {
                 console.log('cannot move file');
             }
             else{
-                console.log('File has been uploaded');
-                parseXlsx("./"+filename, function(err, data) {
+                console.log('File has been uploaded ' + filename);
+                 parseXlsx("./"+filename, function(err, data) {
                     if(err) throw err;
                       // data is an array of arrays
                     // console.log(data);
@@ -80,8 +80,7 @@ app.post("/api", (req, res) => {
                     groupEmployees();
                     createRooms();
                     storeInFirebase(mappedEmployeesList, firebase);
-
-                });
+                }); 
             }
         });
 
@@ -203,7 +202,7 @@ app.post("/api", (req, res) => {
 });
 
 app.get("/api/notify", (req, res) => {
-    var from = 'secretsanta.accolite@gmail.com';
+    // var from = 'secretsanta.accolite@gmail.com';
     // var to = req.body.to;
     // var body = req.body.body;
     // var subject = req.body.subject;
