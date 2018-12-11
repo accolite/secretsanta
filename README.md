@@ -1,4 +1,4 @@
-# secret-santa
+# secret-santa - V2
 
 This project is generated with [yo angularfire-express generator](https://github.com/matheushf/generator-angularfire-express)
 version 1.1.2.
