@@ -1,6 +1,12 @@
 (function () {
     // Initialize Firebase
     var firebase = require("firebase");
+    var admin = require("firebase-admin");
+    var serviceAccount = require("./serviceAccountKey.json"); // chnage this for prod; https://firebase.google.com/docs/database/admin/start
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      databaseURL: "https://secretsanta-19ed6.firebaseio.com"
+    });
     // var config = {
     //     apiKey: "AIzaSyBMyZjbWf1J0-A677LvTRXQfb9t7a3y25o",
     //     authDomain: "secretsanta-accolite.firebaseapp.com",
@@ -24,5 +30,5 @@
         messagingSenderId: "1088657152665"
       }; */
     firebase.initializeApp(config);
-    exports.firebase = firebase;
+    exports.firebase = admin;
 })();

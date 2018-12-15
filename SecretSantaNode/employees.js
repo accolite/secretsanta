@@ -32,6 +32,17 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+
+app.get("/testRead", (req, res) => {
+    // read from firebase
+    var users = firebase.database().ref('test');
+    console.log('reading');
+    users.on('value', function (snapshot) {
+        console.log('users ', snapshot.val());
+        res.send('users ' + snapshot.val());
+    });
+});
+
 app.get("/api", (req, res) => {
     res.sendFile(__dirname+"/index.html");
 });
