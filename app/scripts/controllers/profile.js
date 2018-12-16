@@ -36,7 +36,7 @@ angular.module('secretSantaApp')
       }
 
       $scope.save = function () {
-        $scope.user.id = $scope.info.$id;
+        // $scope.user.id = $scope.info.$id;
         NetworkService.updateUser($scope.user.emailid, $scope.user).then(function () {
           window.alert('updated!');
         });

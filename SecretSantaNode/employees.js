@@ -255,6 +255,9 @@ app.get('/api/email/send', (req, res) => {
         case 'addTask': notifyChildAboutAddedTask(currUser);
             res.end();
             break;
+        case 'doneTask' : notifyChildAboutDoneTask(currUser);
+        res.end();
+        break;
         case 'poke_santa': pokeSanta(currUser);
             res.end();
             break;
@@ -266,6 +269,29 @@ app.get('/api/email/send', (req, res) => {
             break;
     }
 });
+
+function notifyChildAboutDoneTask(currUser) {
+    var fbListOfEmployees ;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+        fbListOfEmployees = snapshot.val();
+
+        var childEmailId;
+        _.map(fbListOfEmployees, (data) => {
+            if(data.emailid == currUser)
+            {
+                var room = data.roomAsSanta;
+                var childId = room.split('_')[1];
+                childEmailId = fbListOfEmployees[childId].emailid;
+            }
+        });
+        var from = 'secretsanta.accolite@gmail.com';
+        var subject = "Your santa liked your efforts!";
+        var body = "Your santa liked your efforts"
+        +" to get yourself one more step closer to a surprise gift!!"
+        sendEmail(from, childEmailId, subject, body, 'task_done');
+        console.log("informed child about task");
+    });
+};
 
 function notifyChildAboutAddedTask(currUser) {
     var fbListOfEmployees;
@@ -365,7 +391,7 @@ app.get('/api/user/', (req, res) => {
         _.map(fbListOfEmployees, (employee) => {
             if (employee.emailid == emailId) {
                 var empObj = clone(employee);
-                // delete empObj.santaEmailId;
+                delete empObj.santaEmailId; // check this
                 delete empObj.roomAsSanta;
                 delete empObj.roomAsChild;
                 delete empObj.childEmailId;
