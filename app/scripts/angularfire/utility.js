@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('firebase.Auth')
-  .factory('firebaseUtilityService', ["$firebaseArray", "$firebaseObject", "$rootScope",
-    function ($firebaseArray, $firebaseObject, $rootScope) {
+  .factory('firebaseUtilityService', ["$firebaseArray", "$firebaseObject", "$rootScope", '$location',
+    function ($firebaseArray, $firebaseObject, $rootScope, $location) {
 
     var obj = {};
     var _auth;
@@ -93,6 +93,21 @@ angular.module('firebase.Auth')
         var activities = $firebaseArray(query);
         cb(activities);
     };
+
+    obj.getReports = function (cb) {
+        var query = rootRef.child('Reports');
+        var reports = $firebaseObject(query);
+        cb(reports);
+    };
+
+    /* delete here and place in a respective controller for report 
+    firebaseUtilityService.getReports(function (report) {
+        report.$loaded().then(function () {
+          $scope.report = report;
+          console.log('report', report);
+        });
+      });
+    */
 
     obj.getUserName = function (email) {
       // removes all special characters

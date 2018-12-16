@@ -58,6 +58,9 @@ const mailerSendMail = (htmlData, to, subject) => {
 
 function sendEmail(from, to, subject, body, mailType, reports) {
     switch(mailType) {
+        case 'test': 
+            mailerSendMail(from, to, 'please ignore: secret santa test');
+            break;
         case 'poke_santa' :
             pokeSanta(from, to, subject, body, mailType, reports);
             break;
