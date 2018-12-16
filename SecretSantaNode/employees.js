@@ -44,11 +44,11 @@ app.get("/testRead", (req, res) => {
 });
 
 app.get("/api", (req, res) => {
-    res.sendFile(__dirname+"/index.html");
+    res.sendFile(__dirname + "/index.html");
 });
 
 app.post("/api", (req, res) => {
-    if(req.files){
+    if (req.files) {
         // console.log(req.files.filename.data.toString('utf16'));
         var file = req.files.filename;
         var filename = file.name;
@@ -58,20 +58,19 @@ app.post("/api", (req, res) => {
         employeesCopyForSanta = [];
         employeesCopyForChild = [];
         mappedEmployeesList = [];
-        file.mv("./"+filename, (err) => {
-            if(err)
-            {
+        file.mv("./" + filename, (err) => {
+            if (err) {
+                console.log(err);
                 console.log('cannot move file');
             }
-            else{
+            else {
                 console.log('File has been uploaded ' + filename);
-                 parseXlsx("./"+filename, function(err, data) {
-                    if(err) throw err;
-                      // data is an array of arrays
+                parseXlsx("./" + filename, function (err, data) {
+                    if (err) throw err;
+                    // data is an array of arrays
                     // console.log(data);
                     _.map(data, (curr) => {
-                        if(curr[0] == "")
-                        {
+                        if (curr[0] == "") {
                             return;
                         }
                         employeeData = {};
@@ -84,24 +83,26 @@ app.post("/api", (req, res) => {
                         employeeData.teamName = curr[4] ? curr[4] : "";
                         employeeData.id = 0;
                         employeeData.active = curr[7] ? curr[7] : "";
-                        employeeData.room = {"roomAsSanta" : "", 'roomAsChild' : ""};
+                        employeeData.room = { "roomAsSanta": "", 'roomAsChild': "" };
                         employees.push(employeeData);
                     });
                     id = 0;
                     groupEmployees();
                     createRooms();
-                    storeInFirebase(mappedEmployeesList, firebase);
-                }); 
+                    //   storeInFirebase(mappedEmployeesList, firebase);
+                });
             }
         });
 
         function groupEmployees() {
-            for(var i = 0;i<employees.length; i++) {
+            console.log('++++++++++++++++++++EmployeeGroups+++++++++++++++++++++++++');
+            console.log(employeeGroups);
+            for (var i = 0; i < employees.length; i++) {
                 var employee = employees[i];
-                if(!employeeGroups[employee.active+"_"+employee.location+"_"+employee.company]) {
-                    employeeGroups[employee.active+"_"+employee.location+"_"+employee.company]=[];
+                if (!employeeGroups[employee.active + "_" + employee.location + "_" + employee.company]) {
+                    employeeGroups[employee.active + "_" + employee.location + "_" + employee.company] = [];
                 }
-                employeeGroups[employee.active+"_"+employee.location+"_"+employee.company].push(employee);
+                employeeGroups[employee.active + "_" + employee.location + "_" + employee.company].push(employee);
             }
             for (var array in employeeGroups) {
                 if (employeeGroups.hasOwnProperty(array)) {
@@ -139,15 +140,16 @@ app.post("/api", (req, res) => {
         };
 
         function mapSantaChild(group) {
-            var employeesCopyForSanta=[], employeesCopyForChild=[];
+            var employeesCopyForSanta = [], employeesCopyForChild = [];
+            console.log('+++++++++++++++++++++++++++++++++group.slice()++++++++++++++++++++++++++++');
+            console.log(group.slice());
             employeesCopyForSanta = group.slice();
             employeesCopyForChild = group.slice();
             var length = employeesCopyForSanta.length;
-            if(length == 1)
-            {
-                console.log(group[0].name+ ' cannot be mapped');
-                group[0].santa="";
-                group[0].child="";
+            if (length == 1) {
+                console.log(group[0].name + ' cannot be mapped');
+                group[0].santa = "";
+                group[0].child = "";
                 group[0].id = id++;
                 group[0].gender = "";
                 group[0].likes = "";
@@ -157,14 +159,17 @@ app.post("/api", (req, res) => {
                 return;
             }
 
-            employeesCopyForSanta.sort(function() { return 0.5 - Math.random();}); // shuffle arrays
-            employeesCopyForChild.sort(function() { return 0.5 - Math.random();});
-
+            employeesCopyForSanta.sort(function () { return 0.5 - Math.random(); }); // shuffle arrays
+            employeesCopyForChild.sort(function () { return 0.5 - Math.random(); });
+            console.log('+++++++++++++++++++++++++++++++++employeesCopyForSanta++++++++++++++++++++++++++++');
+            console.log(employeesCopyForSanta);
+            console.log('+++++++++++++++++++++++++++++++++employeesCopyForChild++++++++++++++++++++++++++++');
+            console.log(employeesCopyForChild);
             while (employeesCopyForSanta.length>0) {
                 // var s = employeesCopyForSanta.pop();
 
                 var santa = employeesCopyForSanta.pop(),
-                    child = Object.compare(employeesCopyForChild[0].emailId, santa.emailId) ? employeesCopyForChild[employeesCopyForChild.length-1] : employeesCopyForChild[0];
+                    child = Object.compare(employeesCopyForChild[0].emailId, santa.emailId)  ? employeesCopyForChild[employeesCopyForChild.length-1] : employeesCopyForChild[0];
                 if(santa.santa && (santa.santa.emailId == child.emailId))
                 {
                     if(santa == employeesCopyForChild[employeesCopyForChild.length-1])
@@ -190,8 +195,9 @@ app.post("/api", (req, res) => {
                 group[group.indexOf(child)].santa = santa;
 
             }
-            for(var obj in group)
-            {
+            console.log('+++++++++++++++++++++++++group+++++++++++++++++++++++++++++++++++++');
+            console.log(group);
+            for (var obj in group) {
                 group[obj].id = id++;
                 group[obj].gender = "";
                 group[obj].likes = "";
@@ -203,8 +209,8 @@ app.post("/api", (req, res) => {
 
         function createRooms() {
             _.map(mappedEmployeesList, (data) => {
-                data.room['roomAsChild'] = data.santa.id+"_"+data.id;
-                data.room['roomAsSanta'] = data.id+"_"+data.child.id;
+                data.room['roomAsChild'] = data.santa.id + "_" + data.id;
+                data.room['roomAsSanta'] = data.id + "_" + data.child.id;
             });
             console.log("created rooms");
         };
@@ -223,17 +229,17 @@ app.get("/api/notify", (req, res) => {
 
     var subject = "SecretSanta Application";
     var recepientsArray = employees.map(employee => employee.emailId);
-    var fbListOfEmployees ;
-    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+    var fbListOfEmployees;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function (snapshot) {
         fbListOfEmployees = snapshot.val();
-        var i =0;
+        var i = 0;
 
         _.map(fbListOfEmployees, (employee) => {
-            if(i==0) {
-            sendEmail(from, employee.emailid, subject, body, 'inform_pairs');
-            // sendEmail(from, , subject, body);
-            console.log("Email sent for "+ employee.emailid);
-            i++;
+            if (i == 0) {
+                //         sendEmail(from, employee.emailid, subject, body, 'inform_pairs');
+                //       sendEmail(from, to, subject, body);
+                console.log("Email sent for " + employee.emailid);
+                i++;
             }
         });
     });
@@ -244,55 +250,55 @@ app.get("/api/notify", (req, res) => {
 app.get('/api/email/send', (req, res) => {
     var eventType = req.query.event;
     var currUser = req.query.user;
-    switch(eventType)
-    {
-        case 'addTask' : notifyChildAboutAddedTask(currUser);
-        res.end();
-        break;
+    reportGenerator();
+    switch (eventType) {
+        case 'addTask': notifyChildAboutAddedTask(currUser);
+            res.end();
+            break;
         case 'poke_santa': pokeSanta(currUser);
-        res.end();
-        break;
+            res.end();
+            break;
         case 'poke_child': pokeChild(currUser);
-        res.end();
-        break;
-        case 'gift' : notifyGift(currUser);
-        res.end();
-        break;
+            res.end();
+            break;
+        case 'gift': notifyGift(currUser);
+            res.end();
+            break;
     }
 });
 
 function notifyChildAboutAddedTask(currUser) {
-    var fbListOfEmployees ;
-    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+    var fbListOfEmployees;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function (snapshot) {
         fbListOfEmployees = snapshot.val();
 
         var childEmailId;
         _.map(fbListOfEmployees, (data) => {
-            if(data.emailid == currUser)
-            {
+            if (data.emailid == currUser) {
                 var room = data.roomAsSanta;
                 var childId = room.split('_')[1];
                 childEmailId = fbListOfEmployees[childId].emailid;
+                console.log('child' + childEmailId);
             }
         });
         var from = 'secretsanta.accolite@gmail.com';
+        console.log('secretsanta.accolite@gmail.com');
         var subject = "New Task Added To Your List!!";
         var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
-        +" to get yourself one more step closer to a surprise gift!!"
+            + " to get yourself one more step closer to a surprise gift!!"
         sendEmail(from, childEmailId, subject, body, 'task_added');
         console.log("informed child about task");
     });
 };
 
 function pokeSanta(currUser) {
-    var fbListOfEmployees ;
-    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+    var fbListOfEmployees;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function (snapshot) {
         fbListOfEmployees = snapshot.val();
 
         var santaEmailId;
         _.map(fbListOfEmployees, (data) => {
-            if(data.emailid == currUser)
-            {
+            if (data.emailid == currUser) {
                 var room = data.roomAsChild;
                 var santaId = room.split('_')[0];
                 santaEmailId = fbListOfEmployees[santaId].emailid;
@@ -302,21 +308,20 @@ function pokeSanta(currUser) {
         var from = 'secretsanta.accolite@gmail.com';
         var subject = "POKE!!";
         var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
-        +" to get yourself one more step closer to a surprise gift!!"
+            + " to get yourself one more step closer to a surprise gift!!"
         sendEmail(from, santaEmailId, subject, body, 'poke_santa');
         console.log("email for poke santa send");
     });
 
 };
 function pokeChild(currUser) {
-    var fbListOfEmployees ;
-    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+    var fbListOfEmployees;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function (snapshot) {
         fbListOfEmployees = snapshot.val();
 
         var childEmailId;
         _.map(fbListOfEmployees, (data) => {
-            if(data.emailid == currUser)
-            {
+            if (data.emailid == currUser) {
                 var room = data.roomAsSanta;
                 var childId = room.split('_')[1];
                 childEmailId = fbListOfEmployees[childId].emailid;
@@ -325,21 +330,20 @@ function pokeChild(currUser) {
         var from = 'secretsanta.accolite@gmail.com';
         var subject = "POKE!!";
         var body = "Your santa has added a new task in your bucket./nGrab on the opportunity to complete the task"
-        +" to get yourself one more step closer to a surprise gift!!"
+            + " to get yourself one more step closer to a surprise gift!!"
         sendEmail(from, childEmailId, subject, body, "poke_child");
         console.log("mail for poke child sent");
     });
 
 };
 function notifyGift(currUser) {
-    var fbListOfEmployees ;
-    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+    var fbListOfEmployees;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function (snapshot) {
         fbListOfEmployees = snapshot.val();
 
         var childEmailId;
         _.map(fbListOfEmployees, (data) => {
-            if(data.emailid == currUser)
-            {
+            if (data.emailid == currUser) {
                 var room = data.roomAsSanta;
                 var childId = room.split('_')[1];
                 childEmailId = fbListOfEmployees[childId].emailid;
@@ -354,13 +358,12 @@ function notifyGift(currUser) {
 };
 
 app.get('/api/user/', (req, res) => {
-    var fbListOfEmployees ;
-    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+    var fbListOfEmployees;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function (snapshot) {
         fbListOfEmployees = snapshot.val();
         var emailId = req.query.email;
-        _.map(fbListOfEmployees,(employee) => {
-            if(employee.emailid == emailId)
-            {
+        _.map(fbListOfEmployees, (employee) => {
+            if (employee.emailid == emailId) {
                 var empObj = clone(employee);
                 // delete empObj.santaEmailId;
                 delete empObj.roomAsSanta;
@@ -375,8 +378,8 @@ app.get('/api/user/', (req, res) => {
 });
 
 app.post('/api/user/update', (req, res) => {
-    var fbListOfEmployees ;
-    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+    var fbListOfEmployees;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function (snapshot) {
         fbListOfEmployees = snapshot.val();
         var empObj = req.body;
         console.log(empObj);
@@ -386,9 +389,9 @@ app.post('/api/user/update', (req, res) => {
         fbListOfEmployees[id].likes = empObj.likes ? empObj.likes : "";
         fbListOfEmployees[id].dislikes = empObj.dislikes ? empObj.dislikes : "";
         const dbRefForEmployees = firebase.database().ref().child('Employees');
-        dbRefForEmployees.set(fbListOfEmployees,(err) => {
+        dbRefForEmployees.set(fbListOfEmployees, (err) => {
             console.log(err);
-            if(!err) {
+            if (!err) {
                 res.end("Successfully updated!");
             }
             else {
@@ -408,6 +411,8 @@ function clone(obj) {
     }
     return copy;
 };
-cron.schedule('30 16 * * *', function() {
-    reportGenerator();
+cron.schedule('30 16 * * * *', function () {
+    console.log(1);
+    // reportGenerator();
+    console.log(2);
 });
