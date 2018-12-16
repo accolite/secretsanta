@@ -80,9 +80,9 @@
         </div>
 
          <ul class="list">
-          <li class="list-item" ng-repeat="task in tasks">
-            <input  type="checkbox" class="hidden-box" id="first" ng-change="updateTaskStatus(task)" ng-model="task.completed"/>
-            <label for="first" class="check--label">
+          <li class="list-item" ng-repeat="task in tasks track by $index">
+            <input  type="checkbox" class="hidden-box" id="ck-{{$index}}" ng-change="updateTaskStatus(task)" ng-model="task.completed"/>
+            <label for="ck-{{$index}}" class="check--label">
               <span ng-show="isSanta" class="check--label-box"></span>
               <span class="check--label-text">{{task.text}}</span>
               <button type="button" class="close" ng-show="isSanta" ng-click="deleteTask(task)" style="color: white;">&times;</button>
