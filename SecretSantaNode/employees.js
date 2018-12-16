@@ -24,7 +24,7 @@ app.use(upload());
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
+    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost');
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 });
@@ -41,6 +41,28 @@ app.get("/testRead", (req, res) => {
         console.log('users ', snapshot.val());
         res.send('users ' + snapshot.val());
     });
+});
+
+app.get("/testEmails", (req, res) => {
+    var tos = ['aravindkumar.metku', 'sandeep.k', 'pavani.kolukuluru', 'ankit.jain', 'deepika.akella'];
+    console.log('testing mail range')
+    // var tos = ['aravindkumar.metku'];
+    var servie = '@accoliteindia.com';
+    var count = 100;
+    var cI = 0;
+    var delay = 1;
+    for(var i=0; i<count; i++) {
+        if(cI >= tos.length - 1){
+            cI = 0;
+        }
+        var to = tos[cI] + servie;
+        console.log('to ', to, 'current', i, 'cI', cI);
+        setTimeout(function() {
+            sendEmail('', to, '', '', 'test');
+        }, 1000 * delay * i);
+        cI++
+    }
+    res.send('testing now')
 });
 
 app.get("/api", (req, res) => {
