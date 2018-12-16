@@ -2,6 +2,7 @@
   "name": "secretsanta",
   "version": "0.0.0",
   "dependencies": {
+    "@angular/flex-layout": "^7.0.0-beta.21",
     "angular-chat-emoji-popup": "^1.0.0",
     "excel": "^0.1.7",
     "exceljs": "^0.8.0",

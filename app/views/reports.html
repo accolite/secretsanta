@@ -1,0 +1,28 @@
+<!-- <div class="item" style="height: 300px" ng-repeat="act in activites">
+    <div class="carousel-col">
+        <div class="panel panel-default" ng-class="getPanelBG(act)">
+            <div class="panel-heading">
+                {{constructMessageHeading(act)}}
+                <b class="pull-right">{{act.timestamp | date:"MM/dd/yyyy 'at' h:mma"}}</b>
+            </div>
+            <div class="panel-body" style="text-align:center;vertical-align: middle">
+                <h1 class="display-1" style="color: whitesmoke; padding: 10px;">{{constructMessage(act)}}</h1>
+            </div>
+        </div>
+    </div>
+</div> -->
+<div class="card" style="width: 140rem;height:10rem;background-color: #1b6d85;color: white">
+    <ul class="list-group list-group-flush" style="height: 12rem;color: white;">
+        <li class="list-group-item" style="height: 16rem;color: white;background-color: #928181;text-align: left;padding-left: 3rem; font-size: 150%;padding-top: 4.5rem;">
+            <font size="8">Max Number of tasks by Santa : {{reports['maxNumberOfTasksBySanta'][0]}}</font>
+        </li>
+        <br>
+        <li class="list-group-item" style="height: 16rem;color: white;background-color: #E15050;text-align: left;padding-left: 3rem; font-size: 150%;padding-top: 4.5rem;">
+            <font size="8">Max Number of tasks Completed by child : {{reports['maxNumberOfTasksCompletedByChild'][0]}}</font>
+        </li>
+        <br>
+        <li class="list-group-item" style="height: 16rem;color: white;background-color: #652F2F;text-align: left;padding-left: 3rem; font-size: 150%;padding-top: 4.5rem;">
+            <font size="8">Total Message Count : {{reports['totalMessages'][0]}}</font>
+        </li>
+    </ul>
+</div>
