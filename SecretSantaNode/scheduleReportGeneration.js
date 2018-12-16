@@ -1,143 +1,211 @@
 var firebase = require('./firebase_config').firebase;
+var storeInFirebase = require('./firebase_storage').storeInFirebase;
 var _ = require("underscore");
 function reportGenerator() {
-    var reports = [];    
-    var maxChatRate = -1; 
-    var maxNumberOfTasksBySanta = 0, minNumberOfTasksBySanta = 9007199254740992; 
-    var minNumberOfTaskCompletedByChild= 0, maxNumberOfTasksCompletedByChild = 0;
-    var roomWithMaxSantaTasks=[], roomWithMaxChildTasksCompleted=[];
-    var roomWithMinSantaTasks=[], roomWithMinChildTasksCompleted=[];
+    var reports = [];
+    var maxChatRate = -1;
+    var maxNumberOfTasksBySanta = 0, minNumberOfTasksBySanta = 9007199254740992;
+    var minNumberOfTaskCompletedByChild = 0, maxNumberOfTasksCompletedByChild = 0; totalLength = 0;
+    var roomWithMaxSantaTasks = [], roomWithMaxChildTasksCompleted = [];
+    var roomWithMinSantaTasks = [], roomWithMinChildTasksCompleted = [];
     var roomWithMaxChatRate;
     generateReport();
-    function generateReport() {    
-        reports = [];            
-        var dbRefForTasks = firebase.database().ref('/tasks/').once('value').then(function(snapshot) {
-            getReportForTasks(snapshot);            
-            console.log(maxNumberOfTasksBySanta +"in room "+roomWithMaxSantaTasks+  ""+ maxNumberOfTasksCompletedByChild+"in room "+roomWithMaxChildTasksCompleted);
-            var dbRefForChats = firebase.database().ref('/rooms/').once('value').then(function(snapshot) {
-                getReportForChats(snapshot);
+
+    function generateReport() {
+        reports = [];
+        var dbRefForTasks = firebase.database().ref('/tasks/').once('value').then(function (snapshot) {
+            getReportForTasks(snapshot);
+            console.log(maxNumberOfTasksBySanta + "in room " + roomWithMaxSantaTasks + "" + maxNumberOfTasksCompletedByChild + "in room " + roomWithMaxChildTasksCompleted);
+            var dbRefForChats = firebase.database().ref('/rooms/').once('value').then(function (snapshot) {
+                //    getReportForChats(snapshot);
+                getTotalMessages(snapshot);
                 console.log(reports);
                 var sendEmail = require("./send_email").sendEmail;
-                sendEmail(null, null, null, null, 'reports', reports);
+
+                const reportsref = firebase.database().ref().child('Reports');
+                delete reports.chat;
+                reportsref.set(reports);
+                // sendEmail(null, null, null, null, 'reports', reports);
             });
-        });        
-        
+        });
+
     }
     function getReportForTasks(snapshot) {
-        reports['tasks']=[];        
-        for(var obj in snapshot.val())
-        {
-            if(obj != 'room')
-            {
-                // console.log(count(snapshot.val()[obj]));
-                var santaTaskCount = countSantaTasks(snapshot.val()[obj].santa);
-                var childTaskCompletedCount = countChildCompletedTasks(snapshot.val()[obj].santa);
-                reports['tasks'].push({'santaTaskCount' : santaTaskCount,
-                                        'childTaskCompletedCount' : childTaskCompletedCount,
-                                        'room' : obj
-                                        });                
-                
-                if(santaTaskCount > maxNumberOfTasksBySanta)
-                {
-                    maxNumberOfTasksBySanta = santaTaskCount;
-                    roomWithMaxSantaTasks.push(obj.slice(0));                        
-                }
-                else
-                {
-                    roomWithMaxSantaTasks=[];
-                }
-                if(santaTaskCount < minNumberOfTasksBySanta)
-                {
-                    minNumberOfTasksBySanta = santaTaskCount;
-                    roomWithMinSantaTasks.push(obj.slice(0));
-                }
-                else
-                {
-                    roomWithMinSantaTasks=[];
-                }
+        reports['maxNumberOfTasksBySanta'] = [];
+        reports['maxNumberOfTasksCompletedByChild'] = [];
+        // for (var obj in snapshot.val()) { console.log('obj===================' + obj['roomAsChild'] + '===========' + obj['roomAsSanta']); }
+        for (var objkey in snapshot.val()) {
+            if (objkey.includes('_')) {
+                if (objkey != 'room') {
+                    //  console.log(count(snapshot.val()[obj]));
+                    console.log(Object.keys(snapshot.val()[objkey]));
+                    var santaTaskCount = countSantaTasks(snapshot.val()[objkey].santa);
+                    console.log('santaTaskCount----------------------------' + santaTaskCount);
+                    // console.log("object--------------------" + snapshot.val()[objkey].santa + '----------' + Object.keys(snapshot.val()));
+                    var childTaskCompletedCount = countChildCompletedTasks(snapshot.val()[objkey].santa);
+                    //  console.log('childTaskCompletedCount----------------------------' + childTaskCompletedCount);
+                    // reports['tasks'].push({
+                    //     'santaTaskCount': santaTaskCount,
+                    //     'childTaskCompletedCount': childTaskCompletedCount,
+                    //     'room': objkey
+                    // });
 
-                if(childTaskCompletedCount > maxNumberOfTasksCompletedByChild)
-                {
-                    maxNumberOfTasksCompletedByChild = childTaskCompletedCount;
-                    roomWithMaxChildTasksCompleted.push(obj.slice(0));
+                    if (santaTaskCount > maxNumberOfTasksBySanta) {
+                        maxNumberOfTasksBySanta = santaTaskCount;
+                        roomWithMaxSantaTasks.push(objkey.slice(0));
+                        // var alreadyMaxSantaThere = false;
+                        // console.log('Object Keys'+ Object.keys(reports));
+
+                        //     if (reports['maxNumberOfTasksBySanta']) {
+                        //         console.log('------------------------------------------------------' + i.maxNumberOfTasksBySanta);
+                        //        reports['maxNumberOfTasksBySanta'].pop();
+                        //         reports['maxNumberOfTasksBySanta'].push({
+                        //             'maxNumberOfTasksBySanta': maxNumberOfTasksBySanta
+                        //         });
+                        //         alreadyMaxSantaThere = true;
+
+                        //     }
+
+
+                        // if (!alreadyMaxSantaThere) {
+                        //     reports['maxNumberOfTasksBySanta'].push({
+                        //         'maxNumberOfTasksBySanta': maxNumberOfTasksBySanta
+                        //     });
+                        // }
+                        reports['maxNumberOfTasksBySanta'].pop();
+                        reports['maxNumberOfTasksBySanta'].push(maxNumberOfTasksBySanta);
+
+                    }
+                    else {
+                        roomWithMaxSantaTasks = [];
+                    }
+                    if (santaTaskCount < minNumberOfTasksBySanta) {
+                        minNumberOfTasksBySanta = santaTaskCount;
+                        roomWithMinSantaTasks.push(objkey.slice(0));
+                    }
+                    else {
+                        roomWithMinSantaTasks = [];
+                    }
+
+                    if (childTaskCompletedCount > maxNumberOfTasksCompletedByChild) {
+                        maxNumberOfTasksCompletedByChild = childTaskCompletedCount;
+                        // var alreadyThere = false;
+                        // for (var i in reports['maxNumberOfTasksCompletedByChild']) {
+                        //     if (i['maxNumberOfTasksCompletedByChild']) {
+                        //         console.log('------------------------------------------------------' + i.maxNumberOfTasksCompletedByChild);
+                        //         reports['maxNumberOfTasksCompletedByChild'].pop();
+                        //         reports['maxNumberOfTasksCompletedByChild'].push({
+                        //             'maxNumberOfTasksCompletedByChild': maxNumberOfTasksCompletedByChild
+                        //         });
+                        //         alreadyThere = true;
+
+                        //     }
+                        // }
+
+                        // if (!alreadyThere) {
+                        //     reports['maxNumberOfTasksCompletedByChild'].push({
+                        //         'maxNumberOfTasksCompletedByChild': maxNumberOfTasksCompletedByChild
+                        //     });
+                        // }
+                        reports['maxNumberOfTasksCompletedByChild'].pop();
+                        reports['maxNumberOfTasksCompletedByChild'].push(maxNumberOfTasksCompletedByChild);
+                    }
+
+                    roomWithMaxChildTasksCompleted.push(objkey.slice(0));
                 }
-                else
-                {
-                    roomWithMaxChildTasksCompleted=[];
+                else {
+                    roomWithMaxChildTasksCompleted = [];
                 }
-                if(childTaskCompletedCount < minNumberOfTaskCompletedByChild)
-                {
+                if (childTaskCompletedCount < minNumberOfTaskCompletedByChild) {
                     minNumberOfTaskCompletedByChild = childTaskCompletedCount;
-                    roomWithMinChildTasksCompleted.push(obj.slice(0))
+                    roomWithMinChildTasksCompleted.push(objkey.slice(0))
                 }
-                else
-                {
-                    roomWithMinChildTasksCompleted=[];
-                }                    
+                else {
+                    roomWithMinChildTasksCompleted = [];
+                }
             }
             else {
-                roomWithMinSantaTasks.push(snapshot.val()[obj]);
-                minNumberOfTasksBySanta = 0;   
-                reports['tasks'].push({'santaTaskCount' : 0,
-                                        'childTaskCompletedCount' : 0,
-                                        'room' : obj});
-            }    
+                roomWithMinSantaTasks.push(snapshot.val()[objkey]);
+                minNumberOfTasksBySanta = 0;
+                // reports['tasks'].push({
+                //     'santaTaskCount': 0,
+                //     'childTaskCompletedCount': 0,
+                //     'room': objkey
+                // });
+            }
         }
-    };
+        // console.log('maxNumberOfTasksCompletedByChild----------------------' + maxNumberOfTasksCompletedByChild);
+        // console.log('roomWithMaxSantaTasks----------------------' + roomWithMaxSantaTasks.length);
+        // console.log('roomWithMinChildTasksCompleted----------------------' + roomWithMinChildTasksCompleted.length);
+    }
+
     function countSantaTasks(foo) {
         var count = 0;
         var santaObj = foo;
         for (var k in santaObj) {
             if (santaObj.hasOwnProperty(k)) {
-               ++count;
-            }
-        }
-        return count;
-    };
-    function countChildCompletedTasks(foo) {
-        var count = 0;
-        for(var k in foo)
-        {
-            if(foo.hasOwnProperty(k) && k.completed == 'true')
-            {
                 ++count;
             }
         }
         return count;
     };
+
+    function getTotalMessages(snapshot) {
+        reports['totalMessages'] = [];
+      //  console.log('Object keys ' + Object.keys(snapshot.val()));
+        for (var objkey in snapshot.val()) {
+          //  console.log('----------------------------------------------------------------' + objkey + objkey.includes('_'));
+            if (objkey.includes('_')) {
+                totalLength = totalLength + Object.keys(snapshot.val()[objkey]).length;
+            }
+        }
+        reports['totalMessages'].push(totalLength);
+
+    }
+
+    function countChildCompletedTasks(foo) {
+        //   console.log('foo==========' + Object.keys(foo));
+        var count = 0;
+        for (var k in foo) {
+            //   console.log('count--------------------------------------------' + foo[k].completed);
+            if (foo.hasOwnProperty(k) && foo[k].completed == true) {
+                ++count;
+
+            }
+        }
+        //  console.log('count--------------------------------------------' + count);
+        return count;
+    };
     function getReportForChats(snapshot) {
         var chatRate;
-        reports['chat']=[];
-        for(var room in snapshot.val())
-        {
+        reports['chat'] = [];
+        //   console.log('chat report ----------------------------------------------------------------------------------' + snapshot.val());
+        for (var room in snapshot.val()) {
             // console.log(snapshot.val()[room]);
             chatRate = calculateChatRateForRoom(snapshot.val()[room]);
-            reports['chat'].push({'chatRate' : chatRate});
+            reports['chat'].push({ 'chatRate': chatRate });
             reports['chat']['room'] = room;
-            maxChatRate = chatRate>maxChatRate?chatRate:maxChatRate
-            if(chatRate>maxChatRate)
-            {
+            maxChatRate = chatRate > maxChatRate ? chatRate : maxChatRate
+            if (chatRate > maxChatRate) {
                 maxChatRate = chatRate;
                 roomWithMaxChatRate = room;
             }
         }
-        console.log("max chat rate is "+maxChatRate+" and max chat room is "+roomWithMaxChatRate);
+        // console.log("max chat rate is " + maxChatRate + " and max chat room is " + roomWithMaxChatRate);
     };
     function calculateChatRateForRoom(room) {
-        var minTimestamp=9007199254740992; var maxTimeStamp = 0;
+        var minTimestamp = 9007199254740992; var maxTimeStamp = 0;
         var chatCount = 0;
-        for(var obj in room)
-        {
-            if(room.hasOwnProperty(obj))
-            {
+        for (var obj in room) {
+            if (room.hasOwnProperty(obj)) {
                 ++chatCount
-                minTimestamp = room[obj].timestamp<minTimestamp ? room[obj] : minTimestamp;
-                maxTimeStamp = room[obj].timestamp>maxTimeStamp ? room[obj] : maxTimeStamp;
+                minTimestamp = room[obj].timestamp < minTimestamp ? room[obj] : minTimestamp;
+                maxTimeStamp = room[obj].timestamp > maxTimeStamp ? room[obj] : maxTimeStamp;
             }
         }
-         return chatCount/(maxTimeStamp - minTimestamp);
+        return chatCount / (maxTimeStamp - minTimestamp);
 
     };
-}
-// reportGenerator();
+};
+reportGenerator();
 exports.reportGenerator = reportGenerator;
