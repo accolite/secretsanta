@@ -362,7 +362,7 @@ app.get('/api/user/', (req, res) => {
             if(employee.emailid == emailId)
             {
                 var empObj = clone(employee);
-                // delete empObj.santaEmailId;
+                delete empObj.santaEmailId; // check this
                 delete empObj.roomAsSanta;
                 delete empObj.roomAsChild;
                 delete empObj.childEmailId;
