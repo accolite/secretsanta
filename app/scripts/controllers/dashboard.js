@@ -77,6 +77,7 @@ angular.module('secretSantaApp')
                 var utterThis = new SpeechSynthesisUtterance("Santa added a new task!");
                 utterThis.voice = speechSynthesis.getVoices().filter(s => s.name.match("Zira | Female"))[0];
                 window.speechSynthesis.speak(utterThis)
+                NetworkService.triggerEmailer('addTask', currentAuth);
               });
             })
           )
@@ -100,7 +101,7 @@ angular.module('secretSantaApp')
           if(_response) {
             $scope.tasks.$save(task).then(function () {
               if(task.completed) {
-                NetworkService.triggerEmailer('addTask', currentAuth);
+                NetworkService.triggerEmailer('doneTask', currentAuth);
               }
             });
           } else {
