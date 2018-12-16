@@ -5,13 +5,13 @@ var gmail_send = require('gmail-send');
 const nodemailer = require('nodemailer');
 
 const emailScheduler = {
-    max: 2,
+    max: 50,
     sent: 0,
     lastIndex: 0,
     emails: [
         { u: 'secretsanta.accolite@gmail.com', p: 'accolitehyderabadsecretsanta' },
         { u: 'secretsanta2.accolite@gmail.com', p: 'accolitehyderabadsecretsanta' },
-        { u: 'secretsanta3.accolite@gmail.com', p: 'accolitehyderabadsecretsanta' } // not there
+        // { u: 'secretsanta3.accolite@gmail.com', p: 'accolitehyderabadsecretsanta' } // not there
     ],
     getIndex: function() {
         if(this.sent > this.max) {
