@@ -95,8 +95,6 @@ app.post("/api", (req, res) => {
         });
 
         function groupEmployees() {
-            console.log('++++++++++++++++++++EmployeeGroups+++++++++++++++++++++++++');
-            console.log(employeeGroups);
             for (var i = 0; i < employees.length; i++) {
                 var employee = employees[i];
                 if (!employeeGroups[employee.active + "_" + employee.location + "_" + employee.company]) {
@@ -141,8 +139,6 @@ app.post("/api", (req, res) => {
 
         function mapSantaChild(group) {
             var employeesCopyForSanta = [], employeesCopyForChild = [];
-            console.log('+++++++++++++++++++++++++++++++++group.slice()++++++++++++++++++++++++++++');
-            console.log(group.slice());
             employeesCopyForSanta = group.slice();
             employeesCopyForChild = group.slice();
             var length = employeesCopyForSanta.length;
@@ -161,10 +157,6 @@ app.post("/api", (req, res) => {
 
             employeesCopyForSanta.sort(function () { return 0.5 - Math.random(); }); // shuffle arrays
             employeesCopyForChild.sort(function () { return 0.5 - Math.random(); });
-            console.log('+++++++++++++++++++++++++++++++++employeesCopyForSanta++++++++++++++++++++++++++++');
-            console.log(employeesCopyForSanta);
-            console.log('+++++++++++++++++++++++++++++++++employeesCopyForChild++++++++++++++++++++++++++++');
-            console.log(employeesCopyForChild);
             while (employeesCopyForSanta.length>0) {
                 // var s = employeesCopyForSanta.pop();
 
@@ -195,8 +187,6 @@ app.post("/api", (req, res) => {
                 group[group.indexOf(child)].santa = santa;
 
             }
-            console.log('+++++++++++++++++++++++++group+++++++++++++++++++++++++++++++++++++');
-            console.log(group);
             for (var obj in group) {
                 group[obj].id = id++;
                 group[obj].gender = "";
@@ -437,8 +427,8 @@ function clone(obj) {
     }
     return copy;
 };
-cron.schedule('30 16 * * * *', function () {
-    console.log(1);
-    // reportGenerator();
-    console.log(2);
+cron.schedule('* * * * * *', function () {
+
+     reportGenerator();
+
 });
