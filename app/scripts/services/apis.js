@@ -8,10 +8,6 @@ angular.module('secretSantaApp')
       var bsse = 'http://localhost:4000';
       // var bsse = 'http://192.168.43.47:4000';
 
-      obj.getUser = function (email) {
-        console.log('get user object');
-      };
-
       obj.updateUser = function (email, data) {
         return $http.post(bsse + '/api/user/update/?email=' + email, JSON.stringify(data));
       };
