@@ -4,8 +4,8 @@ angular.module('secretSantaApp')
   .factory('NetworkService', ['$http', function ($http) {
 
       var obj = {};
-      // var bsse = 'http://secret-santa.accolitelabs.com'; // here : change production
-      var bsse = 'http://localhost:4000';
+      var bsse = 'https://secret-santa.accolitelabs.com'; // here : change production
+      // var bsse = 'http://localhost:4000';
       // var bsse = 'http://192.168.43.47:4000';
 
       obj.updateUser = function (email, data) {
