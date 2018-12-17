@@ -29,39 +29,39 @@
  */
 angular.module('secretSantaApp')
 
-/**
- * Adds a special `whenAuthenticated` method onto $routeProvider. This special method,
- * when called, invokes Auth.$requireAuth() service (see Auth.js).
- *
- * The promise either resolves to the authenticated user object and makes it available to
- * dependency injection (see AccountCtrl), or rejects the promise if user is not logged in,
- * forcing a redirect to the /login page
- */
+  /**
+   * Adds a special `whenAuthenticated` method onto $routeProvider. This special method,
+   * when called, invokes Auth.$requireAuth() service (see Auth.js).
+   *
+   * The promise either resolves to the authenticated user object and makes it available to
+   * dependency injection (see AccountCtrl), or rejects the promise if user is not logged in,
+   * forcing a redirect to the /login page
+   */
 
-/*
- * Commented due to issues with the new SDK
- *
- .config(['$routeProvider', 'SECURED_ROUTES', function ($routeProvider, SECURED_ROUTES) {
+  /*
+   * Commented due to issues with the new SDK
+   *
+   .config(['$routeProvider', 'SECURED_ROUTES', function ($routeProvider, SECURED_ROUTES) {
+  
+   // credits for this idea: https://groups.google.com/forum/#!msg/angular/dPr9BpIZID0/MgWVluo_Tg8J
+   // unfortunately, a decorator cannot be use here because they are not applied until after
+   // the .config calls resolve, so they can't be used during route configuration, so we have
+   // to hack it directly onto the $routeProvider object
+   /*
+   $routeProvider.whenAuthenticated = function (path, route) {
+   route.resolve = route.resolve || {};
+   route.resolve.user = ['auth', function (auth) {
+   return auth.$requireSignIn();
+   }];
+   $routeProvider.when(path, route);
+   SECURED_ROUTES[path] = true;
+   return $routeProvider;
+   };
+   }])
+   */
 
- // credits for this idea: https://groups.google.com/forum/#!msg/angular/dPr9BpIZID0/MgWVluo_Tg8J
- // unfortunately, a decorator cannot be use here because they are not applied until after
- // the .config calls resolve, so they can't be used during route configuration, so we have
- // to hack it directly onto the $routeProvider object
- /*
- $routeProvider.whenAuthenticated = function (path, route) {
- route.resolve = route.resolve || {};
- route.resolve.user = ['auth', function (auth) {
- return auth.$requireSignIn();
- }];
- $routeProvider.when(path, route);
- SECURED_ROUTES[path] = true;
- return $routeProvider;
- };
- }])
- */
-
-// configure views; whenAuthenticated adds a resolve method to ensure users authenticate
-// before trying to access that route
+  // configure views; whenAuthenticated adds a resolve method to ensure users authenticate
+  // before trying to access that route
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/', {
@@ -104,12 +104,12 @@ angular.module('secretSantaApp')
         templateUrl: 'views/reports.html',
         controller: 'ReportCtrl',
         controllerAs: 'dashboard',
-        // resolve: {
-        //   "currentAuth": ["auth", function (auth) {
-        //     // returns a promisse so the resolve waits for it to complete
-        //     return auth.$requireSignIn();
-        //   }]
-        // }
+        resolve: {
+          "currentAuth": ["auth", function (auth) {
+            // returns a promisse so the resolve waits for it to complete
+            return auth.$requireSignIn();
+          }]
+        }
       })
       .when('/profile/:email?', {
         templateUrl: 'views/profile.html',
@@ -192,7 +192,7 @@ angular.module('secretSantaApp')
       $rootScope.$on("$routeChangeError", function (event, next, previous, error) {
         if (error === "AUTH_REQUIRED") {
           $rootScope.$emit('auth_required');
-          if(next.$$route.originalPath !== '/dashboard') {
+          if (next.$$route.originalPath !== '/dashboard') {
             $location.path(loginRedirectPath);
           }
         }
