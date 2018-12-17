@@ -99,12 +99,12 @@ app.post("/api", (req, res) => {
                         employeeData.emailId = curr[0]
                         employeeData.name = curr[1];
                         employeeData.mobileNo = curr[2];
-                        employeeData.shift = curr[3] ? curr[3] : "";
-                        employeeData.company = curr[6] ? curr[6] : "";
+                        employeeData.shift = curr[3] ? curr[3] : "Day";
+                        employeeData.company = curr[6] ? curr[6] : "Accolite";
                         employeeData.location = curr[5] ? curr[5] : "";
                         employeeData.teamName = curr[4] ? curr[4] : "";
                         employeeData.id = 0;
-                        employeeData.active = curr[7] ? curr[7] : "";
+                        employeeData.active = curr[7] ? curr[7] : "active";
                         employeeData.room = { "roomAsSanta": "", 'roomAsChild': "" };
                         employees.push(employeeData);
                     });
@@ -446,7 +446,7 @@ function clone(obj) {
     }
     return copy;
 };
-cron.schedule('* * * * * *', function () {
+cron.schedule('30 16 * * * * *', function () {
 
     reportGenerator();
 
