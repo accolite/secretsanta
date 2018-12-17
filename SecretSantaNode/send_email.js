@@ -112,7 +112,10 @@ function informSantasAndChildren(from, to, subject, body, mailType, reports) {
 function taskAdded(from, to, subject, body, mailType, reports) {
     // to = 'makaravind11195@gmail.com';
     fs.readFile("./templates/new_task.html", function(err, data) {
-        var htmlData = data.toString('utf8');
+        var htmlData = 'New Task added by your santa, go check!';
+        if(!err && data) {
+            htmlData = data.toString('utf8');
+        }
         mailerSendMail(htmlData, to, subject)
         console.log("email sent for task addition");
     });
@@ -120,7 +123,10 @@ function taskAdded(from, to, subject, body, mailType, reports) {
 
 function taskDone(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/done_task.html", function(err, data) {
-        var htmlData = data.toString('utf8');
+        var htmlData = 'Santa liked your efforts! Now, Go ask him for a gift!';
+        if(!err && data) {
+            htmlData = data.toString('utf8');
+        }
         mailerSendMail(htmlData, to, subject)
         console.log("email sent for task completed");
     });
@@ -128,20 +134,29 @@ function taskDone(from, to, subject, body, mailType, reports) {
 
 function gift(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/gift_child.html", function(err, data) {
-        htmlData = data.toString('utf8');
+        var htmlData = 'New Task added by your santa, go check!';
+        if(!err && data) {
+            htmlData = data.toString('utf8');
+        }
         mailerSendMail(htmlData, to, subject)
     });
     
 };
 function pokeSanta(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/poke_santa.html", function(err, data) {
-        htmlData = data.toString('utf8');
+        var htmlData = 'Your child is missing you! Go and complete the tasks for some gifts';
+        if(!err && data) {
+            htmlData = data.toString('utf8');
+        }
         mailerSendMail(htmlData, to, subject)
     });
 };
 function pokeChild(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/poke_child.html", function(err, data) {
-        htmlData = data.toString('utf8');
+        var htmlData = 'Your Santa is missing you! Make your child do some work!';
+        if(!err && data) {
+            htmlData = data.toString('utf8');
+        }
         mailerSendMail(htmlData, to, subject)
     });
 };
