@@ -134,7 +134,7 @@ function taskDone(from, to, subject, body, mailType, reports) {
 
 function gift(from, to, subject, body, mailType, reports) {
     fs.readFile("./templates/gift_child.html", function(err, data) {
-        var htmlData = 'New Task added by your santa, go check!';
+        var htmlData = 'Wow, Your santa promised you a gift, go check!';
         if(!err && data) {
             htmlData = data.toString('utf8');
         }
