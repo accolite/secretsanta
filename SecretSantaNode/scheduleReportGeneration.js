@@ -21,18 +21,19 @@ function reportGenerator() {
             var dbRefForChats = firebase.database().ref('/rooms/').once('value').then(function (snapshot) {
 
                 //    getReportForChats(snapshot);
+                getTotalPokes(snapshot);
                 getTotalMessages(snapshot);
                 console.log(reports);
                 var sendEmail = require("./send_email").sendEmail;
-                var dbRefForActivities = firebase.database().ref('/activity/').once('value').then(function (snapshot) {
-                    getTotalPokes(snapshot);
+                //  var dbRefForActivities = firebase.database().ref('/activity/').once('value').then(function (snapshot) {
+                //  getTotalPokes(snapshot);
 
 
-                    const reportsref = firebase.database().ref().child('Reports');
-                    delete reports.chat;
-                    reportsref.set(reports);
-                    // sendEmail(null, null, null, null, 'reports', reports);
-                });
+                const reportsref = firebase.database().ref().child('Reports');
+                delete reports.chat;
+                reportsref.set(reports);
+                // sendEmail(null, null, null, null, 'reports', reports);
+                // });
             });
         });
 
@@ -60,8 +61,8 @@ function reportGenerator() {
                     // console.log("object--------------------" + snapshot.val()[objkey].santa + '----------' + Object.keys(snapshot.val()));
                     var childTaskCompletedCount = countChildCompletedTasks(snapshot.val()[objkey].santa);
                     totalTasksCompleted = totalTasksCompleted + childTaskCompletedCount;
-                    console.log('totalTasksCompleted----------------------------' + totalTasksCompleted); 
-                    reports['totalTasksCompletedByChild'].pop();  
+                    console.log('totalTasksCompleted----------------------------' + totalTasksCompleted);
+                    reports['totalTasksCompletedByChild'].pop();
                     reports['totalTasksCompletedByChild'].push(totalTasksCompleted);
                     //  console.log('childTaskCompletedCount----------------------------' + childTaskCompletedCount);
                     // reports['tasks'].push({
@@ -186,13 +187,23 @@ function reportGenerator() {
 
     function getTotalPokes(snapshot) {
         reports['totalPokes'] = [];
-        //  console.log('Object keys ' + Object.keys(snapshot.val()));
+       // console.log('Object keys ' + Object.keys(snapshot.val()));
         for (var objkey in snapshot.val()) {
-            // console.log('----------------------------------------------------------------' + objkey + objkey.includes('_'));
-            if (snapshot.val()[objkey].event == 'poke') {
-                totalPokes = totalPokes + 1;
+            //   console.log('----------------------------------------------------------------' + objkey + objkey.includes('_'));
+            if (objkey.includes('_')) {
+                for (var innerobjkey in snapshot.val()[objkey]) {
+
+                    var a = snapshot.val()[objkey];
+
+                    if (a[innerobjkey].type == 'special_poke_child' || a[innerobjkey].type == 'special_poke_santa') {
+
+
+                        totalPokes = totalPokes + 1;
+                    }
+                }
             }
         }
+        // console.log('a1--------------------------------------------------------------------------------------' + a1);
         console.log('totalPokes' + totalPokes);
         reports['totalPokes'].push(totalPokes);
 
