@@ -11,8 +11,8 @@
         </div>
     </div>
 </div> -->
-<div class="card" style="width: 140rem;height:10rem;background-color: #1b6d85;color: white">
-    <ul class="list-group list-group-flush" style="height: 12rem;color: white;">
+<!-- <div class="card " style="width: 140rem;height:10rem;background-color: #1b6d85;color: white">
+    <ul class="list-group list-group-flush row" style="height: 12rem;color: white;">
         <li class="list-group-item" style="height: 16rem;color: white;background-color: #928181;text-align: left;padding-left: 3rem; font-size: 150%;padding-top: 4.5rem;">
             <font size="8">Max Number of tasks by Santa : {{reports['maxNumberOfTasksBySanta'][0]}}</font>
         </li>
@@ -25,4 +25,33 @@
             <font size="8">Total Message Count : {{reports['totalMessages'][0]}}</font>
         </li>
     </ul>
+</div> -->
+
+<div style="width: 100%;text-align: center;">
+    <div style="display: inline-block;margin-left: 3rem; margin-right: 3rem">
+        <div class="card card-1 red">
+            <h1 style="font-size: 7em;margin-left: auto">{{reports['totalMessages'][0]}}</h1>
+            <h4 style="font-size: 3em">Messages</h4>
+        </div>
+        <div class="card card-1 blue">
+            <h1 style="font-size: 7em;margin-left: auto">{{reports['totalPokes'][0]}}</h1>
+            <h4 style="font-size: 3em">Pokes</h4>
+        </div>
+        <div class="card card-1 green">
+            <h1 style="font-size: 7em;margin-left: auto">{{reports['totalTasksBySanta'][0]}}</h1>
+            <h4 style="font-size: 3em">Challenges</h4>
+        </div>
+        <div class="card card-1 yellow">
+            <h1 style="font-size: 7em;margin-left: auto">{{reports['totalTasksCompletedByChild'][0]}}</h1>
+            <h4 style="font-size: 3em">Gifts Promised</h4>
+        </div>
+        <div class="card card-1 yellow">
+            <h1 style="font-size: 7em;margin-left: auto">{{reports['maxNumberOfTasksBySanta'][0]}}</h1>
+            <h4 style="font-size: 1em">Most Tasks given by Santa</h4>
+        </div>
+        <div class="card card-1 yellow">
+            <h1 style="font-size: 7em;margin-left: auto">{{reports['maxNumberOfTasksCompletedByChild'][0]}}</h1>
+            <h4 style="font-size: 1em">Most Tasks done by Child</h4>
+        </div>
+    </div>
 </div>

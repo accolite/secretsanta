@@ -104,12 +104,12 @@ angular.module('secretSantaApp')
         templateUrl: 'views/reports.html',
         controller: 'ReportCtrl',
         controllerAs: 'dashboard',
-        resolve: {
-          "currentAuth": ["auth", function (auth) {
-            // returns a promisse so the resolve waits for it to complete
-            return auth.$requireSignIn();
-          }]
-        }
+        // resolve: {
+        //   "currentAuth": ["auth", function (auth) {
+        //     // returns a promisse so the resolve waits for it to complete
+        //     return auth.$requireSignIn();
+        //   }]
+        // }
       })
       .when('/profile/:email?', {
         templateUrl: 'views/profile.html',
