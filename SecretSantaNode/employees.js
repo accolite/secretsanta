@@ -446,7 +446,7 @@ function clone(obj) {
     }
     return copy;
 };
-cron.schedule('* * * * * *', function () {
+cron.schedule('*/10 * * * *', function () {
 
     reportGenerator();
 
