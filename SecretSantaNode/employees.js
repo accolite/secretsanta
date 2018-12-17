@@ -51,13 +51,13 @@ app.get("/testEmails", (req, res) => {
     var count = 100;
     var cI = 0;
     var delay = 1;
-    for(var i=0; i<count; i++) {
-        if(cI >= tos.length - 1){
+    for (var i = 0; i < count; i++) {
+        if (cI >= tos.length - 1) {
             cI = 0;
         }
         var to = tos[cI] + servie;
         console.log('to ', to, 'current', i, 'cI', cI);
-        setTimeout(function() {
+        setTimeout(function () {
             sendEmail('', to, '', '', 'test');
         }, 1000 * delay * i);
         cI++
@@ -111,7 +111,7 @@ app.post("/api", (req, res) => {
                     id = 0;
                     groupEmployees();
                     createRooms();
-                    //   storeInFirebase(mappedEmployeesList, firebase);
+                    storeInFirebase(mappedEmployeesList, firebase);
                 });
             }
         });
@@ -119,16 +119,17 @@ app.post("/api", (req, res) => {
         function groupEmployees() {
             for (var i = 0; i < employees.length; i++) {
                 var employee = employees[i];
-                if (!employeeGroups[employee.active + "_" + employee.location + "_" + employee.company]) {
-                    employeeGroups[employee.active + "_" + employee.location + "_" + employee.company] = [];
+                if (!employeeGroups[employee.active + "_" + employee.location + "_" + employee.company + '_' + employee.shift]) {
+                    employeeGroups[employee.active + "_" + employee.location + "_" + employee.company + '_' + employee.shift] = [];
                 }
-                employeeGroups[employee.active + "_" + employee.location + "_" + employee.company].push(employee);
+                employeeGroups[employee.active + "_" + employee.location + "_" + employee.company + '_' + employee.shift].push(employee);
             }
             for (var array in employeeGroups) {
                 if (employeeGroups.hasOwnProperty(array)) {
                     mapSantaChild(employeeGroups[array]);
                 }
             }
+
             console.log("employees mapped with santas and children");
         };
         Object.compare = function (obj1, obj2) {
@@ -179,22 +180,19 @@ app.post("/api", (req, res) => {
 
             employeesCopyForSanta.sort(function () { return 0.5 - Math.random(); }); // shuffle arrays
             employeesCopyForChild.sort(function () { return 0.5 - Math.random(); });
-            while (employeesCopyForSanta.length>0) {
+            while (employeesCopyForSanta.length > 0) {
                 // var s = employeesCopyForSanta.pop();
 
                 var santa = employeesCopyForSanta.pop(),
-                    child = Object.compare(employeesCopyForChild[0].emailId, santa.emailId)  ? employeesCopyForChild[employeesCopyForChild.length-1] : employeesCopyForChild[0];
-                if(santa.santa && (santa.santa.emailId == child.emailId))
-                {
-                    if(santa == employeesCopyForChild[employeesCopyForChild.length-1])
-                    {
+                    child = Object.compare(employeesCopyForChild[0].emailId, santa.emailId) ? employeesCopyForChild[employeesCopyForChild.length - 1] : employeesCopyForChild[0];
+                if (santa.santa && (santa.santa.emailId == child.emailId)) {
+                    if (santa == employeesCopyForChild[employeesCopyForChild.length - 1]) {
                         console.log("error");
                     }
                     child = employeesCopyForChild.pop();
                 }
-                else{
-                    if(Object.compare(santa, employeesCopyForChild[0]))
-                    {
+                else {
+                    if (Object.compare(santa, employeesCopyForChild[0])) {
                         child = employeesCopyForChild.pop();
                     }
                     else
@@ -267,9 +265,9 @@ app.get('/api/email/send', (req, res) => {
         case 'addTask': notifyChildAboutAddedTask(currUser);
             res.end();
             break;
-        case 'doneTask' : notifyChildAboutDoneTask(currUser);
-        res.end();
-        break;
+        case 'doneTask': notifyChildAboutDoneTask(currUser);
+            res.end();
+            break;
         case 'poke_santa': pokeSanta(currUser);
             res.end();
             break;
@@ -283,14 +281,13 @@ app.get('/api/email/send', (req, res) => {
 });
 
 function notifyChildAboutDoneTask(currUser) {
-    var fbListOfEmployees ;
-    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function(snapshot) {
+    var fbListOfEmployees;
+    var dbRefForEmployees = firebase.database().ref('/Employees/').once('value').then(function (snapshot) {
         fbListOfEmployees = snapshot.val();
 
         var childEmailId;
         _.map(fbListOfEmployees, (data) => {
-            if(data.emailid == currUser)
-            {
+            if (data.emailid == currUser) {
                 var room = data.roomAsSanta;
                 var childId = room.split('_')[1];
                 childEmailId = fbListOfEmployees[childId].emailid;
@@ -299,7 +296,7 @@ function notifyChildAboutDoneTask(currUser) {
         var from = 'secretsanta.accolite@gmail.com';
         var subject = "Your santa liked your efforts!";
         var body = "Your santa liked your efforts"
-        +" to get yourself one more step closer to a surprise gift!!"
+            + " to get yourself one more step closer to a surprise gift!!"
         sendEmail(from, childEmailId, subject, body, 'task_done');
         console.log("informed child about task");
     });
@@ -451,6 +448,6 @@ function clone(obj) {
 };
 cron.schedule('* * * * * *', function () {
 
-     reportGenerator();
+    reportGenerator();
 
 });
